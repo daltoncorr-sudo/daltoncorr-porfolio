@@ -14,8 +14,8 @@
       --text-secondary: #6E6E73;
       --accent: #0071E3;
       --border: #D2D2D7;
-      --surface: #F5F5F7;
-      --nav-h: 48px;
+      --surface: #FFFFFF;
+      --nav-w: 260px;
       --page-max: 1200px;
       --section-pad: 80px;
       --content-pad-mobile: 24px;
@@ -38,43 +38,44 @@
       color: var(--text-secondary);
       min-height: 100vh;
     }
+    /* ─── Dot Keyframes ─── */
+    @keyframes dotIn {
+      0% { opacity: 0; transform: translateY(-50%) scale(0.5); }
+      100% { opacity: 1; transform: translateY(-50%) scale(1); }
+    }
+    @keyframes dotOut {
+      0% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    @keyframes columnIn {
+      0% { opacity: 0; transform: translateX(-8px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ─── Left-side Nav ─── */
     .site-nav {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
+      bottom: 0;
       z-index: 200;
-      height: var(--nav-h);
+      width: var(--nav-w, 260px);
       display: flex;
-      align-items: center;
-      padding: 0 var(--content-pad-mobile);
-      background: rgba(255, 255, 255, 0.85);
-      -webkit-backdrop-filter: blur(20px);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-    @media (min-width: 600px) {
-      .site-nav { padding: 0 var(--content-pad-tablet); }
-    }
-    @media (min-width: 1248px) {
-      .site-nav { padding: 0 max(0px, calc((100vw - var(--page-max)) / 2)); }
-    }
-    .site-nav-inner {
-      width: 100%;
-      max-width: var(--page-max);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+      flex-direction: column;
+      padding: 40px 0 40px 40px;
+      background: #FFFFFF;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .brand {
+      display: block;
       font-size: 16px;
       font-weight: 600;
       color: var(--text-primary);
       text-decoration: none;
       letter-spacing: -0.01em;
-      flex-shrink: 0;
+      margin-bottom: 32px;
     }
     .brand:hover { color: var(--accent); }
     .brand:focus { outline: none; }
@@ -83,54 +84,113 @@
       outline-offset: 3px;
       border-radius: 2px;
     }
-    .nav-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    .nav-columns {
+      display: flex;
+      gap: 0;
+      align-items: flex-start;
+      flex: 1;
+    }
+    .nav-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+      animation: columnIn 0.3s ease-out forwards;
+    }
+    .nav-column + .nav-column {
+      margin-left: 8px;
+      padding-left: 16px;
+      border-left: 1px solid var(--border);
+    }
+    .nav-item {
+      position: relative;
       display: flex;
       align-items: center;
-      gap: 32px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .nav-btn {
+      padding: 6px 12px 6px 18px;
+      cursor: pointer;
       background: none;
       border: none;
-      cursor: pointer;
-      padding: 0;
-      margin: 0;
-      position: relative;
       font-family: inherit;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
       color: var(--text-secondary);
+      text-align: left;
+      white-space: nowrap;
       transition: color 0.2s ease;
+      outline: none;
     }
-    .nav-btn:hover { color: var(--text-primary); }
-    .nav-btn:focus { outline: none; }
-    .nav-btn:focus-visible {
+    .nav-item:hover { color: var(--text-primary); }
+    .nav-item:focus-visible {
       color: var(--accent);
       outline: 2px solid var(--accent);
-      outline-offset: 4px;
+      outline-offset: 2px;
       border-radius: 2px;
     }
-    .nav-btn.active { color: var(--accent); }
-    .nav-btn.active::before {
-      content: "";
+    .nav-item.active { color: var(--accent); }
+    .nav-item.dimmed { color: var(--text-secondary); }
+
+    /* ─── Dots ─── */
+    .nav-dot {
       position: absolute;
-      left: 50%;
-      top: -10px;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
+      left: 0;
+      top: 50%;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: var(--accent);
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .nav-dot--active {
+      background: #0071E3;
+      animation: dotIn 0.25s ease-out forwards;
+    }
+    .nav-dot--inactive {
+      background: #D2D2D7;
+      animation: dotOut 0.15s ease forwards;
+    }
+
+    /* Nav expands when columns appear */
+    .site-nav.has-years { width: calc(var(--nav-w, 260px) + 80px); }
+    .site-nav.has-projects { width: calc(var(--nav-w, 260px) + 280px); }
+    @media (min-width: 768px) {
+      .site-nav.has-years ~ main,
+      main.nav-has-years { margin-left: calc(var(--nav-w, 260px) + 80px); }
+      main.nav-has-projects { margin-left: calc(var(--nav-w, 260px) + 280px); }
+    }
+
+    /* ─── Responsive: Mobile ─── */
+    @media (max-width: 767px) {
+      .site-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.92);
+      }
+      .brand { margin-bottom: 12px; }
+      .nav-columns { flex-wrap: wrap; }
+      main { padding-top: 140px !important; margin-left: 0 !important; }
+    }
+    @media (min-width: 768px) {
+      main {
+        margin-left: var(--nav-w, 260px) !important;
+        padding-top: 0 !important;
+      }
     }
     main {
       min-height: 100vh;
-      padding-top: var(--nav-h);
+      padding-top: 40px;
+    }
+    @media (min-width: 768px) {
+      main { margin-left: var(--nav-w, 260px); }
     }
     .view {
       display: none;
@@ -145,12 +205,11 @@
     .view.fade-out { opacity: 0; }
     /* Homepage slideshow — full bleed, only UI is nav */
     .home-slideshow {
-      margin-top: calc(-1 * var(--nav-h));
-      padding-top: var(--nav-h);
+      margin-top: -40px;
+      padding-top: 0;
       position: relative;
-      width: 100vw;
-      margin-left: calc(50% - 50vw);
-      height: calc(100vh - var(--nav-h));
+      width: 100%;
+      height: 100vh;
       min-height: 320px;
       overflow: hidden;
       background: var(--surface);
@@ -452,14 +511,16 @@
       .home-slideshow__layer { transition: none; }
       .work-card__img, .work-hero__media { transition: none; }
       .view, .view.visible { transition: none; }
+      .nav-dot--active, .nav-dot--inactive { animation: none; }
+      .nav-column { animation: none; }
     }
   </style>
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary">
-    <div class="site-nav-inner">
-      <a class="brand" id="brandHome" href="#">Dalton Corr</a>
-      <ul class="nav-list" id="navList"></ul>
+    <a class="brand" id="brandHome" href="#">Dalton Corr</a>
+    <div class="nav-columns" id="navColumns">
+      <div class="nav-column" id="navMain"></div>
     </div>
   </nav>
   <main id="main">
@@ -589,56 +650,157 @@
     window.scrollTo(0, 0);
   }
 
+  function makeDot(dotState) {
+    if (!dotState) return null;
+    var dot = document.createElement("span");
+    dot.className = "nav-dot " + (dotState === "active" ? "nav-dot--active" : "nav-dot--inactive");
+    return dot;
+  }
+
+  function makeNavItem(label, onClick) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-item";
+    btn.textContent = label;
+    btn.addEventListener("click", onClick);
+    return btn;
+  }
+
   function buildNav() {
-    var list = $("#navList");
-    list.innerHTML = "";
+    var mainCol = $("#navMain");
+    mainCol.innerHTML = "";
+    var pages = [
+      { label: "Home", id: "home" },
+      { label: "Work", id: "work" },
+      { label: "About", id: "about" },
+      { label: "Press", id: "press" },
+      { label: "Contact", id: "contact" }
+    ];
+    pages.forEach(function (p) {
+      var btn = makeNavItem(p.label, function () {
+        state.page = p.id;
+        state.year = null;
+        state.projectSlug = null;
+        if (p.id === "home") {
+          showView("home");
+        } else if (p.id === "work") {
+          showView("work");
+          showWorkLanding();
+        } else {
+          showView(p.id);
+        }
+        scrollTop();
+        updateNav();
+      });
+      btn.setAttribute("data-nav", p.id);
+      mainCol.appendChild(btn);
+    });
+    updateNav();
+  }
 
-    function addBtn(text, navId, onClick) {
-      var li = document.createElement("li");
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "nav-btn";
-      btn.textContent = text;
-      btn.setAttribute("data-nav", navId);
-      btn.addEventListener("click", onClick);
-      li.appendChild(btn);
-      list.appendChild(li);
-      return btn;
+  function updateNav() {
+    var nav = $(".site-nav");
+    var mainEl = $("main");
+    var cols = $("#navColumns");
+    // Remove year and project columns
+    var old = cols.querySelectorAll(".nav-column--years, .nav-column--projects");
+    for (var i = 0; i < old.length; i++) old[i].remove();
+    // Reset nav width classes
+    nav.classList.remove("has-years", "has-projects");
+    mainEl.classList.remove("nav-has-years", "nav-has-projects");
+
+    // Update main column dots
+    var mainBtns = $all("#navMain .nav-item");
+    mainBtns.forEach(function (btn) {
+      var id = btn.getAttribute("data-nav");
+      // Remove existing dots
+      var existingDot = btn.querySelector(".nav-dot");
+      if (existingDot) existingDot.remove();
+      btn.classList.remove("active", "dimmed");
+
+      var dotState = null;
+      if (id === state.page) {
+        if (state.page === "work" && state.year !== null) {
+          dotState = "inactive";
+          btn.classList.add("dimmed");
+        } else {
+          dotState = "active";
+          btn.classList.add("active");
+        }
+      }
+      var dot = makeDot(dotState);
+      if (dot) btn.insertBefore(dot, btn.firstChild);
+    });
+
+    // Show year column if Work is active
+    if (state.page === "work") {
+      var yearCol = document.createElement("div");
+      yearCol.className = "nav-column nav-column--years";
+      var years = (SITE.years || []).slice().sort(function (a, b) { return b - a; });
+      years.forEach(function (y) {
+        var yStr = String(y);
+        var btn = makeNavItem(yStr, function () {
+          state.year = y;
+          state.projectSlug = null;
+          showView("work");
+          showWorkLanding();
+          scrollTop();
+          updateNav();
+        });
+        btn.setAttribute("data-year", yStr);
+        // Year dot
+        var dotState = null;
+        if (state.year === y) {
+          if (state.projectSlug !== null) {
+            dotState = "inactive";
+            btn.classList.add("dimmed");
+          } else {
+            dotState = "active";
+            btn.classList.add("active");
+          }
+        }
+        var dot = makeDot(dotState);
+        if (dot) btn.insertBefore(dot, btn.firstChild);
+        yearCol.appendChild(btn);
+      });
+      cols.appendChild(yearCol);
+      nav.classList.add("has-years");
+      mainEl.classList.add("nav-has-years");
+
+      // Show project column if a year is selected
+      if (state.year !== null) {
+        var projects = SITE.projectsByYear[String(state.year)] || [];
+        if (projects.length) {
+          var projCol = document.createElement("div");
+          projCol.className = "nav-column nav-column--projects";
+          projects.forEach(function (proj) {
+            var btn = makeNavItem(proj.title, function () {
+              state.projectSlug = proj.slug;
+              state.page = "work";
+              showView("work");
+              renderProject(proj);
+              scrollTop();
+              updateNav();
+            });
+            btn.setAttribute("data-project", proj.slug);
+            // Project dot
+            var dotState = null;
+            if (state.projectSlug === proj.slug) {
+              dotState = "active";
+              btn.classList.add("active");
+            }
+            var dot = makeDot(dotState);
+            if (dot) btn.insertBefore(dot, btn.firstChild);
+            projCol.appendChild(btn);
+          });
+          cols.appendChild(projCol);
+          nav.classList.remove("has-years");
+          nav.classList.add("has-projects");
+          mainEl.classList.remove("nav-has-years");
+          mainEl.classList.add("nav-has-projects");
+        }
+      }
     }
-
-    addBtn("Work", "work", function () {
-      state.page = "work";
-      state.year = null;
-      state.projectSlug = null;
-      showView("work");
-      showWorkLanding();
-      scrollTop();
-      updateNavClasses();
-    });
-    addBtn("About", "about", function () {
-      state.page = "about";
-      state.year = null;
-      state.projectSlug = null;
-      showView("about");
-      scrollTop();
-      updateNavClasses();
-    });
-    addBtn("Press", "press", function () {
-      state.page = "press";
-      state.year = null;
-      state.projectSlug = null;
-      showView("press");
-      scrollTop();
-      updateNavClasses();
-    });
-    addBtn("Contact", "contact", function () {
-      state.page = "contact";
-      state.year = null;
-      state.projectSlug = null;
-      showView("contact");
-      scrollTop();
-      updateNavClasses();
-    });
   }
 
   function showView(name) {
@@ -666,16 +828,7 @@
   }
 
   function updateNavClasses() {
-    $all(".nav-btn").forEach(function (b) {
-      b.classList.remove("active");
-    });
-    var map = { home: null, about: "about", press: "press", contact: "contact", work: "work" };
-    var id = map[state.page];
-    if (state.page === "work") id = "work";
-    if (id) {
-      var b = $('.nav-btn[data-nav="' + id + '"]');
-      if (b) b.classList.add("active");
-    }
+    updateNav();
   }
 
   function pictureTag(img, lazy) {
@@ -775,7 +928,7 @@
       showView("work");
       renderProject(found.project);
       scrollTop();
-      updateNavClasses();
+      updateNav();
     });
   }
 
@@ -845,7 +998,7 @@
         $("#workProject").style.display = "none";
         $("#workLanding").style.display = "block";
         scrollTop();
-        updateNavClasses();
+        updateNav();
       });
     }
   }
@@ -926,7 +1079,7 @@
     state.projectSlug = null;
     showView("home");
     scrollTop();
-    updateNavClasses();
+    updateNav();
   }
 
   function boot() {
@@ -939,7 +1092,7 @@
     bindWorkGrid($("#workGridOnHome"));
     renderWorkGrids();
     showView("home");
-    updateNavClasses();
+    updateNav();
     initSlideshow();
   }
 
@@ -958,7 +1111,7 @@
   document.addEventListener("keydown", function (e) {
     var keys = ["ArrowUp", "ArrowDown", "Enter"];
     if (keys.indexOf(e.key) < 0) return;
-    var btns = $all(".site-nav .nav-btn");
+    var btns = $all(".site-nav .nav-item");
     if (!btns.length) return;
     var idx = btns.indexOf(document.activeElement);
     if (idx < 0 && e.key.indexOf("Arrow") === 0) {
@@ -977,11 +1130,6 @@
     } else if (e.key === "Enter" && document.activeElement && document.activeElement.click) {
       document.activeElement.click();
     }
-  });
-
-  window.addEventListener("load", function () {
-    var wb = $('.nav-btn[data-nav="work"]');
-    if (wb) wb.focus();
   });
 })();
   </script>
