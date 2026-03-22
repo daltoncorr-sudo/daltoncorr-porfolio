@@ -6,465 +6,594 @@
   <title>Dalton Corr — Creative Direction · Design · Music</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #FAFAF7;
-      --text: #1A1A1A;
-      --muted: #A09E97;
-      --hint: #D4D2CC;
-      --blue: #3B5BDB;
-      --nav-pad: 2.5rem;
-      --content-left: 14rem;
+      --bg: #FFFFFF;
+      --text-primary: #1D1D1F;
+      --text-secondary: #6E6E73;
+      --accent: #0071E3;
+      --border: #D2D2D7;
+      --surface: #FFFFFF;
+      --nav-w: 260px;
+      --page-max: 1200px;
+      --section-pad: 80px;
+      --content-pad-mobile: 24px;
+      --content-pad-tablet: 48px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --view-fade-out: 0.3s;
+      --view-fade-in: 0.5s;
+      --view-fade-in-delay: 0.15s;
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       background: var(--bg);
-      color: var(--text);
-      font-family: "Cormorant Garamond", Georgia, serif;
+      color: var(--text-primary);
+      font-family: "SF Pro Display", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-weight: 400;
-      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
-      line-height: 1.7;
+      font-size: 17px;
+      line-height: 1.53;
+      color: var(--text-secondary);
       min-height: 100vh;
     }
-    .nav-dot {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--blue);
-      left: 0;
-      top: 0;
-      transition: top 0.5s var(--ease), opacity 0.3s ease;
-      pointer-events: none;
-      opacity: 1;
+    /* ─── Dot Keyframes ─── */
+    @keyframes dotIn {
+      0% { opacity: 0; transform: translateY(-50%) scale(0.5); }
+      100% { opacity: 1; transform: translateY(-50%) scale(1); }
     }
+    @keyframes dotOut {
+      0% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    @keyframes columnIn {
+      0% { opacity: 0; transform: translateX(-8px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ─── Left-side Nav ─── */
     .site-nav {
       position: fixed;
       top: 0;
       left: 0;
-      padding: var(--nav-pad);
-      z-index: 100;
-      width: var(--content-left);
-      max-width: 42vw;
+      bottom: 0;
+      z-index: 200;
+      width: var(--nav-w, 260px);
+      display: flex;
+      flex-direction: column;
+      padding: 40px 0 40px 40px;
+      background: #FFFFFF;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .site-nav-inner { position: relative; padding-left: 1rem; }
     .brand {
-      font-weight: 300;
-      font-size: clamp(1.05rem, 1rem + 0.2vw, 1.15rem);
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
       letter-spacing: -0.01em;
-      margin-bottom: 1.75rem;
-      color: var(--text);
+      margin-bottom: 32px;
     }
-    .nav-list { list-style: none; margin: 0; padding: 0; }
-    .nav-list > li { margin-bottom: 0.35rem; }
-    .nav-btn {
+    .brand:hover { color: var(--accent); }
+    .brand:focus { outline: none; }
+    .brand:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    .nav-columns {
+      display: flex;
+      gap: 0;
+      align-items: flex-start;
+      flex: 1;
+    }
+    .nav-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 0;
+      animation: columnIn 0.3s ease-out forwards;
+    }
+    .nav-column + .nav-column {
+      margin-left: 8px;
+      padding-left: 16px;
+      border-left: 1px solid var(--border);
+    }
+    .nav-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 6px 12px 6px 18px;
+      cursor: pointer;
       background: none;
       border: none;
-      font: inherit;
-      cursor: pointer;
-      padding: 0.15rem 0;
-      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
       text-align: left;
-      width: 100%;
-      transition: color 0.3s ease;
-      position: relative;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+      outline: none;
     }
-    .nav-btn:hover { color: var(--text); }
-    .nav-btn:focus { outline: none; }
-    .nav-btn:focus-visible {
-      color: var(--text);
-      outline: 1px solid var(--hint);
-      outline-offset: 3px;
+    .nav-item:hover { color: var(--text-primary); }
+    .nav-item:focus-visible {
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 2px;
     }
-    .nav-btn.active { color: var(--text); }
-    .nav-btn .label { padding-left: 0.85rem; display: block; }
-    .sub-nav {
-      margin: 0.5rem 0 0 0.5rem;
-      padding: 0;
-      list-style: none;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.45s var(--ease), opacity 0.4s ease;
+    .nav-item.active { color: var(--accent); }
+    .nav-item.dimmed { color: var(--text-secondary); }
+
+    /* ─── Dots ─── */
+    .nav-dot {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
     }
-    .sub-nav.open {
-      max-height: 1200px;
-      opacity: 1;
+    .nav-dot--active {
+      background: #0071E3;
+      animation: dotIn 0.25s ease-out forwards;
     }
-    .sub-nav .nav-btn { font-size: 0.85rem; }
-    .sub-nav .sub-nav { margin-left: 0.45rem; }
-    .sub-nav .sub-nav .nav-btn { font-size: 0.82rem; }
-    .nav-hint {
-      font-family: system-ui, -apple-system, sans-serif;
-      font-size: 0.6rem;
-      color: var(--hint);
-      margin-top: 1.25rem;
-      line-height: 1.4;
-      max-width: 9rem;
+    .nav-dot--inactive {
+      background: #D2D2D7;
+      animation: dotOut 0.15s ease forwards;
     }
-    @media (max-width: 599px) {
-      .nav-hint { display: none; }
-      :root { --nav-pad: 1.5rem; --content-left: 100%; }
-      .site-nav { position: relative; width: 100%; max-width: none; }
+
+    /* Nav expands when columns appear */
+    .site-nav.has-years { width: calc(var(--nav-w, 260px) + 80px); }
+    .site-nav.has-projects { width: calc(var(--nav-w, 260px) + 280px); }
+    @media (min-width: 768px) {
+      main.nav-has-years { margin-left: calc(var(--nav-w, 260px) + 80px) !important; }
+      main.nav-has-projects { margin-left: calc(var(--nav-w, 260px) + 280px) !important; }
+    }
+    /* No border between nav and content */
+
+    /* ─── Responsive: Mobile ─── */
+    @media (max-width: 767px) {
+      .site-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.92);
+      }
+      .brand { margin-bottom: 12px; }
+      .nav-columns { flex-wrap: wrap; }
+      main { padding-top: 140px !important; margin-left: 0 !important; }
+    }
+    @media (min-width: 768px) {
+      main {
+        margin-left: var(--nav-w, 260px) !important;
+        padding-top: 0 !important;
+      }
     }
     main {
-      margin-left: var(--content-left);
       min-height: 100vh;
-      padding: 2.5rem 2.5rem 4rem 1rem;
-    }
-    @media (max-width: 899px) {
-      main { margin-left: 0; padding: 1rem 1.5rem 3rem; }
+      padding-top: 40px;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .view {
       display: none;
       opacity: 0;
-      transition: opacity 0.35s ease;
+      transition: opacity var(--view-fade-out) ease;
     }
     .view.visible {
       display: block;
       opacity: 1;
+      transition: opacity var(--view-fade-in) var(--ease) var(--view-fade-in-delay);
     }
     .view.fade-out { opacity: 0; }
-    .home-hero {
-      min-height: calc(100vh - 5rem);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
+    /* Homepage slideshow — full bleed, only UI is nav */
+    .home-slideshow {
+      margin-top: -40px;
+      padding-top: 0;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 320px;
+      overflow: hidden;
+      background: var(--surface);
     }
-    .home-hero h1 {
-      font-weight: 300;
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      margin: 0 0 1rem;
-      animation: heroIn 1s var(--ease) forwards;
-      opacity: 0;
-      transform: translateY(8px);
+    .home-slideshow__layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity 0.6s ease-in-out;
     }
-    .home-hero .tag {
-      color: var(--muted);
-      font-size: clamp(0.6rem, 1.2vw, 0.65rem);
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      animation: heroIn 1s var(--ease) 0.1s forwards;
-      opacity: 0;
-      transform: translateY(8px);
+    .home-slideshow__layer.is-back { z-index: 1; opacity: 0; }
+    .home-slideshow__layer.is-front { z-index: 2; opacity: 1; }
+    .work-section {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: var(--section-pad) var(--content-pad-mobile) calc(var(--section-pad) * 1.25);
     }
-    @keyframes heroIn {
-      to { opacity: 1; transform: translateY(0); }
+    @media (min-width: 600px) {
+      .work-section { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .work-section { padding-left: 0; padding-right: 0; }
+    }
+    .work-hero {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      min-height: 280px;
+      max-height: 900px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 64px;
+      transition: box-shadow 0.3s ease;
+    }
+    .work-hero:hover,
+    .work-hero:focus-within {
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.12);
+    }
+    .work-hero__media {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+    .work-hero__link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+    .work-hero__link:hover .work-hero__media,
+    .work-hero__link:focus-visible .work-hero__media {
+      transform: scale(1.02);
+    }
+    .work-hero__title {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      right: 24px;
+      margin: 0;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #FFFFFF;
+      text-shadow: 0 1px 24px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      row-gap: 64px;
+    }
+    @media (max-width: 699px) {
+      .work-grid { grid-template-columns: 1fr; row-gap: 64px; }
+    }
+    .work-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+    .work-card:focus { outline: none; }
+    .work-card:focus-visible .work-card__frame {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: 10px;
+    }
+    .work-card__frame {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 3 / 2;
+      background: var(--surface);
+      transition: box-shadow 0.3s ease;
+    }
+    .work-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+    .work-card:hover .work-card__frame,
+    .work-card:focus-visible .work-card__frame {
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1);
+    }
+    .work-card:hover .work-card__img,
+    .work-card:focus-visible .work-card__img {
+      transform: scale(1.02);
+    }
+    .work-card__title {
+      margin: 16px 0 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .work-card__tags {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .page-wrap {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: var(--section-pad) var(--content-pad-mobile);
+    }
+    @media (min-width: 600px) {
+      .page-wrap { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .page-wrap { padding-left: 0; padding-right: 0; }
     }
     .page-title {
-      font-weight: 300;
-      font-size: clamp(1.8rem, 3vw, 2.8rem);
-      letter-spacing: -0.01em;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
       line-height: 1.1;
-      margin: 0 0 1.5rem;
+      margin: 0 0 24px;
+    }
+    .subhead {
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.25;
+      margin: 0 0 16px;
     }
     .meta-line {
-      color: var(--muted);
-      font-size: 0.88rem;
-      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
     }
     .body-text {
-      color: var(--muted);
-      max-width: 48ch;
-      line-height: 1.7;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.53;
+      max-width: 680px;
+      margin: 0 auto 48px;
     }
     .body-text p { margin: 0 0 1rem; }
     a.contact-link {
-      color: inherit;
+      color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px solid var(--hint);
-      transition: border-color 0.25s ease;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, color 0.2s ease;
     }
-    a.contact-link:hover { border-bottom-color: var(--text); }
+    a.contact-link:hover {
+      border-bottom-color: var(--accent);
+    }
     .press-year {
-      font-weight: 300;
-      font-size: 1.35rem;
-      margin: 2rem 0 0.75rem;
+      font-weight: 600;
+      font-size: 21px;
+      color: var(--text-primary);
+      margin: 2.5rem 0 0.75rem;
     }
-    .press-item { margin-bottom: 0.85rem; color: var(--muted); max-width: 52ch; }
-    .press-item strong { color: var(--text); font-weight: 400; }
-    .press-item a {
-      color: inherit;
+    .press-year:first-child { margin-top: 0; }
+    .press-item {
+      margin-bottom: 0.85rem;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.53;
+      max-width: 680px;
+    }
+    .press-item strong { color: var(--text-primary); font-weight: 600; }
+    .press-item a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s ease; }
+    .press-item a:hover { border-bottom-color: var(--accent); }
+    .press-item a:hover strong { color: var(--accent); }
+    /* Project detail */
+    .project-page { max-width: 860px; margin: 0 auto; padding: var(--section-pad) var(--content-pad-mobile) calc(var(--section-pad) * 1.5); }
+    @media (min-width: 600px) {
+      .project-page { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .project-page { padding-left: 0; padding-right: 0; }
+    }
+    .project-back {
+      display: inline-block;
+      margin-bottom: 32px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px solid var(--hint);
-      transition: border-color 0.25s ease;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
     }
-    .press-item a:hover { border-bottom-color: var(--text); }
-    .editorial {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 1.25rem 1rem;
-      align-items: start;
-      max-width: 820px;
+    .project-back:hover { text-decoration: underline; }
+    .project-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .project-hero {
+      width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      background: var(--surface);
+    }
+    .project-hero img {
+      width: 100%;
+      height: 100%;
+      max-height: 75vh;
+      object-fit: cover;
+      display: block;
+    }
+    .project-head {
+      margin-bottom: 32px;
+    }
+    .project-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+      align-items: baseline;
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 100%;
+    }
+    .project-meta-row span { white-space: nowrap; }
+    .project-meta-row .meta-sep { color: var(--border); }
+    .case-study {
+      max-width: 860px;
       margin: 0 auto;
     }
-    .editorial .cell {
-      position: relative;
+    .case-study__full {
+      margin-bottom: 32px;
+      border-radius: 8px;
       overflow: hidden;
-      background-size: cover;
-      background-position: center;
+      background: var(--surface);
     }
-    .editorial img {
+    .case-study__full:last-child { margin-bottom: 0; }
+    .case-study__full img {
       width: 100%;
       height: auto;
       display: block;
-      vertical-align: middle;
-      border-radius: 0;
     }
-    .editorial .w-7 { grid-column: span 7; }
-    .editorial .w-5 { grid-column: span 5; }
-    .editorial .w-6 { grid-column: span 6; }
-    .editorial .w-8 { grid-column: span 8; }
-    .editorial .w-4 { grid-column: span 4; }
-    .editorial .w-12 { grid-column: span 12; }
-    .editorial .off-2 { grid-column: 3 / span 8; }
-    @media (max-width: 899px) {
-      .editorial { grid-template-columns: 1fr; }
-      .editorial .w-4, .editorial .w-5, .editorial .w-6, .editorial .w-7, .editorial .w-8, .editorial .w-12, .editorial .off-2 {
-        grid-column: 1 / -1;
-      }
+    .case-study__pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 699px) {
+      .case-study__pair { grid-template-columns: 1fr; }
+    }
+    .case-study__pair .cell {
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .case-study__pair img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     .img-wrap {
       position: relative;
-      background-color: #EDE8DC;
+      background-color: var(--surface);
     }
     .img-wrap img { position: relative; z-index: 1; }
-    .stagger-item {
-      opacity: 0;
-      transform: scale(0.97);
-      transition: opacity 0.55s var(--ease), transform 0.8s var(--ease);
-      will-change: opacity, transform;
-    }
-    .stagger-item.show {
-      opacity: 1;
-      transform: scale(1);
-    }
     .project-block { margin-bottom: 3rem; }
     .svg-ph {
       width: 100%;
       aspect-ratio: 3/4;
       display: block;
     }
-    .project-detail {
-      max-width: 820px;
-      margin: 0 auto;
-    }
     @media (prefers-reduced-motion: reduce) {
-      .nav-dot { transition: none; }
-      .home-hero h1, .home-hero .tag { animation: none; opacity: 1; transform: none; }
-      .stagger-item { opacity: 1; transform: none; transition: none; }
+      .home-slideshow__layer { transition: none; }
+      .work-card__img, .work-hero__media { transition: none; }
+      .view, .view.visible { transition: none; }
+      .nav-dot--active, .nav-dot--inactive { animation: none; }
+      .nav-column { animation: none; }
     }
   </style>
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary">
-    <div class="site-nav-inner">
-      <div class="nav-dot" id="navDot" aria-hidden="true"></div>
-      <div class="brand">Dalton Corr</div>
-      <ul class="nav-list" id="navList"></ul>
-      <p class="nav-hint" id="navHint">Navigate with<br />arrow keys or mouse</p>
+    <a class="brand" id="brandHome" href="#">Dalton Corr</a>
+    <div class="nav-columns" id="navColumns">
+      <div class="nav-column" id="navMain"></div>
     </div>
   </nav>
   <main id="main">
     <section class="view visible" id="viewHome" aria-label="Home">
-      <div class="home-hero">
-        <h1>Dalton Corr</h1>
-        <p class="tag">Creative Direction · Design · Music</p>
-      </div>
+      <div class="home-slideshow" id="homeSlideshow" aria-hidden="true"></div>
+      <div class="work-section" id="workGridOnHome"></div>
     </section>
     <section class="view" id="viewWork" aria-label="Work">
-      <div id="workLanding"></div>
+      <div id="workLanding" class="work-section"></div>
       <div id="workProject" style="display:none"></div>
     </section>
     <section class="view" id="viewAbout" aria-label="About">
-      <h2 class="page-title">About</h2>
-      <div class="body-text">
+      <div class="page-wrap">
+        <h2 class="page-title">About</h2>
+        <div class="body-text">
         <p>Dalton Corr is an independent creative director, designer, and composer based in Venice, Los Angeles.</p>
         <p>He art directs international film festivals, scores the films that play in them, and builds brands for the people who make them. Currently art director for HollyShorts Film Festival and composing his first feature-length film score.</p>
         <p>Interested in working together —<br />
           <a class="contact-link" href="mailto:hello@daltoncorr.com">hello@daltoncorr.com</a>
         </p>
+        </div>
       </div>
     </section>
     <section class="view" id="viewPress" aria-label="Press">
+      <div class="page-wrap">
       <h2 class="page-title">Press &amp; Awards</h2>
       <div class="body-text">
         <div class="press-year">2024</div>
         <div class="press-item"><a href="http://www.festivalinla.com/2024/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener"><strong>Festival in LA</strong> — "The World's Best Film Festival Posters"</a></div>
         <div class="press-item"><a href="https://variety.com/2024/film/global/hollyshorts-film-festival-20th-anniversary-zoe-saldana-jamie-lee-curtis-1236067159/" target="_blank" rel="noopener"><strong>Variety</strong> — HollyShorts 20th anniversary coverage</a></div>
-        <div class="press-item"><a href="https://deadline.com/2024/07/hollyshorts-film-festival-2024-jurors-1236016173/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 20th anniversary coverage</a></div>
+        <div class="press-item"><a href="https://deadline.com/2024/07/hollyshorts-film-festival-2024-jurors-1236016173/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 20th coverage</a></div>
         <div class="press-item"><a href="https://canvasrebel.com/meet-dalton-corr/" target="_blank" rel="noopener"><strong>Canvas Rebel</strong> — Interview</a></div>
-        <div class="press-item"><strong>Daily Mail</strong> — HollyShorts festival coverage</div>
+        <div class="press-item"><strong>Daily Mail</strong> — Festival coverage</div>
         <div class="press-year">2023</div>
         <div class="press-item"><a href="http://www.festivalinla.com/2023/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener"><strong>Festival in LA</strong> — "The World's Best Film Festival Posters"</a></div>
-        <div class="press-item"><a href="https://deadline.com/2023/07/19th-hollyshorts-film-festival-liineup-announcement-news-1235441960/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 19th edition coverage</a></div>
+        <div class="press-item"><a href="https://deadline.com/2023/07/19th-hollyshorts-film-festival-liineup-announcement-news-1235441960/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 19th coverage</a></div>
         <div class="press-item"><strong>Radio du Cinéma</strong> — Interview</div>
         <div class="press-item"><strong>LAist</strong> — "Things To Do This Week"</div>
       </div>
+      </div>
     </section>
   </main>
-  <script id="site-data" type="application/json">{"categories": ["design", "music"], "designProjects": [{"slug": "hollyshorts-21", "title": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Los Angeles", "description": "Art Director of the 21th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 21st anniversary poster, merch design, badge design, award design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 21th Annual HollyShorts Award Show TCL Chinese Theatres | Los Angeles, 2025", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/01.webp"}, {"src": "assets/images/design/hollyshorts21/02.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/02.webp"}, {"src": "assets/images/design/hollyshorts21/03.jpeg", "alt": "IMG_9135.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/04.jpeg", "alt": "IMG_1355.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/05.jpeg", "alt": "IMG_9191.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/06.jpg", "alt": "54715467764_2357977844_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/07.jpeg", "alt": "IMG_9196.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/08.jpg", "alt": "54729116567_902409cbf6_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/09.jpg", "alt": "54728644752_7dabb5f045_o 2.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/10.jpeg", "alt": "IMG_8331.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/11.jpeg", "alt": "IMG_7601.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/12.jpeg", "alt": "IMG_9129.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/13.jpeg", "alt": "IMG_9169.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/14.jpeg", "alt": "IMG_9120.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/15.jpeg", "alt": "IMG_9161.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/16.jpg", "alt": "54720456147_54381b7e60_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/17.jpg", "alt": "54730171974_deadfd9b5a_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/18.jpg", "alt": "54729688633_66abfafdb4_k 2.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts21/thumb.png", "missing": false}, {"slug": "comedy-rebrand", "title": "HollyShorts Comedy 2025", "role": "Art Director — Led Rebrand", "location": "Los Angeles", "description": "Rebrand and Art Direction for HollyShorts Comedy 2025 May 2025 Los Angeles, California www.hollyshortscomedy.com Led the redesign of the Hollywood Comedy Short Film Festival into HollyShorts Comedy, establishing a bold new visual identity aligned with the parent HollyShorts brand. The rebrand included new logo, color palette, and typography, along with a comprehensive design system spanning print, digital, and event assets. Work includes: festival poster, official website website, interactive AR activations, on-screen graphics, award show design, social media assets, festival badges, merchandise, and additional collateral.", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/01.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/02.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/02.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/03.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/03.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/04.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/05.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/06.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/07.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/08.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/08.webp"}], "thumb": "assets/images/design/hollyshorts-comedy-2025/thumb.png", "missing": false}, {"slug": "hollyshorts-london", "title": "HollyShorts London 2025", "role": "Creative Director", "location": "London, United Kingdom", "description": "Branding and Art Direction for HollyShorts London June 2025 London, United Kingdom www.hollyshorts.com/london Led creative direction and design for the inaugural HollyShorts London, establishing a new visual identity for the festival’s international expansion. Built a city-specific system that stayed grounded in the parent brand while incorporating UK cinematic culture and tone. Work includes: festival poster, custom London branding package, digital marketing rollout, official website assets, motion graphics, social media templates, screening visuals, badges, merchandise, and print collateral.", "palette": ["#DAD5C9", "#D0CAC0", "#C8C2B8"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/03.jpg", "alt": "465921008_929866422409253_6811404960256833731_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/04.jpg", "alt": "472304542_844055327752181_783869732097309527_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/05.jpg", "alt": "472298236_1128974298601453_1361862241833342341_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/06.jpg", "alt": "472404434_625409833255136_3559600277865683536_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/07.jpg", "alt": "470934486_8384437738328269_4397251221193907368_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/08.jpg", "alt": "470935988_8709149192525956_7029747810375016340_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/09.jpg", "alt": "470955319_490966800142874_1986426474110815044_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/10.jpg", "alt": "470973968_1089669722564324_1205839330410274054_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/11.jpg", "alt": "472239287_919153263653328_1023683448985257053_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/12.jpg", "alt": "472319687_1248458226224122_4616341925662061820_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/13.jpg", "alt": "472215280_455677710746912_527048242292983217_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/14.jpg", "alt": "472338709_906072598408296_1268345784545495665_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/15.jpg", "alt": "472289667_1110353980248420_5092475038890263860_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/16.jpg", "alt": "472032168_1119931572853821_1601451983331609380_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/17.jpg", "alt": "472233077_965652965466096_2612320933165423722_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/18.jpg", "alt": "472282706_2672610159793315_8925558514694169954_n.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts-london/thumb.jpg", "missing": false}, {"slug": "hollyshorts-20", "title": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese · Egyptian Theater · Japan House, Los Angeles", "description": "Art Director of the 20th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 20th anniversary poster, merch design, badge design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 20th Annual HollyShorts Award Show live from the Egyptian Theater, and assisting on award design. TCL Chinese Theatres, Egyptian Theater, Japan House Los Angeles, 2024", "palette": ["#0D0D1A", "#161628", "#1C1C30"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/01.webp"}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/02.webp"}, {"src": "assets/images/design/hollyshorts20/03.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/04.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/05.png", "alt": "photo wall design", "webp": "assets/images/design/hollyshorts20/05.webp"}, {"src": "assets/images/design/hollyshorts20/06.jpg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/07.jpeg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/08.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/09.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/10.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/11.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/12.jpeg", "alt": "on-screen graphics", "webp": null}, {"src": "assets/images/design/hollyshorts20/13.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/14.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/15.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/16.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/17.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/18.jpg", "alt": "event signage", "webp": null}], "thumb": "assets/images/design/hollyshorts20/thumb.png", "missing": false}, {"slug": "cannes-2024", "title": "Cannes 2024", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Original illustrations and poster design for Kodak-hosted events at the 2024 Cannes Film Festival.", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/cannes-2024/01.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/01.webp"}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/02.webp"}, {"src": "assets/images/design/cannes-2024/03.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/03.webp"}, {"src": "assets/images/design/cannes-2024/04.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/04.webp"}], "thumb": "assets/images/design/cannes-2024/thumb.png", "missing": false}, {"slug": "nice-knives", "title": "Nice Knives", "role": "Poster Design + Film Score", "location": "New York City", "description": "Poster design for Nice Knives Directed by Connor Copeland Distributed by BAM In Motion Little Tube Productions New York City, 2023", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": "assets/images/design/nice-knives/01.webp"}], "thumb": "assets/images/design/nice-knives/thumb.png", "missing": false}, {"slug": "hcsff8", "title": "8th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "The 8 th Annual Hollywood Comedy Shorts Film Festival Art Director • Los Angeles, California • May 2024", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hcsff8/01.jpg", "alt": "8th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff8/02.jpg", "alt": "53697456816_d24a11792c_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/03.jpg", "alt": "[large] 2024 Hollywood Comedy Short Film Festival Poster.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/04.jpg", "alt": "53697840444_86a9f3b229_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/05.jpg", "alt": "53697834414_3f0a308c59_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/06.jpeg", "alt": "IMG_4414.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/07.jpeg", "alt": "IMG_4416.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/08.jpeg", "alt": "IMG_4328.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/09.jpeg", "alt": "IMG_4299.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/10.jpeg", "alt": "IMG_4332.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/11.png", "alt": "Kaledescope 2.png", "webp": "assets/images/design/hcsff8/11.webp"}, {"src": "assets/images/design/hcsff8/12.png", "alt": "Kaledescope 3.png", "webp": "assets/images/design/hcsff8/12.webp"}, {"src": "assets/images/design/hcsff8/13.png", "alt": "Kaledescope 10.png", "webp": "assets/images/design/hcsff8/13.webp"}, {"src": "assets/images/design/hcsff8/14.png", "alt": "All Access.png", "webp": "assets/images/design/hcsff8/14.webp"}, {"src": "assets/images/design/hcsff8/15.png", "alt": "Day One Pass.png", "webp": "assets/images/design/hcsff8/15.webp"}, {"src": "assets/images/design/hcsff8/16.png", "alt": "Day Two Pass.png", "webp": "assets/images/design/hcsff8/16.webp"}, {"src": "assets/images/design/hcsff8/17.png", "alt": "Press.png", "webp": "assets/images/design/hcsff8/17.webp"}, {"src": "assets/images/design/hcsff8/18.png", "alt": "Screenwriter.png", "webp": "assets/images/design/hcsff8/18.webp"}], "thumb": "assets/images/design/hcsff8/thumb.png", "missing": false}, {"slug": "hollyshortswebsite", "title": "Hollyshorts.com", "role": "Designer / Developer", "location": "Los Angeles", "description": "Website design for Hollyshorts.com , official website of the Oscar-Qualifying® Film Festival www.hollyshorts.com", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hollyshortswebsite/01.png", "alt": "Hollyshorts.com", "webp": null}], "thumb": "assets/images/design/hollyshortswebsite/thumb.png", "missing": false}, {"slug": "little-issues", "title": "LiTTLE iSSUES", "role": "Designer", "location": "Los Angeles", "description": "Poster design for Little Issues Directed by Jerah Milligan Created by Jana Miley Winner of over a dozen awards Los Angeles, 2024", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/little-issues/01.png", "alt": "LiTTLE iSSUES", "webp": "assets/images/design/little-issues/01.webp"}], "thumb": "assets/images/design/little-issues/thumb.png", "missing": false}, {"slug": "skyfire-artists", "title": "Skyfire Artists", "role": "Designer", "location": "Los Angeles", "description": "Skyfire Artists Talent Management Los Angeles, California • 2024 • www.skyfireartists.com • instagram", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/skyfire-artists/01.png", "alt": "SA Tall - White.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/02.png", "alt": "SA Tall - Black.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/03.png", "alt": "Sign.png", "webp": "assets/images/design/skyfire-artists/03.webp"}, {"src": "assets/images/design/skyfire-artists/04.png", "alt": "Sign 2.png", "webp": "assets/images/design/skyfire-artists/04.webp"}, {"src": "assets/images/design/skyfire-artists/05.png", "alt": "Card.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/06.png", "alt": "Card 2.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/07.png", "alt": "Hat 3.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/08.png", "alt": "Hat 4.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/09.png", "alt": "SA Hat 2.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/10.png", "alt": "SA Shirt.png", "webp": null}], "thumb": "assets/images/design/skyfire-artists/thumb.png", "missing": false}, {"slug": "hollyshorts-19", "title": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "19th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2023", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts19/01.webp"}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": "assets/images/design/hollyshorts19/02.webp"}, {"src": "assets/images/design/hollyshorts19/03.jpg", "alt": "IMG_2157.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/04.jpg", "alt": "IMG_2159.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/05.jpeg", "alt": "IMG_2163.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/06.jpeg", "alt": "IMG_2162.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/07.jpg", "alt": "53116870852_38ed7647c2_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/08.jpeg", "alt": "IMG_2106.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/09.jpg", "alt": "53129550845_82942014eb_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/10.jpeg", "alt": "IMG_2222.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/11.png", "alt": "Steven.png", "webp": "assets/images/design/hollyshorts19/11.webp"}, {"src": "assets/images/design/hollyshorts19/12.jpeg", "alt": "IMG_2114.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/13.jpg", "alt": "53116882592_c5664cc898_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/14.png", "alt": "BitPix.png", "webp": "assets/images/design/hollyshorts19/14.webp"}, {"src": "assets/images/design/hollyshorts19/15.png", "alt": "BitPix+Award+Winners+Bundle.png", "webp": "assets/images/design/hollyshorts19/15.webp"}, {"src": "assets/images/design/hollyshorts19/16.png", "alt": "Day+Pass.png", "webp": "assets/images/design/hollyshorts19/16.webp"}, {"src": "assets/images/design/hollyshorts19/17.png", "alt": "Staff.png", "webp": "assets/images/design/hollyshorts19/17.webp"}, {"src": "assets/images/design/hollyshorts19/18.png", "alt": "All+Access+A.png", "webp": "assets/images/design/hollyshorts19/18.webp"}], "thumb": "assets/images/design/hollyshorts19/thumb.png", "missing": false}, {"slug": "cannes-2023", "title": "Cannes 2023", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Cannes Film Festival 2023 Cannes, France • May 2023", "palette": ["#D0C9BD", "#C5BEB2", "#BAB3A7"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/cannes/01.png", "alt": "Cannes 2023", "webp": "assets/images/design/cannes/01.webp"}, {"src": "assets/images/design/cannes/02.png", "alt": "Cannes 2023", "webp": "assets/images/design/cannes/02.webp"}], "thumb": "assets/images/design/cannes/thumb.png", "missing": false}, {"slug": "hcsff7", "title": "7th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "The 7th Annual Hollywood Comedy Shorts Film Festival Look Cinemas • Los Angeles, California • April 2023", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hcsff7/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff7/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7/02.webp"}, {"src": "assets/images/design/hcsff7/03.png", "alt": "Red+2-1.png", "webp": "assets/images/design/hcsff7/03.webp"}, {"src": "assets/images/design/hcsff7/04.jpg", "alt": "52840583340_8769e3c2a4_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/05.jpg", "alt": "52841097138_a7f35b76ac_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/06.jpg", "alt": "52840085407_068c6fad26_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/07.jpg", "alt": "52841710376_219789baca_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/08.jpg", "alt": "52840170211_5916cc291b_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/09.jpg", "alt": "52840614108_d24f1e125a_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/10.png", "alt": "Yellow+2-1.png", "webp": null}, {"src": "assets/images/design/hcsff7/11.png", "alt": "Black-1.png", "webp": null}, {"src": "assets/images/design/hcsff7/12.png", "alt": "All+Access.png", "webp": "assets/images/design/hcsff7/12.webp"}, {"src": "assets/images/design/hcsff7/13.png", "alt": "Filmmaker.png", "webp": "assets/images/design/hcsff7/13.webp"}, {"src": "assets/images/design/hcsff7/14.png", "alt": "Staff-1.png", "webp": "assets/images/design/hcsff7/14.webp"}, {"src": "assets/images/design/hcsff7/15.png", "alt": "Day+One.png", "webp": "assets/images/design/hcsff7/15.webp"}, {"src": "assets/images/design/hcsff7/16.png", "alt": "Screenwriter.png", "webp": "assets/images/design/hcsff7/16.webp"}, {"src": "assets/images/design/hcsff7/17.png", "alt": "Press.png", "webp": "assets/images/design/hcsff7/17.webp"}, {"src": "assets/images/design/hcsff7/18.png", "alt": "Weekend.png", "webp": null}], "thumb": "assets/images/design/hcsff7/thumb.png", "missing": false}, {"slug": "feeling", "title": "Let This Feeling Go", "role": "Designer", "location": "Los Angeles", "description": "Original artwork and poster design for Let This Feeling Go Director Andrew De Zen Los Angeles, 2023", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/feeling/01.png", "alt": "Let This Feeling Go", "webp": "assets/images/design/feeling/01.webp"}, {"src": "assets/images/design/feeling/02.png", "alt": "Poster+1G+(title)+copy.png", "webp": "assets/images/design/feeling/02.webp"}, {"src": "assets/images/design/feeling/03.png", "alt": "Poster+5+(title)+copy.png", "webp": "assets/images/design/feeling/03.webp"}], "thumb": "assets/images/design/feeling/thumb.png", "missing": false}, {"slug": "hallelujah", "title": "Hallelujah", "role": "Designer", "location": "Los Angeles", "description": "Hallelujah Director Victor Gabriel • Executive Producer Spike Lee • Los Angeles, 2023", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hallelujah/01.jpg", "alt": "Hallelujah", "webp": null}, {"src": "assets/images/design/hallelujah/02.png", "alt": "Hallelujah", "webp": "assets/images/design/hallelujah/02.webp"}], "thumb": "assets/images/design/hallelujah/thumb.jpg", "missing": false}, {"slug": "survived-by", "title": "Survived By", "role": "Designer", "location": "Los Angeles", "description": "Original artwork and poster design for Survived By Director K.D. Chalk Los Angeles, 2023", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/survived-by/01.jpg", "alt": "Survived By", "webp": null}], "thumb": "assets/images/design/survived-by/thumb.jpg", "missing": false}, {"slug": "timewriter", "title": "Timewriter", "role": "Designer", "location": "Los Angeles", "description": "Art department for Timewriter Directed by Ryan Luevano Los Angeles, 2023 IMDb", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/timewriter/01.jpg", "alt": "Timewriter", "webp": null}], "thumb": "assets/images/design/timewriter/thumb.png", "missing": false}, {"slug": "hollyshorts-18", "title": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Designer", "location": "TCL Chinese Theatres", "description": "18th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2022", "palette": ["#222238", "#2A2A40", "#1A1A30"], "category": "design", "year": 2022, "images": [{"src": "assets/images/design/hsff18/01.png", "alt": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hsff18/01.webp"}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp"}, {"src": "assets/images/design/hsff18/03.png", "alt": "6+copy.png", "webp": "assets/images/design/hsff18/03.webp"}, {"src": "assets/images/design/hsff18/04.jpg", "alt": "D3E8F9F0-AE46-4052-B1FB-AFAF48D065CF.jpg", "webp": null}, {"src": "assets/images/design/hsff18/05.jpeg", "alt": "IMG_6421.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/06.jpeg", "alt": "IMG_6416.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/07.jpeg", "alt": "IMG_6402.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/08.jpeg", "alt": "IMG_6408.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/09.png", "alt": "HollyShorts+Laurel+2.png", "webp": null}, {"src": "assets/images/design/hsff18/10.png", "alt": "Hollyshorts18.png", "webp": "assets/images/design/hsff18/10.webp"}, {"src": "assets/images/design/hsff18/11.jpg", "alt": "F+is+for+Film+Black.jpg", "webp": null}, {"src": "assets/images/design/hsff18/12.jpg", "alt": "F+is+for+Film+white.jpg", "webp": null}], "thumb": "assets/images/design/hsff18/thumb.png", "missing": false}, {"slug": "hcsff6", "title": "6th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "6th Annual Hollywood Comedy Shorts Film Festival TCL Chinese Theaters 6 • Hollywood, California • April 2022", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2022, "images": [{"src": "assets/images/design/hcsff6/01.jpg", "alt": "6th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff6/02.jpg", "alt": "img_0484_52043317890_o.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/03.jpg", "alt": "img_0469_52042825331_o.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/04.jpeg", "alt": "IMG_5787.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/05.jpeg", "alt": "image1.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/06.jpeg", "alt": "image0.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/07.jpg", "alt": "All+Access.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/08.png", "alt": "Film+Maker.png", "webp": null}, {"src": "assets/images/design/hcsff6/09.png", "alt": "Media.png", "webp": null}, {"src": "assets/images/design/hcsff6/10.jpg", "alt": "Screenwriter+badges.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/11.png", "alt": "Flyer+6.png", "webp": null}, {"src": "assets/images/design/hcsff6/12.png", "alt": "Black+Laurel.png", "webp": null}, {"src": "assets/images/design/hcsff6/13.png", "alt": "Offocial+Selection+Blaxk.png", "webp": null}, {"src": "assets/images/design/hcsff6/14.png", "alt": "Winner+Black+.png", "webp": null}, {"src": "assets/images/design/hcsff6/15.png", "alt": "Drake+meme+2.png", "webp": "assets/images/design/hcsff6/15.webp"}, {"src": "assets/images/design/hcsff6/16.png", "alt": "Tap+meme+(logos).png+.png", "webp": null}, {"src": "assets/images/design/hcsff6/17.png", "alt": "Portait+Poster+5B.png", "webp": null}, {"src": "assets/images/design/hcsff6/18.png", "alt": "Square+Poster+4+Updated.png", "webp": null}], "thumb": "assets/images/design/hcsff6/thumb.jpg", "missing": false}, {"slug": "hdtracks", "title": "HDtracks", "role": "Director of Marketing, Lead Designer", "location": "New York City", "description": "HDtracks The world’s leading online Hi-Res music store", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2019, "images": [{"src": "assets/images/design/hdtracks/01.png", "alt": "HDtracks", "webp": "assets/images/design/hdtracks/01.webp"}, {"src": "assets/images/design/hdtracks/02.png", "alt": "HDtracks+SplashPage+Mock+Up.png", "webp": "assets/images/design/hdtracks/02.webp"}, {"src": "assets/images/design/hdtracks/03.png", "alt": "Screen+Shot+2021-05-10+at+12.58.46+PM.png", "webp": "assets/images/design/hdtracks/03.webp"}, {"src": "assets/images/design/hdtracks/04.png", "alt": "Screen+Shot+2021-05-10+at+1.04.37+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/05.png", "alt": "Screen+Shot+2021-05-10+at+1.06.42+PM.png", "webp": "assets/images/design/hdtracks/05.webp"}, {"src": "assets/images/design/hdtracks/06.png", "alt": "Chuck.png", "webp": "assets/images/design/hdtracks/06.webp"}, {"src": "assets/images/design/hdtracks/07.png", "alt": "Screen+Shot+2021-05-10+at+1.18.22+PM.png", "webp": "assets/images/design/hdtracks/07.webp"}, {"src": "assets/images/design/hdtracks/08.png", "alt": "Screen+Shot+2021-05-10+at+1.18.33+PM.png", "webp": "assets/images/design/hdtracks/08.webp"}, {"src": "assets/images/design/hdtracks/09.jpg", "alt": "10470178_663675363703231_3821372901395509111_o.jpg", "webp": null}, {"src": "assets/images/design/hdtracks/10.png", "alt": "65303997_2952501178124033_8095062357006352384_n.png", "webp": null}, {"src": "assets/images/design/hdtracks/11.png", "alt": "Screen+Shot+2020-09-16+at+12.17.22+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/12.png", "alt": "Screen+Shot+2021-05-10+at+1.17.14+PM.png", "webp": "assets/images/design/hdtracks/12.webp"}], "thumb": "assets/images/design/hdtracks/thumb.png", "missing": false}, {"slug": "miles-regis", "title": "Miles Regis", "role": "Designer", "location": "New York City", "description": "Illustrations for award-winning painter, Miles Regis Hand-created illustrations adapting Miles Regis’s paintings into black-white illustrations for his upcoming coloring book. Los Angeles, 2023", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2018, "images": [{"src": "assets/images/design/miles-regis/01.jpg", "alt": "Miles Regis", "webp": null}, {"src": "assets/images/design/miles-regis/02.jpg", "alt": "Miles Regis", "webp": null}, {"src": "assets/images/design/miles-regis/03.png", "alt": "Miles Regis", "webp": "assets/images/design/miles-regis/03.webp"}, {"src": "assets/images/design/miles-regis/04.png", "alt": "Miles Regis", "webp": "assets/images/design/miles-regis/04.webp"}], "thumb": "assets/images/design/miles-regis/thumb.png", "missing": false}, {"slug": "chop-suey-club", "title": "Chop Suey Club", "role": "Designer", "location": "New York City", "description": "Chop Suey Club Contemporary Art Gallery • New York City • 2016 www.chopsueyclub.com", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2016, "images": [], "thumb": "assets/images/design/chop-suey-club/thumb.png", "missing": true}, {"slug": "welcome-home", "title": "Welcome Home", "role": "Designer", "location": "New York City", "description": "Original artwork and poster design for “Welcome Home” directed by Jo Rochelle", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2016, "images": [{"src": "assets/images/design/welcome-home/01.png", "alt": "Welcome Home", "webp": "assets/images/design/welcome-home/01.webp"}, {"src": "assets/images/design/welcome-home/02.png", "alt": "Welcome Home", "webp": "assets/images/design/welcome-home/02.webp"}], "thumb": "assets/images/design/welcome-home/thumb.png", "missing": false}], "musicProjects": [{"slug": "dont-mind-me", "title": "Don't Mind Me", "role": "Composer — Feature Film", "location": "Dir. Isaiah Hoban Halvorsen", "description": "First feature-length film score. Full soundtrack for the feature.", "palette": ["#0A0A08", "#0E0E0B", "#121210"], "category": "music", "year": 2025, "images": [], "thumb": null, "missing": true}, {"slug": "nice-knives-score", "title": "Nice Knives (film score)", "role": "Composer", "location": "New York City", "description": "Original soundtrack for the short film, Nice Knives Directed by Connor Copeland • Distributed by BAM In Motion • New York City, 2024", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "music", "year": 2024, "images": [], "thumb": "assets/images/music/nice-knives/thumb.png", "missing": true}, {"slug": "kid-nicoleman", "title": "Into The Ether With Kid Nicoleman (soundtrack)", "role": "Composer", "location": "Los Angeles", "description": "Original soundtrack for Volume One of Into The Ether With Kid Nicoleman Original soundtrack for season one of the dreamy storytelling podcast. Mind-bending sound design, eye-opening interviews, and insightful monologues make this a show as relaxing as it is expansive. © ℗ 2023 Corr Tunes Instagram SoundCloud Spotify", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2023, "images": [], "thumb": "assets/images/music/kid-nicoleman/thumb.gif", "missing": true}, {"slug": "gazoo", "title": "Gazoo Interview (film score)", "role": "Composer", "location": "Los Angeles", "description": "Original score for documentary short, Blob Dylan: Gazoo Directed by Sam Ferguson • New York City, 2022 An investigative documentary searching for the origins of the infamous NYC graffiti tag, “Blob Dylan.”", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/gazoo/thumb.png", "missing": true}, {"slug": "leave-me", "title": "Leave Me Alone (music video)", "role": "Composer", "location": "Los Angeles", "description": "Leave Me Alone Music and lyrics by Lein Theresa and Dalton Corr. Live session produced by Paul Prudente. Video by Gabe Zanoff Los Angeles, 2022", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/leave-me/thumb.png", "missing": true}, {"slug": "cheeky", "title": "Cheeky (film score)", "role": "Composer", "location": "Prague", "description": "Original score for short film, Cheeky Directed by Johnny Frohman and Yair Vurnbrand. • Prague, 2014 A comedy short about a boy growing up, maybe a little too fast.", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/cheeky/thumb.png", "missing": true}, {"slug": "tan", "title": "Tan Paints The Tenderloin (film score)", "role": "Composer", "location": "San Francisco", "description": "Original score for documentary, Tan Paints The Tenderloin Directed by Matthew Bunker •. New York City, 2022 Documentary short about Tan Sirinumas, a Thai immigrant living in San Francisco who finally receives recognition for his painting. Official Selection SF Shorts Film Festival 2020", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/tan/thumb.jpg", "missing": true}, {"slug": "no-regrets-remix", "title": "No Regrets Remix (song)", "role": "Producer", "location": "Los Angeles", "description": "Remix of B. Bravo’s “No Regrets,” appearing on the limited-edition Japanese CD version Bastard Jazz Recordings • New York City, 2022", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/no-regrets-remix/thumb.jpg", "missing": true}, {"slug": "2022-reel", "title": "2022 Composition Reel", "role": "Composer", "location": "Los Angeles", "description": "2022 Music Composition Reel and Demos © ℗ 2023 Corr Tunes", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/2022-reel/thumb.jpg", "missing": true}, {"slug": "the-future-is-ow", "title": "The Future Is Ow (theme song)", "role": "Composer", "location": "Los Angeles", "description": "Original theme song for the podcast, The Future Is Ow Created by Mack Degeurin and ​​Jonah Inserra • New York City, 2021", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2021, "images": [], "thumb": "assets/images/music/the-future-is-ow-theme-song/thumb.jpg", "missing": true}, {"slug": "alchemy", "title": "Alchemy (film score)", "role": "Composer, Music Supervisor", "location": "New York City", "description": "Original score and music supervision for Documentary short, Alchemy Directed by Remington Long • New York City, 2019 Documentary about Bonnie Ohara, the founder of a one-woman bakery in Modesto, California. Winner of over ten awards including: American Documentary and Animation Festival Paris Short Film Fest Greenwich Village Film Fest , Best Documentary", "palette": ["#E3DDD2", "#D8D2C6", "#CEC8BC"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/alchemy/thumb.png", "missing": true}, {"slug": "higher", "title": "Higher (song)", "role": "Artist", "location": "New York City", "description": "Higher Music and lyrics by Dalton Corr and Lucas Lyle. Produced by Dalton Corr. Vocals by Lucas Lyle New York City , 2019", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/higher/thumb.png", "missing": true}, {"slug": "boys-will-be-flowers", "title": "Boys Will Be Flowers (film score)", "role": "Composer", "location": "El Capitolio, Cuba", "description": "Original score for short film, Boys Will Be Flowers Directed by Daddy Ramazani • El Capitolio, Cuba, 2019 “A nostalgic portrait that captures the carefree children of Cuba, a softly cinematic study of young Cuban skaters hanging out on sun-drenched street.” Official Selection Le Festival International du Film sur l’Art Featured by Nowness", "palette": ["#C4BDA8", "#B8B19C", "#ACA590"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/boys/thumb.png", "missing": true}, {"slug": "baxter", "title": "BAXTER (music video)", "role": "Composer", "location": "New York City", "description": "BAXTER, original song and music video Written and produced by Dalton Corr • Directed by Dalton Corr • Produced by Remington Long and Connor Smith Paris and New York City, 2018", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2018, "images": [], "thumb": "assets/images/music/baxter/thumb.jpg", "missing": true}, {"slug": "i-think", "title": "I Think Of You (music video)", "role": "Artist", "location": "New York City", "description": "I Think Of You original song and music video Written and produced by Dalton Corr • Directed by Daddy Ramazani • Produced by Remington Long Distributed by Village Records • New York City, 2017", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2017, "images": [], "thumb": "assets/images/music/i-think/thumb.jpg", "missing": true}, {"slug": "dizzy", "title": "Dizzy live from St. Marks (music video)", "role": "Bass", "location": "New York City", "description": "Dizzy Live on St. Mark’s Directed by Connor Smith • New York City, 2015 Shaun Webber, guitar & vocals. Dalton Corr, bass. Jacques Wortsman, guitar. Austin Gutierrez, drums", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2015, "images": [], "thumb": "assets/images/music/dizzy/thumb.png", "missing": true}, {"slug": "paper-rose", "title": "The Paper Rose (film score)", "role": "Composer", "location": "New York City", "description": "Original film score for the short film, The Paper Rose Directed by Nadia Fedchin • New York City, 2015", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2015, "images": [], "thumb": "assets/images/music/paper-rose/thumb.jpg", "missing": true}, {"slug": "brake-heel", "title": "Brake My Heel (film score)", "role": "Composer, Performer", "location": "Prague", "description": "Original song composed for the short film, Itch City Music and lyrics by Dalton Corr. Performed by Dalton Corr, vocals by Tavia Young Directed by Lelia Garrison • Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/brake-heel/thumb.jpg", "missing": true}, {"slug": "on-strings", "title": "On Strings (film score)", "role": "Composer", "location": "Prague", "description": "Original film score for the short film, On Strings Directed by Nadia Fedchin • Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/on-strings/thumb.png", "missing": true}, {"slug": "prague", "title": "Live from Prague (music video)", "role": "Performer", "location": "Prague", "description": "Original songs “Modi” and “Skylight Blues” performed live in Prague “Skylight Blues” and “Modi” were composed and arranged by Dalton Corr. Recorded llive from the Palffy Palace in Prague. The recording was later used as the theme music for the NYU Prague Campus podcast. Performed by Dalton Corr (piano), John Marcus (bass), Peter Anspach (drums), and Raymundo Gutierrez (flute). Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/prague/thumb.jpg", "missing": true}], "gallery": [{"src": "assets/images/design/hcsff6/02.jpg", "alt": "img_0484_52043317890_o.jpg", "webp": null, "speed": 0.072}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/02.webp", "speed": 0.047}, {"src": "assets/images/design/hcsff7/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.056}, {"src": "assets/images/design/skyfire-artists/02.png", "alt": "SA Tall - Black.png", "webp": null, "speed": 0.068}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/02.webp", "speed": 0.072}, {"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/01.webp", "speed": 0.035}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp", "speed": 0.075}, {"src": "assets/images/design/hcsff7/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7/02.webp", "speed": 0.055}, {"src": "assets/images/design/feeling/01.png", "alt": "Let This Feeling Go", "webp": "assets/images/design/feeling/01.webp", "speed": 0.059}, {"src": "assets/images/design/miles-regis/01.jpg", "alt": "Miles Regis", "webp": null, "speed": 0.047}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null, "speed": 0.047}, {"src": "assets/images/design/hollyshortswebsite/01.png", "alt": "Hollyshorts.com", "webp": null, "speed": 0.039}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": "assets/images/design/hollyshorts19/02.webp", "speed": 0.043}, {"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/01.webp", "speed": 0.072}, {"src": "assets/images/design/hcsff7-2/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.038}, {"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": "assets/images/design/nice-knives/01.webp", "speed": 0.052}, {"src": "assets/images/design/skyfire-artists/01.png", "alt": "SA Tall - White.png", "webp": null, "speed": 0.076}, {"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/01.webp", "speed": 0.052}, {"src": "assets/images/design/hcsff7-2/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7-2/02.webp", "speed": 0.062}, {"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts19/01.webp", "speed": 0.057}, {"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null, "speed": 0.046}, {"src": "assets/images/design/little-issues/01.png", "alt": "LiTTLE iSSUES", "webp": "assets/images/design/little-issues/01.webp", "speed": 0.08}], "blurBySrc": {}}</script>
+  <script id="site-data" type="application/json">{"categories": ["design", "music"], "designProjects": [{"slug": "hollyshorts-21", "title": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Los Angeles", "description": "Art Director of the 21th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 21st anniversary poster, merch design, badge design, award design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 21th Annual HollyShorts Award Show TCL Chinese Theatres | Los Angeles, 2025", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/01.webp"}, {"src": "assets/images/design/hollyshorts21/02.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/02.webp"}, {"src": "assets/images/design/hollyshorts21/03.jpeg", "alt": "IMG_9135.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/04.jpeg", "alt": "IMG_1355.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/05.jpeg", "alt": "IMG_9191.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/06.jpg", "alt": "54715467764_2357977844_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/07.jpeg", "alt": "IMG_9196.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/08.jpg", "alt": "54729116567_902409cbf6_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/09.jpg", "alt": "54728644752_7dabb5f045_o 2.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/10.jpeg", "alt": "IMG_8331.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/11.jpeg", "alt": "IMG_7601.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/12.jpeg", "alt": "IMG_9129.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/13.jpeg", "alt": "IMG_9169.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/14.jpeg", "alt": "IMG_9120.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/15.jpeg", "alt": "IMG_9161.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/16.jpg", "alt": "54720456147_54381b7e60_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/17.jpg", "alt": "54730171974_deadfd9b5a_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/18.jpg", "alt": "54729688633_66abfafdb4_k 2.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts21/thumb.png", "missing": false}, {"slug": "comedy-rebrand", "title": "HollyShorts Comedy 2025", "role": "Art Director — Led Rebrand", "location": "Los Angeles", "description": "Rebrand and Art Direction for HollyShorts Comedy 2025 May 2025 Los Angeles, California www.hollyshortscomedy.com Led the redesign of the Hollywood Comedy Short Film Festival into HollyShorts Comedy, establishing a bold new visual identity aligned with the parent HollyShorts brand. The rebrand included new logo, color palette, and typography, along with a comprehensive design system spanning print, digital, and event assets. Work includes: festival poster, official website website, interactive AR activations, on-screen graphics, award show design, social media assets, festival badges, merchandise, and additional collateral.", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/01.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/02.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/02.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/03.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/03.webp"}, {"src": "assets/images/design/hollyshorts-comedy-2025/04.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/05.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/06.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/07.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/08.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/08.webp"}], "thumb": "assets/images/design/hollyshorts-comedy-2025/thumb.png", "missing": false}, {"slug": "hollyshorts-london", "title": "HollyShorts London 2025", "role": "Creative Director", "location": "London, United Kingdom", "description": "Branding and Art Direction for HollyShorts London June 2025 London, United Kingdom www.hollyshorts.com/london Led creative direction and design for the inaugural HollyShorts London, establishing a new visual identity for the festival’s international expansion. Built a city-specific system that stayed grounded in the parent brand while incorporating UK cinematic culture and tone. Work includes: festival poster, custom London branding package, digital marketing rollout, official website assets, motion graphics, social media templates, screening visuals, badges, merchandise, and print collateral.", "palette": ["#DAD5C9", "#D0CAC0", "#C8C2B8"], "category": "design", "year": 2025, "images": [{"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/03.jpg", "alt": "465921008_929866422409253_6811404960256833731_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/04.jpg", "alt": "472304542_844055327752181_783869732097309527_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/05.jpg", "alt": "472298236_1128974298601453_1361862241833342341_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/06.jpg", "alt": "472404434_625409833255136_3559600277865683536_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/07.jpg", "alt": "470934486_8384437738328269_4397251221193907368_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/08.jpg", "alt": "470935988_8709149192525956_7029747810375016340_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/09.jpg", "alt": "470955319_490966800142874_1986426474110815044_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/10.jpg", "alt": "470973968_1089669722564324_1205839330410274054_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/11.jpg", "alt": "472239287_919153263653328_1023683448985257053_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/12.jpg", "alt": "472319687_1248458226224122_4616341925662061820_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/13.jpg", "alt": "472215280_455677710746912_527048242292983217_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/14.jpg", "alt": "472338709_906072598408296_1268345784545495665_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/15.jpg", "alt": "472289667_1110353980248420_5092475038890263860_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/16.jpg", "alt": "472032168_1119931572853821_1601451983331609380_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/17.jpg", "alt": "472233077_965652965466096_2612320933165423722_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/18.jpg", "alt": "472282706_2672610159793315_8925558514694169954_n.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts-london/thumb.jpg", "missing": false}, {"slug": "hollyshorts-20", "title": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese · Egyptian Theater · Japan House, Los Angeles", "description": "Art Director of the 20th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 20th anniversary poster, merch design, badge design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 20th Annual HollyShorts Award Show live from the Egyptian Theater, and assisting on award design. TCL Chinese Theatres, Egyptian Theater, Japan House Los Angeles, 2024", "palette": ["#0D0D1A", "#161628", "#1C1C30"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/01.webp"}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/02.webp"}, {"src": "assets/images/design/hollyshorts20/03.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/04.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/05.png", "alt": "photo wall design", "webp": "assets/images/design/hollyshorts20/05.webp"}, {"src": "assets/images/design/hollyshorts20/06.jpg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/07.jpeg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/08.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/09.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/10.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/11.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/12.jpeg", "alt": "on-screen graphics", "webp": null}, {"src": "assets/images/design/hollyshorts20/13.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/14.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/15.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/16.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/17.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/18.jpg", "alt": "event signage", "webp": null}], "thumb": "assets/images/design/hollyshorts20/thumb.png", "missing": false}, {"slug": "cannes-2024", "title": "Cannes 2024", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Original illustrations and poster design for Kodak-hosted events at the 2024 Cannes Film Festival.", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/cannes-2024/01.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/01.webp"}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/02.webp"}, {"src": "assets/images/design/cannes-2024/03.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/03.webp"}, {"src": "assets/images/design/cannes-2024/04.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/04.webp"}], "thumb": "assets/images/design/cannes-2024/thumb.png", "missing": false}, {"slug": "nice-knives", "title": "Nice Knives", "role": "Poster Design + Film Score", "location": "New York City", "description": "Poster design for Nice Knives Directed by Connor Copeland Distributed by BAM In Motion Little Tube Productions New York City, 2023", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": "assets/images/design/nice-knives/01.webp"}], "thumb": "assets/images/design/nice-knives/thumb.png", "missing": false}, {"slug": "hcsff8", "title": "8th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "The 8 th Annual Hollywood Comedy Shorts Film Festival Art Director • Los Angeles, California • May 2024", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hcsff8/01.jpg", "alt": "8th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff8/02.jpg", "alt": "53697456816_d24a11792c_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/03.jpg", "alt": "[large] 2024 Hollywood Comedy Short Film Festival Poster.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/04.jpg", "alt": "53697840444_86a9f3b229_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/05.jpg", "alt": "53697834414_3f0a308c59_k.jpg", "webp": null}, {"src": "assets/images/design/hcsff8/06.jpeg", "alt": "IMG_4414.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/07.jpeg", "alt": "IMG_4416.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/08.jpeg", "alt": "IMG_4328.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/09.jpeg", "alt": "IMG_4299.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/10.jpeg", "alt": "IMG_4332.jpeg", "webp": null}, {"src": "assets/images/design/hcsff8/11.png", "alt": "Kaledescope 2.png", "webp": "assets/images/design/hcsff8/11.webp"}, {"src": "assets/images/design/hcsff8/12.png", "alt": "Kaledescope 3.png", "webp": "assets/images/design/hcsff8/12.webp"}, {"src": "assets/images/design/hcsff8/13.png", "alt": "Kaledescope 10.png", "webp": "assets/images/design/hcsff8/13.webp"}, {"src": "assets/images/design/hcsff8/14.png", "alt": "All Access.png", "webp": "assets/images/design/hcsff8/14.webp"}, {"src": "assets/images/design/hcsff8/15.png", "alt": "Day One Pass.png", "webp": "assets/images/design/hcsff8/15.webp"}, {"src": "assets/images/design/hcsff8/16.png", "alt": "Day Two Pass.png", "webp": "assets/images/design/hcsff8/16.webp"}, {"src": "assets/images/design/hcsff8/17.png", "alt": "Press.png", "webp": "assets/images/design/hcsff8/17.webp"}, {"src": "assets/images/design/hcsff8/18.png", "alt": "Screenwriter.png", "webp": "assets/images/design/hcsff8/18.webp"}], "thumb": "assets/images/design/hcsff8/thumb.png", "missing": false}, {"slug": "hollyshortswebsite", "title": "Hollyshorts.com", "role": "Designer / Developer", "location": "Los Angeles", "description": "Website design for Hollyshorts.com , official website of the Oscar-Qualifying® Film Festival www.hollyshorts.com", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/hollyshortswebsite/01.png", "alt": "Hollyshorts.com", "webp": null}], "thumb": "assets/images/design/hollyshortswebsite/thumb.png", "missing": false}, {"slug": "little-issues", "title": "LiTTLE iSSUES", "role": "Designer", "location": "Los Angeles", "description": "Poster design for Little Issues Directed by Jerah Milligan Created by Jana Miley Winner of over a dozen awards Los Angeles, 2024", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/little-issues/01.png", "alt": "LiTTLE iSSUES", "webp": "assets/images/design/little-issues/01.webp"}], "thumb": "assets/images/design/little-issues/thumb.png", "missing": false}, {"slug": "skyfire-artists", "title": "Skyfire Artists", "role": "Designer", "location": "Los Angeles", "description": "Skyfire Artists Talent Management Los Angeles, California • 2024 • www.skyfireartists.com • instagram", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2024, "images": [{"src": "assets/images/design/skyfire-artists/01.png", "alt": "SA Tall - White.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/02.png", "alt": "SA Tall - Black.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/03.png", "alt": "Sign.png", "webp": "assets/images/design/skyfire-artists/03.webp"}, {"src": "assets/images/design/skyfire-artists/04.png", "alt": "Sign 2.png", "webp": "assets/images/design/skyfire-artists/04.webp"}, {"src": "assets/images/design/skyfire-artists/05.png", "alt": "Card.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/06.png", "alt": "Card 2.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/07.png", "alt": "Hat 3.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/08.png", "alt": "Hat 4.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/09.png", "alt": "SA Hat 2.png", "webp": null}, {"src": "assets/images/design/skyfire-artists/10.png", "alt": "SA Shirt.png", "webp": null}], "thumb": "assets/images/design/skyfire-artists/thumb.png", "missing": false}, {"slug": "hollyshorts-19", "title": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "19th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2023", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts19/01.webp"}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": "assets/images/design/hollyshorts19/02.webp"}, {"src": "assets/images/design/hollyshorts19/03.jpg", "alt": "IMG_2157.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/04.jpg", "alt": "IMG_2159.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/05.jpeg", "alt": "IMG_2163.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/06.jpeg", "alt": "IMG_2162.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/07.jpg", "alt": "53116870852_38ed7647c2_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/08.jpeg", "alt": "IMG_2106.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/09.jpg", "alt": "53129550845_82942014eb_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/10.jpeg", "alt": "IMG_2222.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/11.png", "alt": "Steven.png", "webp": "assets/images/design/hollyshorts19/11.webp"}, {"src": "assets/images/design/hollyshorts19/12.jpeg", "alt": "IMG_2114.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/13.jpg", "alt": "53116882592_c5664cc898_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/14.png", "alt": "BitPix.png", "webp": "assets/images/design/hollyshorts19/14.webp"}, {"src": "assets/images/design/hollyshorts19/15.png", "alt": "BitPix+Award+Winners+Bundle.png", "webp": "assets/images/design/hollyshorts19/15.webp"}, {"src": "assets/images/design/hollyshorts19/16.png", "alt": "Day+Pass.png", "webp": "assets/images/design/hollyshorts19/16.webp"}, {"src": "assets/images/design/hollyshorts19/17.png", "alt": "Staff.png", "webp": "assets/images/design/hollyshorts19/17.webp"}, {"src": "assets/images/design/hollyshorts19/18.png", "alt": "All+Access+A.png", "webp": "assets/images/design/hollyshorts19/18.webp"}], "thumb": "assets/images/design/hollyshorts19/thumb.png", "missing": false}, {"slug": "cannes-2023", "title": "Cannes 2023", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Cannes Film Festival 2023 Cannes, France • May 2023", "palette": ["#D0C9BD", "#C5BEB2", "#BAB3A7"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/cannes/01.png", "alt": "Cannes 2023", "webp": "assets/images/design/cannes/01.webp"}, {"src": "assets/images/design/cannes/02.png", "alt": "Cannes 2023", "webp": "assets/images/design/cannes/02.webp"}], "thumb": "assets/images/design/cannes/thumb.png", "missing": false}, {"slug": "hcsff7", "title": "7th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "The 7th Annual Hollywood Comedy Shorts Film Festival Look Cinemas • Los Angeles, California • April 2023", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hcsff7/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff7/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7/02.webp"}, {"src": "assets/images/design/hcsff7/03.png", "alt": "Red+2-1.png", "webp": "assets/images/design/hcsff7/03.webp"}, {"src": "assets/images/design/hcsff7/04.jpg", "alt": "52840583340_8769e3c2a4_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/05.jpg", "alt": "52841097138_a7f35b76ac_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/06.jpg", "alt": "52840085407_068c6fad26_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/07.jpg", "alt": "52841710376_219789baca_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/08.jpg", "alt": "52840170211_5916cc291b_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/09.jpg", "alt": "52840614108_d24f1e125a_h.jpg", "webp": null}, {"src": "assets/images/design/hcsff7/10.png", "alt": "Yellow+2-1.png", "webp": null}, {"src": "assets/images/design/hcsff7/11.png", "alt": "Black-1.png", "webp": null}, {"src": "assets/images/design/hcsff7/12.png", "alt": "All+Access.png", "webp": "assets/images/design/hcsff7/12.webp"}, {"src": "assets/images/design/hcsff7/13.png", "alt": "Filmmaker.png", "webp": "assets/images/design/hcsff7/13.webp"}, {"src": "assets/images/design/hcsff7/14.png", "alt": "Staff-1.png", "webp": "assets/images/design/hcsff7/14.webp"}, {"src": "assets/images/design/hcsff7/15.png", "alt": "Day+One.png", "webp": "assets/images/design/hcsff7/15.webp"}, {"src": "assets/images/design/hcsff7/16.png", "alt": "Screenwriter.png", "webp": "assets/images/design/hcsff7/16.webp"}, {"src": "assets/images/design/hcsff7/17.png", "alt": "Press.png", "webp": "assets/images/design/hcsff7/17.webp"}, {"src": "assets/images/design/hcsff7/18.png", "alt": "Weekend.png", "webp": null}], "thumb": "assets/images/design/hcsff7/thumb.png", "missing": false}, {"slug": "feeling", "title": "Let This Feeling Go", "role": "Designer", "location": "Los Angeles", "description": "Original artwork and poster design for Let This Feeling Go Director Andrew De Zen Los Angeles, 2023", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/feeling/01.png", "alt": "Let This Feeling Go", "webp": "assets/images/design/feeling/01.webp"}, {"src": "assets/images/design/feeling/02.png", "alt": "Poster+1G+(title)+copy.png", "webp": "assets/images/design/feeling/02.webp"}, {"src": "assets/images/design/feeling/03.png", "alt": "Poster+5+(title)+copy.png", "webp": "assets/images/design/feeling/03.webp"}], "thumb": "assets/images/design/feeling/thumb.png", "missing": false}, {"slug": "hallelujah", "title": "Hallelujah", "role": "Designer", "location": "Los Angeles", "description": "Hallelujah Director Victor Gabriel • Executive Producer Spike Lee • Los Angeles, 2023", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/hallelujah/01.jpg", "alt": "Hallelujah", "webp": null}, {"src": "assets/images/design/hallelujah/02.png", "alt": "Hallelujah", "webp": "assets/images/design/hallelujah/02.webp"}], "thumb": "assets/images/design/hallelujah/thumb.jpg", "missing": false}, {"slug": "survived-by", "title": "Survived By", "role": "Designer", "location": "Los Angeles", "description": "Original artwork and poster design for Survived By Director K.D. Chalk Los Angeles, 2023", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/survived-by/01.jpg", "alt": "Survived By", "webp": null}], "thumb": "assets/images/design/survived-by/thumb.jpg", "missing": false}, {"slug": "timewriter", "title": "Timewriter", "role": "Designer", "location": "Los Angeles", "description": "Art department for Timewriter Directed by Ryan Luevano Los Angeles, 2023 IMDb", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2023, "images": [{"src": "assets/images/design/timewriter/01.jpg", "alt": "Timewriter", "webp": null}], "thumb": "assets/images/design/timewriter/thumb.png", "missing": false}, {"slug": "hollyshorts-18", "title": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Designer", "location": "TCL Chinese Theatres", "description": "18th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2022", "palette": ["#222238", "#2A2A40", "#1A1A30"], "category": "design", "year": 2022, "images": [{"src": "assets/images/design/hsff18/01.png", "alt": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hsff18/01.webp"}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp"}, {"src": "assets/images/design/hsff18/03.png", "alt": "6+copy.png", "webp": "assets/images/design/hsff18/03.webp"}, {"src": "assets/images/design/hsff18/04.jpg", "alt": "D3E8F9F0-AE46-4052-B1FB-AFAF48D065CF.jpg", "webp": null}, {"src": "assets/images/design/hsff18/05.jpeg", "alt": "IMG_6421.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/06.jpeg", "alt": "IMG_6416.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/07.jpeg", "alt": "IMG_6402.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/08.jpeg", "alt": "IMG_6408.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/09.png", "alt": "HollyShorts+Laurel+2.png", "webp": null}, {"src": "assets/images/design/hsff18/10.png", "alt": "Hollyshorts18.png", "webp": "assets/images/design/hsff18/10.webp"}, {"src": "assets/images/design/hsff18/11.jpg", "alt": "F+is+for+Film+Black.jpg", "webp": null}, {"src": "assets/images/design/hsff18/12.jpg", "alt": "F+is+for+Film+white.jpg", "webp": null}], "thumb": "assets/images/design/hsff18/thumb.png", "missing": false}, {"slug": "hcsff6", "title": "6th Annual Hollywood Comedy Shorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "6th Annual Hollywood Comedy Shorts Film Festival TCL Chinese Theaters 6 • Hollywood, California • April 2022", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "year": 2022, "images": [{"src": "assets/images/design/hcsff6/01.jpg", "alt": "6th Annual Hollywood Comedy Shorts Film Festival", "webp": null}, {"src": "assets/images/design/hcsff6/02.jpg", "alt": "img_0484_52043317890_o.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/03.jpg", "alt": "img_0469_52042825331_o.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/04.jpeg", "alt": "IMG_5787.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/05.jpeg", "alt": "image1.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/06.jpeg", "alt": "image0.jpeg", "webp": null}, {"src": "assets/images/design/hcsff6/07.jpg", "alt": "All+Access.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/08.png", "alt": "Film+Maker.png", "webp": null}, {"src": "assets/images/design/hcsff6/09.png", "alt": "Media.png", "webp": null}, {"src": "assets/images/design/hcsff6/10.jpg", "alt": "Screenwriter+badges.jpg", "webp": null}, {"src": "assets/images/design/hcsff6/11.png", "alt": "Flyer+6.png", "webp": null}, {"src": "assets/images/design/hcsff6/12.png", "alt": "Black+Laurel.png", "webp": null}, {"src": "assets/images/design/hcsff6/13.png", "alt": "Offocial+Selection+Blaxk.png", "webp": null}, {"src": "assets/images/design/hcsff6/14.png", "alt": "Winner+Black+.png", "webp": null}, {"src": "assets/images/design/hcsff6/15.png", "alt": "Drake+meme+2.png", "webp": "assets/images/design/hcsff6/15.webp"}, {"src": "assets/images/design/hcsff6/16.png", "alt": "Tap+meme+(logos).png+.png", "webp": null}, {"src": "assets/images/design/hcsff6/17.png", "alt": "Portait+Poster+5B.png", "webp": null}, {"src": "assets/images/design/hcsff6/18.png", "alt": "Square+Poster+4+Updated.png", "webp": null}], "thumb": "assets/images/design/hcsff6/thumb.jpg", "missing": false}, {"slug": "hdtracks", "title": "HDtracks", "role": "Director of Marketing, Lead Designer", "location": "New York City", "description": "HDtracks The world’s leading online Hi-Res music store", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2019, "images": [{"src": "assets/images/design/hdtracks/01.png", "alt": "HDtracks", "webp": "assets/images/design/hdtracks/01.webp"}, {"src": "assets/images/design/hdtracks/02.png", "alt": "HDtracks+SplashPage+Mock+Up.png", "webp": "assets/images/design/hdtracks/02.webp"}, {"src": "assets/images/design/hdtracks/03.png", "alt": "Screen+Shot+2021-05-10+at+12.58.46+PM.png", "webp": "assets/images/design/hdtracks/03.webp"}, {"src": "assets/images/design/hdtracks/04.png", "alt": "Screen+Shot+2021-05-10+at+1.04.37+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/05.png", "alt": "Screen+Shot+2021-05-10+at+1.06.42+PM.png", "webp": "assets/images/design/hdtracks/05.webp"}, {"src": "assets/images/design/hdtracks/06.png", "alt": "Chuck.png", "webp": "assets/images/design/hdtracks/06.webp"}, {"src": "assets/images/design/hdtracks/07.png", "alt": "Screen+Shot+2021-05-10+at+1.18.22+PM.png", "webp": "assets/images/design/hdtracks/07.webp"}, {"src": "assets/images/design/hdtracks/08.png", "alt": "Screen+Shot+2021-05-10+at+1.18.33+PM.png", "webp": "assets/images/design/hdtracks/08.webp"}, {"src": "assets/images/design/hdtracks/09.jpg", "alt": "10470178_663675363703231_3821372901395509111_o.jpg", "webp": null}, {"src": "assets/images/design/hdtracks/10.png", "alt": "65303997_2952501178124033_8095062357006352384_n.png", "webp": null}, {"src": "assets/images/design/hdtracks/11.png", "alt": "Screen+Shot+2020-09-16+at+12.17.22+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/12.png", "alt": "Screen+Shot+2021-05-10+at+1.17.14+PM.png", "webp": "assets/images/design/hdtracks/12.webp"}], "thumb": "assets/images/design/hdtracks/thumb.png", "missing": false}, {"slug": "miles-regis", "title": "Miles Regis", "role": "Designer", "location": "New York City", "description": "Illustrations for award-winning painter, Miles Regis Hand-created illustrations adapting Miles Regis’s paintings into black-white illustrations for his upcoming coloring book. Los Angeles, 2023", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2018, "images": [{"src": "assets/images/design/miles-regis/01.jpg", "alt": "Miles Regis", "webp": null}, {"src": "assets/images/design/miles-regis/02.jpg", "alt": "Miles Regis", "webp": null}, {"src": "assets/images/design/miles-regis/03.png", "alt": "Miles Regis", "webp": "assets/images/design/miles-regis/03.webp"}, {"src": "assets/images/design/miles-regis/04.png", "alt": "Miles Regis", "webp": "assets/images/design/miles-regis/04.webp"}], "thumb": "assets/images/design/miles-regis/thumb.png", "missing": false}, {"slug": "chop-suey-club", "title": "Chop Suey Club", "role": "Designer", "location": "New York City", "description": "Chop Suey Club Contemporary Art Gallery • New York City • 2016 www.chopsueyclub.com", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "year": 2016, "images": [], "thumb": "assets/images/design/chop-suey-club/thumb.png", "missing": true}, {"slug": "welcome-home", "title": "Welcome Home", "role": "Designer", "location": "New York City", "description": "Original artwork and poster design for “Welcome Home” directed by Jo Rochelle", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "year": 2016, "images": [{"src": "assets/images/design/welcome-home/01.png", "alt": "Welcome Home", "webp": "assets/images/design/welcome-home/01.webp"}, {"src": "assets/images/design/welcome-home/02.png", "alt": "Welcome Home", "webp": "assets/images/design/welcome-home/02.webp"}], "thumb": "assets/images/design/welcome-home/thumb.png", "missing": false}], "musicProjects": [{"slug": "dont-mind-me", "title": "Don't Mind Me", "role": "Composer — Feature Film", "location": "Dir. Isaiah Hoban Halvorsen", "description": "First feature-length film score. Full soundtrack for the feature.", "palette": ["#0A0A08", "#0E0E0B", "#121210"], "category": "music", "year": 2025, "images": [], "thumb": null, "missing": true}, {"slug": "nice-knives-score", "title": "Nice Knives (film score)", "role": "Composer", "location": "New York City", "description": "Original soundtrack for the short film, Nice Knives Directed by Connor Copeland • Distributed by BAM In Motion • New York City, 2024", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "music", "year": 2024, "images": [], "thumb": "assets/images/music/nice-knives/thumb.png", "missing": true}, {"slug": "kid-nicoleman", "title": "Into The Ether With Kid Nicoleman (soundtrack)", "role": "Composer", "location": "Los Angeles", "description": "Original soundtrack for Volume One of Into The Ether With Kid Nicoleman Original soundtrack for season one of the dreamy storytelling podcast. Mind-bending sound design, eye-opening interviews, and insightful monologues make this a show as relaxing as it is expansive. © ℗ 2023 Corr Tunes Instagram SoundCloud Spotify", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2023, "images": [], "thumb": "assets/images/music/kid-nicoleman/thumb.gif", "missing": true}, {"slug": "gazoo", "title": "Gazoo Interview (film score)", "role": "Composer", "location": "Los Angeles", "description": "Original score for documentary short, Blob Dylan: Gazoo Directed by Sam Ferguson • New York City, 2022 An investigative documentary searching for the origins of the infamous NYC graffiti tag, “Blob Dylan.”", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/gazoo/thumb.png", "missing": true}, {"slug": "leave-me", "title": "Leave Me Alone (music video)", "role": "Composer", "location": "Los Angeles", "description": "Leave Me Alone Music and lyrics by Lein Theresa and Dalton Corr. Live session produced by Paul Prudente. Video by Gabe Zanoff Los Angeles, 2022", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/leave-me/thumb.png", "missing": true}, {"slug": "cheeky", "title": "Cheeky (film score)", "role": "Composer", "location": "Prague", "description": "Original score for short film, Cheeky Directed by Johnny Frohman and Yair Vurnbrand. • Prague, 2014 A comedy short about a boy growing up, maybe a little too fast.", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/cheeky/thumb.png", "missing": true}, {"slug": "tan", "title": "Tan Paints The Tenderloin (film score)", "role": "Composer", "location": "San Francisco", "description": "Original score for documentary, Tan Paints The Tenderloin Directed by Matthew Bunker •. New York City, 2022 Documentary short about Tan Sirinumas, a Thai immigrant living in San Francisco who finally receives recognition for his painting. Official Selection SF Shorts Film Festival 2020", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/tan/thumb.jpg", "missing": true}, {"slug": "no-regrets-remix", "title": "No Regrets Remix (song)", "role": "Producer", "location": "Los Angeles", "description": "Remix of B. Bravo’s “No Regrets,” appearing on the limited-edition Japanese CD version Bastard Jazz Recordings • New York City, 2022", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/no-regrets-remix/thumb.jpg", "missing": true}, {"slug": "2022-reel", "title": "2022 Composition Reel", "role": "Composer", "location": "Los Angeles", "description": "2022 Music Composition Reel and Demos © ℗ 2023 Corr Tunes", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2022, "images": [], "thumb": "assets/images/music/2022-reel/thumb.jpg", "missing": true}, {"slug": "the-future-is-ow", "title": "The Future Is Ow (theme song)", "role": "Composer", "location": "Los Angeles", "description": "Original theme song for the podcast, The Future Is Ow Created by Mack Degeurin and ​​Jonah Inserra • New York City, 2021", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2021, "images": [], "thumb": "assets/images/music/the-future-is-ow-theme-song/thumb.jpg", "missing": true}, {"slug": "alchemy", "title": "Alchemy (film score)", "role": "Composer, Music Supervisor", "location": "New York City", "description": "Original score and music supervision for Documentary short, Alchemy Directed by Remington Long • New York City, 2019 Documentary about Bonnie Ohara, the founder of a one-woman bakery in Modesto, California. Winner of over ten awards including: American Documentary and Animation Festival Paris Short Film Fest Greenwich Village Film Fest , Best Documentary", "palette": ["#E3DDD2", "#D8D2C6", "#CEC8BC"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/alchemy/thumb.png", "missing": true}, {"slug": "higher", "title": "Higher (song)", "role": "Artist", "location": "New York City", "description": "Higher Music and lyrics by Dalton Corr and Lucas Lyle. Produced by Dalton Corr. Vocals by Lucas Lyle New York City , 2019", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/higher/thumb.png", "missing": true}, {"slug": "boys-will-be-flowers", "title": "Boys Will Be Flowers (film score)", "role": "Composer", "location": "El Capitolio, Cuba", "description": "Original score for short film, Boys Will Be Flowers Directed by Daddy Ramazani • El Capitolio, Cuba, 2019 “A nostalgic portrait that captures the carefree children of Cuba, a softly cinematic study of young Cuban skaters hanging out on sun-drenched street.” Official Selection Le Festival International du Film sur l’Art Featured by Nowness", "palette": ["#C4BDA8", "#B8B19C", "#ACA590"], "category": "music", "year": 2019, "images": [], "thumb": "assets/images/music/boys/thumb.png", "missing": true}, {"slug": "baxter", "title": "BAXTER (music video)", "role": "Composer", "location": "New York City", "description": "BAXTER, original song and music video Written and produced by Dalton Corr • Directed by Dalton Corr • Produced by Remington Long and Connor Smith Paris and New York City, 2018", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2018, "images": [], "thumb": "assets/images/music/baxter/thumb.jpg", "missing": true}, {"slug": "i-think", "title": "I Think Of You (music video)", "role": "Artist", "location": "New York City", "description": "I Think Of You original song and music video Written and produced by Dalton Corr • Directed by Daddy Ramazani • Produced by Remington Long Distributed by Village Records • New York City, 2017", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2017, "images": [], "thumb": "assets/images/music/i-think/thumb.jpg", "missing": true}, {"slug": "dizzy", "title": "Dizzy live from St. Marks (music video)", "role": "Bass", "location": "New York City", "description": "Dizzy Live on St. Mark’s Directed by Connor Smith • New York City, 2015 Shaun Webber, guitar & vocals. Dalton Corr, bass. Jacques Wortsman, guitar. Austin Gutierrez, drums", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2015, "images": [], "thumb": "assets/images/music/dizzy/thumb.png", "missing": true}, {"slug": "paper-rose", "title": "The Paper Rose (film score)", "role": "Composer", "location": "New York City", "description": "Original film score for the short film, The Paper Rose Directed by Nadia Fedchin • New York City, 2015", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2015, "images": [], "thumb": "assets/images/music/paper-rose/thumb.jpg", "missing": true}, {"slug": "brake-heel", "title": "Brake My Heel (film score)", "role": "Composer, Performer", "location": "Prague", "description": "Original song composed for the short film, Itch City Music and lyrics by Dalton Corr. Performed by Dalton Corr, vocals by Tavia Young Directed by Lelia Garrison • Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/brake-heel/thumb.jpg", "missing": true}, {"slug": "on-strings", "title": "On Strings (film score)", "role": "Composer", "location": "Prague", "description": "Original film score for the short film, On Strings Directed by Nadia Fedchin • Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/on-strings/thumb.png", "missing": true}, {"slug": "prague", "title": "Live from Prague (music video)", "role": "Performer", "location": "Prague", "description": "Original songs “Modi” and “Skylight Blues” performed live in Prague “Skylight Blues” and “Modi” were composed and arranged by Dalton Corr. Recorded llive from the Palffy Palace in Prague. The recording was later used as the theme music for the NYU Prague Campus podcast. Performed by Dalton Corr (piano), John Marcus (bass), Peter Anspach (drums), and Raymundo Gutierrez (flute). Prague, 2014", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "music", "year": 2014, "images": [], "thumb": "assets/images/music/prague/thumb.jpg", "missing": true}], "gallery": [{"src": "assets/images/design/hcsff6/02.jpg", "alt": "img_0484_52043317890_o.jpg", "webp": null, "speed": 0.052}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": "assets/images/design/cannes-2024/02.webp", "speed": 0.048}, {"src": "assets/images/design/hcsff7/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.063}, {"src": "assets/images/design/skyfire-artists/02.png", "alt": "SA Tall - Black.png", "webp": null, "speed": 0.036}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/02.webp", "speed": 0.064}, {"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts20/01.webp", "speed": 0.072}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp", "speed": 0.047}, {"src": "assets/images/design/hcsff7/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7/02.webp", "speed": 0.072}, {"src": "assets/images/design/feeling/01.png", "alt": "Let This Feeling Go", "webp": "assets/images/design/feeling/01.webp", "speed": 0.065}, {"src": "assets/images/design/miles-regis/01.jpg", "alt": "Miles Regis", "webp": null, "speed": 0.075}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null, "speed": 0.062}, {"src": "assets/images/design/hollyshortswebsite/01.png", "alt": "Hollyshorts.com", "webp": null, "speed": 0.073}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": "assets/images/design/hollyshorts19/02.webp", "speed": 0.034}, {"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": "assets/images/design/hollyshorts-comedy-2025/01.webp", "speed": 0.073}, {"src": "assets/images/design/hcsff7-2/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.043}, {"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": "assets/images/design/nice-knives/01.webp", "speed": 0.032}, {"src": "assets/images/design/skyfire-artists/01.png", "alt": "SA Tall - White.png", "webp": null, "speed": 0.031}, {"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts21/01.webp", "speed": 0.076}, {"src": "assets/images/design/hcsff7-2/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7-2/02.webp", "speed": 0.051}, {"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hollyshorts19/01.webp", "speed": 0.071}, {"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null, "speed": 0.06}, {"src": "assets/images/design/little-issues/01.png", "alt": "LiTTLE iSSUES", "webp": "assets/images/design/little-issues/01.webp", "speed": 0.07}], "blurBySrc": {}}</script>
   <script>
 (function () {
   var SITE = JSON.parse(document.getElementById("site-data").textContent);
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mergeAssetHints(blurMap) {
+    if (!blurMap) return;
+    if (blurMap.blurBySrc) SITE.blurBySrc = blurMap.blurBySrc;
+    if (blurMap.webpBySrc) {
+      var wmap = blurMap.webpBySrc;
+      (SITE.gallery || []).forEach(function (im) {
+        if (wmap[im.src]) im.webp = wmap[im.src];
+      });
+      getAllProjects().forEach(function (proj) {
+        (proj.images || []).forEach(function (im) {
+          if (wmap[im.src]) im.webp = wmap[im.src];
+        });
+      });
+    }
+  }
+
   var state = {
     page: "home",
     category: null,
-    projectSlug: null,
-    focusIndex: 0,
-    flatTargets: []
+    projectSlug: null
   };
 
   function $(sel) { return document.querySelector(sel); }
   function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
-
-  function buildNav() {
-    var list = $("#navList");
-    list.innerHTML = "";
-
-    function addBtn(parent, text, onClick, extra) {
-      var li = document.createElement("li");
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "nav-btn";
-      btn.innerHTML = '<span class="label">' + text + "</span>";
-      if (extra) extra(btn, li);
-      btn.addEventListener("click", onClick);
-      li.appendChild(btn);
-      parent.appendChild(li);
-      return { li: li, btn: btn };
-    }
-
-    var h = addBtn(list, "Home", function () {
-      state.page = "home";
-      state.category = null;
-      state.projectSlug = null;
-      showView("home");
-      updateNavClasses();
-      updateSubNav();
-      positionDot();
-    });
-    h.btn.setAttribute("data-nav", "home");
-
-    // Work top-level
-    var workLi = document.createElement("li");
-    var workBtn = document.createElement("button");
-    workBtn.type = "button";
-    workBtn.className = "nav-btn";
-    workBtn.setAttribute("data-nav", "work");
-    workBtn.innerHTML = '<span class="label">Work</span>';
-    workBtn.addEventListener("click", function () {
-      state.page = "work";
-      state.category = null;
-      state.projectSlug = null;
-      showView("work");
-      renderWorkLanding();
-      updateNavClasses();
-      updateSubNav();
-      positionDot();
-    });
-    workLi.appendChild(workBtn);
-
-    // Category sub-navs: Design + Music
-    var subCats = document.createElement("ul");
-    subCats.className = "sub-nav";
-    subCats.id = "subCats";
-
-    var categories = [
-      { key: "design", label: "Design", projects: SITE.designProjects },
-      { key: "music", label: "Music", projects: SITE.musicProjects }
-    ];
-
-    categories.forEach(function (cat) {
-      var catLi = document.createElement("li");
-      var catBtn = document.createElement("button");
-      catBtn.type = "button";
-      catBtn.className = "nav-btn";
-      catBtn.setAttribute("data-cat", cat.key);
-      catBtn.innerHTML = '<span class="label">' + cat.label + "</span>";
-      catBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        state.page = "work";
-        state.category = cat.key;
-        state.projectSlug = null;
-        showView("work");
-        renderCategoryLanding(cat.key);
-        updateNavClasses();
-        updateSubNav();
-        positionDot();
-      });
-      catLi.appendChild(catBtn);
-
-      var subProj = document.createElement("ul");
-      subProj.className = "sub-nav";
-      subProj.id = "proj-" + cat.key;
-      (cat.projects || []).forEach(function (proj) {
-        var pLi = document.createElement("li");
-        var pBtn = document.createElement("button");
-        pBtn.type = "button";
-        pBtn.className = "nav-btn";
-        pBtn.setAttribute("data-slug", proj.slug);
-        pBtn.innerHTML = '<span class="label">' + escapeHtml(proj.title) + "</span>";
-        pBtn.addEventListener("click", function (e) {
-          e.stopPropagation();
-          state.page = "work";
-          state.category = cat.key;
-          state.projectSlug = proj.slug;
-          showView("work");
-          renderProject(proj);
-          updateNavClasses();
-          updateSubNav();
-          positionDot();
-        });
-        pLi.appendChild(pBtn);
-        subProj.appendChild(pLi);
-      });
-      catLi.appendChild(subProj);
-      subCats.appendChild(catLi);
-    });
-    workLi.appendChild(subCats);
-    list.appendChild(workLi);
-
-    var a = addBtn(list, "About", function () {
-      state.page = "about";
-      state.category = null;
-      state.projectSlug = null;
-      showView("about");
-      updateNavClasses();
-      updateSubNav();
-      positionDot();
-    });
-    a.btn.setAttribute("data-nav", "about");
-    var pr = addBtn(list, "Press", function () {
-      state.page = "press";
-      state.category = null;
-      state.projectSlug = null;
-      showView("press");
-      updateNavClasses();
-      updateSubNav();
-      positionDot();
-    });
-    pr.btn.setAttribute("data-nav", "press");
-  }
-
-  function updateSubNav() {
-    var sc = $("#subCats");
-    if (sc) sc.classList.toggle("open", state.page === "work");
-    ["design", "music"].forEach(function (cat) {
-      var el = $("#proj-" + cat);
-      if (el) el.classList.toggle("open", state.page === "work" && state.category === cat);
-    });
-  }
 
   function escapeHtml(s) {
     var d = document.createElement("div");
@@ -472,179 +601,397 @@
     return d.innerHTML;
   }
 
-  function showView(name) {
-    $all(".view").forEach(function (v) {
-      v.classList.remove("visible");
+  function disciplineLabel(cat) {
+    if (!cat) return "";
+    var c = String(cat);
+    return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+  }
+
+  function thumbUrl(proj) {
+    if (proj.thumb) return proj.thumb;
+    if (proj.images && proj.images.length) return proj.images[0].src;
+    return null;
+  }
+
+  function getAllProjects() {
+    return (SITE.designProjects || []).concat(SITE.musicProjects || []);
+  }
+
+  function getOrderedProjects() {
+    var out = [];
+    getAllProjects().forEach(function (proj) {
+      var t = thumbUrl(proj);
+      if (t) out.push({ year: proj.year, project: proj, thumb: t });
     });
-    if (name === "home") $("#viewHome").classList.add("visible");
-    if (name === "work") $("#viewWork").classList.add("visible");
-    if (name === "about") $("#viewAbout").classList.add("visible");
-    if (name === "press") $("#viewPress").classList.add("visible");
+    return out;
+  }
+
+  function findProject(slug) {
+    var all = getAllProjects();
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].slug === slug) return { year: all[i].year, project: all[i] };
+    }
+    return null;
+  }
+
+  function scrollTop() {
     window.scrollTo(0, 0);
   }
 
-  function updateNavClasses() {
-    $all(".nav-btn").forEach(function (b) {
-      b.classList.remove("active");
+  function makeDot(dotState) {
+    if (!dotState) return null;
+    var dot = document.createElement("span");
+    dot.className = "nav-dot " + (dotState === "active" ? "nav-dot--active" : "nav-dot--inactive");
+    return dot;
+  }
+
+  function makeNavItem(label, onClick) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "nav-item";
+    btn.textContent = label;
+    btn.addEventListener("click", onClick);
+    return btn;
+  }
+
+  function buildNav() {
+    var mainCol = $("#navMain");
+    mainCol.innerHTML = "";
+    var pages = [
+      { label: "Home", id: "home" },
+      { label: "Work", id: "work" },
+      { label: "About", id: "about" },
+      { label: "Press", id: "press" }
+    ];
+    pages.forEach(function (p) {
+      var btn = makeNavItem(p.label, function () {
+        state.page = p.id;
+        state.category = null;
+        state.projectSlug = null;
+        if (p.id === "home") {
+          showView("home");
+        } else if (p.id === "work") {
+          showView("work");
+          showWorkLanding();
+        } else {
+          showView(p.id);
+        }
+        scrollTop();
+        updateNav();
+      });
+      btn.setAttribute("data-nav", p.id);
+      mainCol.appendChild(btn);
     });
-    if (state.page === "home") {
-      var hb = $('.nav-btn[data-nav="home"]');
-      if (hb) hb.classList.add("active");
-    } else if (state.page === "about") {
-      var ab = $('.nav-btn[data-nav="about"]');
-      if (ab) ab.classList.add("active");
-    } else if (state.page === "press") {
-      var xb = $('.nav-btn[data-nav="press"]');
-      if (xb) xb.classList.add("active");
-    } else if (state.page === "work") {
-      var wb = $('.nav-btn[data-nav="work"]');
-      if (wb) wb.classList.add("active");
-      if (state.projectSlug) {
-        var pb = document.querySelector('.nav-btn[data-slug="' + state.projectSlug + '"]');
-        if (pb) pb.classList.add("active");
-      } else if (state.category) {
-        var cb = document.querySelector('.nav-btn[data-cat="' + state.category + '"]');
-        if (cb) cb.classList.add("active");
+    updateNav();
+  }
+
+  function updateNav() {
+    var nav = $(".site-nav");
+    var mainEl = $("main");
+    var cols = $("#navColumns");
+    // Remove category and project columns
+    var old = cols.querySelectorAll(".nav-column--years, .nav-column--projects");
+    for (var i = 0; i < old.length; i++) old[i].remove();
+    // Reset nav width classes
+    nav.classList.remove("has-years", "has-projects");
+    mainEl.classList.remove("nav-has-years", "nav-has-projects");
+
+    // Update main column dots
+    var mainBtns = $all("#navMain .nav-item");
+    mainBtns.forEach(function (btn) {
+      var id = btn.getAttribute("data-nav");
+      var existingDot = btn.querySelector(".nav-dot");
+      if (existingDot) existingDot.remove();
+      btn.classList.remove("active", "dimmed");
+
+      var dotState = null;
+      if (id === state.page) {
+        if (state.page === "work" && state.category !== null) {
+          dotState = "inactive";
+          btn.classList.add("dimmed");
+        } else {
+          dotState = "active";
+          btn.classList.add("active");
+        }
+      }
+      var dot = makeDot(dotState);
+      if (dot) btn.insertBefore(dot, btn.firstChild);
+    });
+
+    // Show category column if Work is active
+    if (state.page === "work") {
+      var catCol = document.createElement("div");
+      catCol.className = "nav-column nav-column--years";
+      var categories = [
+        { key: "design", label: "Design" },
+        { key: "music", label: "Music" }
+      ];
+      categories.forEach(function (cat) {
+        var btn = makeNavItem(cat.label, function () {
+          state.category = cat.key;
+          state.projectSlug = null;
+          showView("work");
+          showWorkLanding();
+          scrollTop();
+          updateNav();
+        });
+        btn.setAttribute("data-cat", cat.key);
+        var dotState = null;
+        if (state.category === cat.key) {
+          if (state.projectSlug !== null) {
+            dotState = "inactive";
+            btn.classList.add("dimmed");
+          } else {
+            dotState = "active";
+            btn.classList.add("active");
+          }
+        }
+        var dot = makeDot(dotState);
+        if (dot) btn.insertBefore(dot, btn.firstChild);
+        catCol.appendChild(btn);
+      });
+      cols.appendChild(catCol);
+      nav.classList.add("has-years");
+      mainEl.classList.add("nav-has-years");
+
+      // Show project column if a category is selected
+      if (state.category !== null) {
+        var projects = state.category === "design" ? (SITE.designProjects || []) : (SITE.musicProjects || []);
+        if (projects.length) {
+          var projCol = document.createElement("div");
+          projCol.className = "nav-column nav-column--projects";
+          projects.forEach(function (proj) {
+            var btn = makeNavItem(proj.title, function () {
+              state.projectSlug = proj.slug;
+              state.page = "work";
+              showView("work");
+              renderProject(proj);
+              scrollTop();
+              updateNav();
+            });
+            btn.setAttribute("data-project", proj.slug);
+            var dotState = null;
+            if (state.projectSlug === proj.slug) {
+              dotState = "active";
+              btn.classList.add("active");
+            }
+            var dot = makeDot(dotState);
+            if (dot) btn.insertBefore(dot, btn.firstChild);
+            projCol.appendChild(btn);
+          });
+          cols.appendChild(projCol);
+          nav.classList.remove("has-years");
+          nav.classList.add("has-projects");
+          mainEl.classList.remove("nav-has-years");
+          mainEl.classList.add("nav-has-projects");
+        }
       }
     }
   }
 
-  function positionDot() {
-    var dot = $("#navDot");
-    var anchor = null;
-    if (state.page === "home") anchor = $('.nav-btn[data-nav="home"]');
-    else if (state.page === "about") anchor = $('.nav-btn[data-nav="about"]');
-    else if (state.page === "press") anchor = $('.nav-btn[data-nav="press"]');
-    else if (state.page === "work") {
-      if (state.projectSlug) anchor = document.querySelector('.nav-btn[data-slug="' + state.projectSlug + '"]');
-      else if (state.category) anchor = document.querySelector('.nav-btn[data-cat="' + state.category + '"]');
-      else anchor = $('.nav-btn[data-nav="work"]');
+  function showView(name) {
+    var map = { home: "viewHome", work: "viewWork", about: "viewAbout", press: "viewPress" };
+    var nextId = map[name];
+    var next = nextId ? document.getElementById(nextId) : null;
+    var current = document.querySelector(".view.visible");
+    if (!next) return;
+    if (current === next) return;
+    var outMs = reduced ? 0 : 300;
+    function reveal() {
+      $all(".view").forEach(function (v) {
+        v.classList.remove("visible", "fade-out");
+      });
+      next.classList.add("visible");
     }
-    if (!anchor) return;
-    var navInner = document.querySelector(".site-nav-inner");
-    var nr = navInner.getBoundingClientRect();
-    var lab = anchor.querySelector(".label");
-    if (!lab) return;
-    var ar = lab.getBoundingClientRect();
-    var top = ar.top - nr.top + ar.height / 2 - 3;
-    dot.style.top = top + "px";
+    if (!current || reduced) {
+      reveal();
+      return;
+    }
+    current.classList.add("fade-out");
+    setTimeout(function () {
+      reveal();
+    }, outMs);
   }
 
-  function pictureTag(img) {
+  function updateNavClasses() {
+    updateNav();
+  }
+
+  function pictureTag(img, lazy) {
     var blur = SITE.blurBySrc && SITE.blurBySrc[img.src] ? SITE.blurBySrc[img.src] : "";
     var style = blur ? ' style="background-image:url(\'' + blur + '\');background-size:cover"' : "";
+    var loadAttr = lazy !== false ? ' loading="lazy" decoding="async"' : "";
     var inner = "";
     if (img.webp) {
-      inner = "<picture><source srcset=\"" + img.webp + "\" type=\"image/webp\" /><img src=\"" + img.src + "\" alt=\"" + escapeHtml(img.alt) + "\" loading=\"lazy\" decoding=\"async\" width=\"1200\" height=\"800\" /></picture>";
+      inner =
+        "<picture><source srcset=\"" +
+        img.webp +
+        "\" type=\"image/webp\" /><img src=\"" +
+        img.src +
+        "\" alt=\"" +
+        escapeHtml(img.alt) +
+        "\"" +
+        loadAttr +
+        ' width="1200" height="800" /></picture>';
     } else {
-      inner = "<img src=\"" + img.src + "\" alt=\"" + escapeHtml(img.alt) + "\" loading=\"lazy\" decoding=\"async\" />";
+      inner = "<img src=\"" + img.src + "\" alt=\"" + escapeHtml(img.alt) + "\"" + loadAttr + " />";
     }
     return '<div class="img-wrap"' + style + ">" + inner + "</div>";
   }
 
-  function editorialLayout(images, stagger) {
-    var patterns = ["w-7", "w-5", "w-6", "w-6", "w-8", "w-4", "w-12", "off-2 w-8"];
-    var html = '<div class="editorial">';
-    images.forEach(function (img, i) {
-      var cls = patterns[i % patterns.length];
-      var delay = stagger ? i * 0.06 : 0;
-      var parallax = !reduced && img.speed ? ' data-parallax="' + img.speed + '"' : "";
-      html += '<div class="cell ' + cls + ' stagger-item img-ph"' + parallax + ' style="transition-delay:' + delay + 's">' + pictureTag(img) + "</div>";
-    });
+  function heroImgTag(proj) {
+    var first = proj.images && proj.images[0];
+    if (!first) return "";
+    return pictureTag({ src: first.src, alt: first.alt, webp: first.webp }, false);
+  }
+
+  function caseStudyLayout(images) {
+    if (!images.length) return "";
+    var html = '<div class="case-study">';
+    var i = 0;
+    var row = 0;
+    while (i < images.length) {
+      if (row % 2 === 0) {
+        html += '<div class="case-study__full">' + pictureTag(images[i]) + "</div>";
+        i += 1;
+      } else {
+        html += '<div class="case-study__pair">';
+        html += '<div class="cell">' + pictureTag(images[i]) + "</div>";
+        if (images[i + 1]) html += '<div class="cell">' + pictureTag(images[i + 1]) + "</div>";
+        i += images[i + 1] ? 2 : 1;
+        html += "</div>";
+      }
+      row += 1;
+    }
     html += "</div>";
     return html;
   }
 
-  function renderWorkLanding() {
-    $("#workProject").style.display = "none";
-    $("#workLanding").style.display = "block";
-    var g = SITE.gallery || [];
-    $("#workLanding").innerHTML = editorialLayout(g, true);
-    requestAnimationFrame(function () {
-      $all("#workLanding .stagger-item").forEach(function (el, i) {
-        setTimeout(function () { el.classList.add("show"); }, 50 + i * 60);
+  function workGridMarkup() {
+    var items = getOrderedProjects();
+    if (!items.length) return "<p class=\"body-text\">Work coming soon.</p>";
+    var hero = items[0];
+    var rest = items.slice(1);
+    var cat = disciplineLabel(hero.project.category);
+    var html = "";
+    html += '<article class="work-hero">';
+    html +=
+      '<a class="work-hero__link" href="#" data-open-project="' +
+      escapeHtml(hero.project.slug) +
+      '" data-year="' +
+      String(hero.year) +
+      '">';
+    html += '<img class="work-hero__media" src="' + escapeHtml(hero.thumb) + '" alt="' + escapeHtml(hero.project.title) + '" />';
+    html += '<h2 class="work-hero__title">' + escapeHtml(hero.project.title) + "</h2>";
+    html += "</a></article>";
+    if (rest.length) {
+      html += '<div class="work-grid">';
+      rest.forEach(function (item) {
+        var d = disciplineLabel(item.project.category);
+        html += '<button type="button" class="work-card" data-open-project="' + escapeHtml(item.project.slug) + '" data-year="' + String(item.year) + '">';
+        html += '<span class="work-card__frame"><img class="work-card__img" src="' + escapeHtml(item.thumb) + '" alt="' + escapeHtml(item.project.title) + '" loading="lazy" decoding="async" /></span>';
+        html += '<span class="work-card__title">' + escapeHtml(item.project.title) + "</span>";
+        html += '<span class="work-card__tags">' + escapeHtml(d) + "</span>";
+        html += "</button>";
       });
-    });
-    bindParallax();
-  }
-
-  function renderCategoryLanding(cat) {
-    $("#workProject").style.display = "none";
-    $("#workLanding").style.display = "block";
-    var projects = cat === "design" ? SITE.designProjects : SITE.musicProjects;
-    var html = '<div class="project-detail">';
-    html += '<h2 class="page-title">' + (cat === "design" ? "Design" : "Music") + '</h2>';
-    projects.forEach(function (proj) {
-      html += '<div class="project-block stagger-item" style="cursor:pointer; margin-bottom: 2.5rem;" data-proj-slug="' + escapeHtml(proj.slug) + '">';
-      html += '<h3 style="font-weight:300; font-size:1.25rem; margin:0 0 0.25rem; color:var(--text);">' + escapeHtml(proj.title) + '</h3>';
-      html += '<div class="meta-line">' + escapeHtml(proj.role) + ' · ' + proj.year + ' · ' + escapeHtml(proj.location) + '</div>';
-      if (proj.thumb) {
-        html += '<div class="img-wrap" style="margin-top:0.75rem;"><img src="' + proj.thumb + '" alt="' + escapeHtml(proj.title) + '" loading="lazy" decoding="async" style="max-width:100%; height:auto;" /></div>';
-      }
-      html += '</div>';
-    });
-    html += '</div>';
-    $("#workLanding").innerHTML = html;
-    // Make project blocks clickable
-    $all("#workLanding [data-proj-slug]").forEach(function (el) {
-      el.addEventListener("click", function () {
-        var slug = el.getAttribute("data-proj-slug");
-        var proj = findProject(slug);
-        if (proj) {
-          state.projectSlug = slug;
-          renderProject(proj);
-          updateNavClasses();
-          updateSubNav();
-          positionDot();
-        }
-      });
-    });
-    requestAnimationFrame(function () {
-      $all("#workLanding .stagger-item").forEach(function (el, i) {
-        setTimeout(function () { el.classList.add("show"); }, 50 + i * 60);
-      });
-    });
-  }
-
-  function findProject(slug) {
-    var all = (SITE.designProjects || []).concat(SITE.musicProjects || []);
-    for (var i = 0; i < all.length; i++) {
-      if (all[i].slug === slug) return all[i];
+      html += "</div>";
     }
-    return null;
+    return html;
+  }
+
+  function bindWorkGrid(root) {
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-open-project]");
+      if (!a || !root.contains(a)) return;
+      e.preventDefault();
+      var slug = a.getAttribute("data-open-project");
+      var found = findProject(slug);
+      if (!found) return;
+      state.page = "work";
+      state.category = found.project.category || null;
+      state.projectSlug = slug;
+      showView("work");
+      renderProject(found.project);
+      scrollTop();
+      updateNav();
+    });
+  }
+
+  function renderWorkGrids() {
+    var html = workGridMarkup();
+    var w1 = $("#workLanding");
+    var w2 = $("#workGridOnHome");
+    if (w1) w1.innerHTML = html;
+    if (w2) w2.innerHTML = html;
+  }
+
+  function showWorkLanding() {
+    $("#workProject").style.display = "none";
+    $("#workLanding").style.display = "block";
+    state.projectSlug = null;
+    renderWorkGrids();
   }
 
   function renderProject(proj) {
     $("#workLanding").style.display = "none";
     $("#workProject").style.display = "block";
-    var html = '<div class="project-detail">';
-    html += '<h2 class="page-title">' + escapeHtml(proj.title) + "</h2>";
-    html += '<div class="meta-line">' + escapeHtml(proj.role) + " · " + (proj.year || "") + " · " + escapeHtml(proj.location) + "</div>";
+    var y = proj.year;
+    var disc = disciplineLabel(proj.category);
+    var html = '<div class="project-page">';
+    html += '<button type="button" class="project-back" id="projectBack">Back to work</button>';
+
+    if (!proj.missing && proj.images && proj.images.length) {
+      html += '<div class="project-hero">' + heroImgTag(proj) + "</div>";
+    }
+
+    html += '<header class="project-head">';
+    html += '<h1 class="page-title">' + escapeHtml(proj.title) + "</h1>";
+    html += '<div class="project-meta-row">';
+    html += "<span>" + escapeHtml(proj.role) + "</span>";
+    html += '<span class="meta-sep" aria-hidden="true">·</span>';
+    html += "<span>" + escapeHtml(proj.location || "") + "</span>";
+    if (y) {
+      html += '<span class="meta-sep" aria-hidden="true">·</span>';
+      html += "<span>" + String(y) + "</span>";
+    }
+    if (disc) {
+      html += '<span class="meta-sep" aria-hidden="true">·</span>';
+      html += "<span>" + escapeHtml(disc) + "</span>";
+    }
+    html += "</div></header>";
     html += '<div class="body-text"><p>' + escapeHtml(proj.description) + "</p></div>";
-    html += '</div>';
+
     if (proj.missing) {
       html += placeholderBlocks(proj);
-    } else {
-      html += editorialLayout(
-        proj.images.map(function (im) {
-          return { src: im.src, alt: im.alt, webp: im.webp, speed: Math.random() * 0.05 + 0.03 };
-        }),
-        true
+    } else if (proj.images && proj.images.length > 1) {
+      html += caseStudyLayout(
+        proj.images.slice(1).map(function (im) {
+          return { src: im.src, alt: im.alt, webp: im.webp };
+        })
       );
+    } else if (proj.images && proj.images.length === 1) {
+      html += "";
     }
+
+    html += "</div>";
     $("#workProject").innerHTML = html;
-    requestAnimationFrame(function () {
-      $all("#workProject .stagger-item").forEach(function (el, i) {
-        setTimeout(function () { el.classList.add("show"); }, 50 + i * 60);
+    var back = $("#projectBack");
+    if (back) {
+      back.addEventListener("click", function () {
+        state.projectSlug = null;
+        state.category = null;
+        $("#workProject").style.display = "none";
+        $("#workLanding").style.display = "block";
+        scrollTop();
+        updateNav();
       });
-    });
-    bindParallax();
-    window.scrollTo(0, 0);
+    }
   }
 
   function placeholderBlocks(proj) {
-    var html = "<!-- TODO: missing images for " + escapeHtml(proj.slug) + " -->";
-    var pal = proj.palette || ["#1a1a2e", "#EDE8DC"];
+    var html = "";
+    var pal = proj.palette || ["#D2D2D7", "#F5F5F7"];
     for (var i = 0; i < 3; i++) {
       var c = pal[i % pal.length];
       html +=
@@ -655,37 +1002,102 @@
     return html;
   }
 
-  var parallaxScrollBound = false;
-  function parallaxOnScroll() {
-    if (reduced || window.matchMedia("(max-width: 600px)").matches) return;
-    var y = window.scrollY || window.pageYOffset;
-    $all("#viewWork [data-parallax]").forEach(function (w) {
-      var sp = parseFloat(w.getAttribute("data-parallax"), 10);
-      if (!sp) return;
-      w.style.transform = "translate3d(0, " + y * sp + "px, 0)";
-    });
-  }
-  function bindParallax() {
-    if (reduced || window.matchMedia("(max-width: 600px)").matches) return;
-    if (!parallaxScrollBound) {
-      parallaxScrollBound = true;
-      window.addEventListener("scroll", parallaxOnScroll, { passive: true });
+  var slideshowTimer = null;
+  function initSlideshow() {
+    var root = $("#homeSlideshow");
+    if (!root) return;
+    var items = SITE.gallery || [];
+    if (!items.length) return;
+    if (slideshowTimer) {
+      clearInterval(slideshowTimer);
+      slideshowTimer = null;
     }
-    parallaxOnScroll();
+    if (reduced) {
+      root.innerHTML =
+        '<div class="home-slideshow__layer is-front" style="background-image:url(\'' +
+        items[0].src.replace(/'/g, "\\'") +
+        '\')"></div>';
+      return;
+    }
+    root.innerHTML = "";
+    var l0 = document.createElement("div");
+    var l1 = document.createElement("div");
+    l0.className = "home-slideshow__layer";
+    l1.className = "home-slideshow__layer";
+    [l0, l1].forEach(function (el) {
+      el.style.position = "absolute";
+      el.style.inset = "0";
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+      el.style.transition = "opacity 0.6s ease-in-out";
+      root.appendChild(el);
+    });
+    var cur = 0;
+    l0.style.backgroundImage = 'url("' + items[0].src + '")';
+    l0.style.opacity = "1";
+    l0.style.zIndex = "2";
+    l1.style.opacity = "0";
+    l1.style.zIndex = "1";
+    var top = l0;
+    var bot = l1;
+    slideshowTimer = setInterval(function () {
+      var next = (cur + 1) % items.length;
+      bot.style.backgroundImage = 'url("' + items[next].src + '")';
+      bot.style.zIndex = "3";
+      bot.style.opacity = "1";
+      top.style.opacity = "0";
+      setTimeout(function () {
+        cur = next;
+        var tmp = top;
+        top = bot;
+        bot = tmp;
+        top.style.zIndex = "2";
+        top.style.opacity = "1";
+        bot.style.zIndex = "1";
+        bot.style.opacity = "0";
+      }, 600);
+    }, 2500);
   }
 
-  window.addEventListener("resize", positionDot);
+  function goHome() {
+    state.page = "home";
+    state.category = null;
+    state.projectSlug = null;
+    showView("home");
+    scrollTop();
+    updateNav();
+  }
 
-  buildNav();
-  updateSubNav();
-  showView("home");
-  updateNavClasses();
-  positionDot();
+  function boot() {
+    buildNav();
+    $("#brandHome").addEventListener("click", function (e) {
+      e.preventDefault();
+      goHome();
+    });
+    bindWorkGrid($("#workLanding"));
+    bindWorkGrid($("#workGridOnHome"));
+    renderWorkGrids();
+    showView("home");
+    updateNav();
+    initSlideshow();
+  }
+
+  fetch("blur_map.json")
+    .then(function (r) {
+      return r.ok ? r.json() : null;
+    })
+    .catch(function () {
+      return null;
+    })
+    .then(function (blurMap) {
+      mergeAssetHints(blurMap);
+      boot();
+    });
 
   document.addEventListener("keydown", function (e) {
     var keys = ["ArrowUp", "ArrowDown", "Enter"];
     if (keys.indexOf(e.key) < 0) return;
-    var btns = $all(".site-nav .nav-btn");
+    var btns = $all(".site-nav .nav-item");
     if (!btns.length) return;
     var idx = btns.indexOf(document.activeElement);
     if (idx < 0 && e.key.indexOf("Arrow") === 0) {
@@ -705,26 +1117,6 @@
       document.activeElement.click();
     }
   });
-
-  window.addEventListener("load", function () {
-    var hb = $('.nav-btn[data-nav="home"]');
-    if (hb) hb.focus();
-    positionDot();
-  });
-
-  if (window.matchMedia("(max-width: 600px)").matches && !reduced && window.DeviceOrientationEvent) {
-    window.addEventListener(
-      "deviceorientation",
-      function (ev) {
-        var gx = Math.max(-2, Math.min(2, (ev.gamma || 0) * 0.04));
-        var gy = Math.max(-2, Math.min(2, (ev.beta || 0) * 0.04));
-        $all("#viewWork .cell").forEach(function (cell) {
-          cell.style.transform = "translate3d(" + gx + "px, " + gy + "px, 0)";
-        });
-      },
-      true
-    );
-  }
 })();
   </script>
 </body>
