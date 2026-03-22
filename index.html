@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dalton Corr — Creative Direction · Design · Music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --text-primary: #1D1D1F;
+      --text-secondary: #6E6E73;
+      --accent: #0071E3;
+      --border: #D2D2D7;
+      --surface: #F5F5F7;
+      --nav-h: 48px;
+      --page-max: 1200px;
+      --section-pad: 80px;
+      --content-pad-mobile: 24px;
+      --content-pad-tablet: 48px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --view-fade-out: 0.3s;
+      --view-fade-in: 0.5s;
+      --view-fade-in-delay: 0.15s;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: "SF Pro Display", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.53;
+      color: var(--text-secondary);
+      min-height: 100vh;
+    }
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--content-pad-mobile);
+      background: rgba(255, 255, 255, 0.85);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (min-width: 600px) {
+      .site-nav { padding: 0 var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .site-nav { padding: 0 max(0px, calc((100vw - var(--page-max)) / 2)); }
+    }
+    .site-nav-inner {
+      width: 100%;
+      max-width: var(--page-max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
+    .brand:hover { color: var(--accent); }
+    .brand:focus { outline: none; }
+    .brand:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    .nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color 0.2s ease;
+    }
+    .nav-btn:hover { color: var(--text-primary); }
+    .nav-btn:focus { outline: none; }
+    .nav-btn:focus-visible {
+      color: var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn.active::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    main {
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+    }
+    .view {
+      display: none;
+      opacity: 0;
+      transition: opacity var(--view-fade-out) ease;
+    }
+    .view.visible {
+      display: block;
+      opacity: 1;
+      transition: opacity var(--view-fade-in) var(--ease) var(--view-fade-in-delay);
+    }
+    .view.fade-out { opacity: 0; }
+    /* Homepage slideshow — full bleed, only UI is nav */
+    .home-slideshow {
+      margin-top: calc(-1 * var(--nav-h));
+      padding-top: var(--nav-h);
+      position: relative;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      height: calc(100vh - var(--nav-h));
+      min-height: 320px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .home-slideshow__layer {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: opacity 0.6s ease-in-out;
+    }
+    .home-slideshow__layer.is-back { z-index: 1; opacity: 0; }
+    .home-slideshow__layer.is-front { z-index: 2; opacity: 1; }
+    .work-section {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: var(--section-pad) var(--content-pad-mobile) calc(var(--section-pad) * 1.25);
+    }
+    @media (min-width: 600px) {
+      .work-section { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .work-section { padding-left: 0; padding-right: 0; }
+    }
+    .work-hero {
+      position: relative;
+      width: 100%;
+      height: 70vh;
+      min-height: 280px;
+      max-height: 900px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 64px;
+      transition: box-shadow 0.3s ease;
+    }
+    .work-hero:hover,
+    .work-hero:focus-within {
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.12);
+    }
+    .work-hero__media {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+    .work-hero__link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+    .work-hero__link:hover .work-hero__media,
+    .work-hero__link:focus-visible .work-hero__media {
+      transform: scale(1.02);
+    }
+    .work-hero__title {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      right: 24px;
+      margin: 0;
+      font-size: 21px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: #FFFFFF;
+      text-shadow: 0 1px 24px rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      row-gap: 64px;
+    }
+    @media (max-width: 699px) {
+      .work-grid { grid-template-columns: 1fr; row-gap: 64px; }
+    }
+    .work-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+    .work-card:focus { outline: none; }
+    .work-card:focus-visible .work-card__frame {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: 10px;
+    }
+    .work-card__frame {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 3 / 2;
+      background: var(--surface);
+      transition: box-shadow 0.3s ease;
+    }
+    .work-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.3s ease;
+    }
+    .work-card:hover .work-card__frame,
+    .work-card:focus-visible .work-card__frame {
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1);
+    }
+    .work-card:hover .work-card__img,
+    .work-card:focus-visible .work-card__img {
+      transform: scale(1.02);
+    }
+    .work-card__title {
+      margin: 16px 0 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .work-card__tags {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .page-wrap {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: var(--section-pad) var(--content-pad-mobile);
+    }
+    @media (min-width: 600px) {
+      .page-wrap { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .page-wrap { padding-left: 0; padding-right: 0; }
+    }
+    .page-title {
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin: 0 0 24px;
+    }
+    .subhead {
+      font-size: 21px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.25;
+      margin: 0 0 16px;
+    }
+    .meta-line {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .body-text {
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.53;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .body-text p { margin: 0 0 1rem; }
+    a.contact-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    a.contact-link:hover {
+      border-bottom-color: var(--accent);
+    }
+    .press-year {
+      font-weight: 600;
+      font-size: 21px;
+      color: var(--text-primary);
+      margin: 2.5rem 0 0.75rem;
+    }
+    .press-year:first-child { margin-top: 0; }
+    .press-item {
+      margin-bottom: 0.85rem;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.53;
+      max-width: 680px;
+    }
+    .press-item strong { color: var(--text-primary); font-weight: 600; }
+    /* Project detail */
+    .project-page { max-width: var(--page-max); margin: 0 auto; padding: var(--section-pad) var(--content-pad-mobile) calc(var(--section-pad) * 1.5); }
+    @media (min-width: 600px) {
+      .project-page { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .project-page { padding-left: 0; padding-right: 0; }
+    }
+    .project-back {
+      display: inline-block;
+      margin-bottom: 32px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
+    }
+    .project-back:hover { text-decoration: underline; }
+    .project-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .project-hero {
+      width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 40px;
+      background: var(--surface);
+    }
+    .project-hero img {
+      width: 100%;
+      height: 100%;
+      max-height: 75vh;
+      object-fit: cover;
+      display: block;
+    }
+    .project-head {
+      margin-bottom: 32px;
+    }
+    .project-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+      align-items: baseline;
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 100%;
+    }
+    .project-meta-row span { white-space: nowrap; }
+    .project-meta-row .meta-sep { color: var(--border); }
+    .case-study {
+      max-width: var(--page-max);
+      margin: 0 auto;
+    }
+    .case-study__full {
+      margin-bottom: 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .case-study__full:last-child { margin-bottom: 0; }
+    .case-study__full img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .case-study__pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 699px) {
+      .case-study__pair { grid-template-columns: 1fr; }
+    }
+    .case-study__pair .cell {
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .case-study__pair img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .img-wrap {
+      position: relative;
+      background-color: var(--surface);
+    }
+    .img-wrap img { position: relative; z-index: 1; }
+    .project-block { margin-bottom: 3rem; }
+    .svg-ph {
+      width: 100%;
+      aspect-ratio: 3/4;
+      display: block;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .home-slideshow__layer { transition: none; }
+      .work-card__img, .work-hero__media { transition: none; }
+      .view, .view.visible { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="site-nav-inner">
+      <a class="brand" id="brandHome" href="#">Dalton Corr</a>
+      <ul class="nav-list" id="navList"></ul>
+    </div>
+  </nav>
+  <main id="main">
+    <section class="view visible" id="viewHome" aria-label="Home">
+      <div class="home-slideshow" id="homeSlideshow" aria-hidden="true"></div>
+      <div class="work-section" id="workGridOnHome"></div>
+    </section>
+    <section class="view" id="viewWork" aria-label="Work">
+      <div id="workLanding" class="work-section"></div>
+      <div id="workProject" style="display:none"></div>
+    </section>
+    <section class="view" id="viewAbout" aria-label="About">
+      <div class="page-wrap">
+        <h2 class="page-title">About</h2>
+        <div class="body-text">
+        <p>Dalton Corr is an independent creative director, designer, and composer based in Venice, Los Angeles.</p>
+        <p>He art directs international film festivals, scores the films that play in them, and builds brands for the people who make them. Currently art director for HollyShorts Film Festival and composing his first feature-length film score.</p>
+        <p>Interested in working together —<br />
+          <a class="contact-link" href="mailto:hello@daltoncorr.com">hello@daltoncorr.com</a>
+        </p>
+        </div>
+      </div>
+    </section>
+    <section class="view" id="viewPress" aria-label="Press">
+      <div class="page-wrap">
+      <h2 class="page-title">Press &amp; Awards</h2>
+      <div class="body-text">
+        <div class="press-year">2024</div>
+        <div class="press-item"><strong>FestivalsInLA</strong> — "World's greatest film festival posters"</div>
+        <div class="press-item"><strong>Variety</strong> — HollyShorts 20th coverage</div>
+        <div class="press-item"><strong>Deadline</strong> — Festival coverage</div>
+        <div class="press-item"><strong>Canvas Rebel</strong> — Interview</div>
+        <div class="press-item"><strong>Daily Mail</strong> — Festival coverage</div>
+        <div class="press-year">2023</div>
+        <div class="press-item"><strong>FestivalsInLA</strong> — "World's greatest film festival posters"</div>
+        <div class="press-item"><strong>Deadline</strong> — HollyShorts 19th coverage</div>
+        <div class="press-item"><strong>Radio du Cinéma</strong> — Interview</div>
+        <div class="press-item"><strong>LAist</strong> — "Things To Do This Week"</div>
+      </div>
+      </div>
+    </section>
+    <section class="view" id="viewContact" aria-label="Contact">
+      <div class="page-wrap">
+        <h2 class="page-title">Contact</h2>
+        <div class="body-text">
+          <p><a class="contact-link" href="mailto:hello@daltoncorr.com">hello@daltoncorr.com</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script id="site-data" type="application/json">{"years": [2025, 2024, 2023, 2022, 2019], "projectsByYear": {"2025": [{"slug": "hollyshorts-21", "title": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Los Angeles", "description": "Art Director of the 21th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 21st anniversary poster, merch design, badge design, award design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 21th Annual HollyShorts Award Show TCL Chinese Theatres | Los Angeles, 2025", "palette": ["#1a1a2e", "#2d2d3f", "#23233a"], "category": "design", "images": [{"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null}, {"src": "assets/images/design/hollyshorts21/02.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null}, {"src": "assets/images/design/hollyshorts21/03.jpeg", "alt": "IMG_9135.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/04.jpeg", "alt": "IMG_1355.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/05.jpeg", "alt": "IMG_9191.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/06.jpg", "alt": "54715467764_2357977844_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/07.jpeg", "alt": "IMG_9196.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/08.jpg", "alt": "54729116567_902409cbf6_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/09.jpg", "alt": "54728644752_7dabb5f045_o 2.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/10.jpeg", "alt": "IMG_8331.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/11.jpeg", "alt": "IMG_7601.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/12.jpeg", "alt": "IMG_9129.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/13.jpeg", "alt": "IMG_9169.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/14.jpeg", "alt": "IMG_9120.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/15.jpeg", "alt": "IMG_9161.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts21/16.jpg", "alt": "54720456147_54381b7e60_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/17.jpg", "alt": "54730171974_deadfd9b5a_k.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts21/18.jpg", "alt": "54729688633_66abfafdb4_k 2.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts21/thumb.png", "missing": false}, {"slug": "comedy-rebrand", "title": "HollyShorts Comedy 2025", "role": "Art Director — Led Rebrand", "location": "Los Angeles", "description": "Rebrand and Art Direction for HollyShorts Comedy 2025 May 2025 Los Angeles, California www.hollyshortscomedy.com Led the redesign of the Hollywood Comedy Short Film Festival into HollyShorts Comedy, establishing a bold new visual identity aligned with the parent HollyShorts brand. The rebrand included new logo, color palette, and typography, along with a comprehensive design system spanning print, digital, and event assets. Work includes: festival poster, official website website, interactive AR activations, on-screen graphics, award show design, social media assets, festival badges, merchandise, and additional collateral.", "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"], "category": "design", "images": [{"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/02.png", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/03.png", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/04.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/05.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/06.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/07.jpeg", "alt": "HollyShorts Comedy 2025", "webp": null}, {"src": "assets/images/design/hollyshorts-comedy-2025/08.png", "alt": "HollyShorts Comedy 2025", "webp": null}], "thumb": "assets/images/design/hollyshorts-comedy-2025/thumb.png", "missing": false}, {"slug": "hollyshorts-london", "title": "HollyShorts London 2025", "role": "Creative Director", "location": "London, United Kingdom", "description": "Branding and Art Direction for HollyShorts London June 2025 London, United Kingdom www.hollyshorts.com/london Led creative direction and design for the inaugural HollyShorts London, establishing a new visual identity for the festival’s international expansion. Built a city-specific system that stayed grounded in the parent brand while incorporating UK cinematic culture and tone. Work includes: festival poster, custom London branding package, digital marketing rollout, official website assets, motion graphics, social media templates, screening visuals, badges, merchandise, and print collateral.", "palette": ["#DAD5C9", "#D0CAC0", "#C8C2B8"], "category": "design", "images": [{"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/03.jpg", "alt": "465921008_929866422409253_6811404960256833731_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/04.jpg", "alt": "472304542_844055327752181_783869732097309527_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/05.jpg", "alt": "472298236_1128974298601453_1361862241833342341_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/06.jpg", "alt": "472404434_625409833255136_3559600277865683536_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/07.jpg", "alt": "470934486_8384437738328269_4397251221193907368_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/08.jpg", "alt": "470935988_8709149192525956_7029747810375016340_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/09.jpg", "alt": "470955319_490966800142874_1986426474110815044_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/10.jpg", "alt": "470973968_1089669722564324_1205839330410274054_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/11.jpg", "alt": "472239287_919153263653328_1023683448985257053_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/12.jpg", "alt": "472319687_1248458226224122_4616341925662061820_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/13.jpg", "alt": "472215280_455677710746912_527048242292983217_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/14.jpg", "alt": "472338709_906072598408296_1268345784545495665_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/15.jpg", "alt": "472289667_1110353980248420_5092475038890263860_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/16.jpg", "alt": "472032168_1119931572853821_1601451983331609380_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/17.jpg", "alt": "472233077_965652965466096_2612320933165423722_n.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts-london/18.jpg", "alt": "472282706_2672610159793315_8925558514694169954_n.jpg", "webp": null}], "thumb": "assets/images/design/hollyshorts-london/thumb.jpg", "missing": false}, {"slug": "dont-mind-me", "title": "Don't Mind Me", "role": "Composer — Feature Film", "location": "Dir. Isaiah Hoban Halvorsen", "description": "First feature-length film score. Full soundtrack for the feature. The career milestone — shorts to features.", "palette": ["#0A0A08", "#0E0E0B", "#121210"], "category": "music", "images": [], "thumb": null, "missing": true}], "2024": [{"slug": "hollyshorts-20", "title": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese · Egyptian Theater · Japan House, Los Angeles", "description": "Art Director of the 20th Annual Oscar-Qualifying HollyShorts Film Festival Work includes official 20th anniversary poster, merch design, badge design, production design of the HollyShorts Film Festival, production design of the Alta Global Media Film Summit, production design of the 20th Annual HollyShorts Award Show live from the Egyptian Theater, and assisting on award design. TCL Chinese Theatres, Egyptian Theater, Japan House Los Angeles, 2024", "palette": ["#0D0D1A", "#161628", "#1C1C30"], "category": "design", "images": [{"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null}, {"src": "assets/images/design/hollyshorts20/03.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/04.jpeg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/05.png", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/06.jpg", "alt": "photo wall design", "webp": null}, {"src": "assets/images/design/hollyshorts20/07.jpeg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/08.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/09.jpg", "alt": "step-and-repeat and red carpet design", "webp": null}, {"src": "assets/images/design/hollyshorts20/10.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/11.jpeg", "alt": "billboard design", "webp": null}, {"src": "assets/images/design/hollyshorts20/12.jpeg", "alt": "on-screen graphics", "webp": null}, {"src": "assets/images/design/hollyshorts20/13.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/14.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/15.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/16.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/17.jpeg", "alt": "event signage", "webp": null}, {"src": "assets/images/design/hollyshorts20/18.jpg", "alt": "event signage", "webp": null}], "thumb": "assets/images/design/hollyshorts20/thumb.png", "missing": false}, {"slug": "cannes-2024", "title": "Cannes 2024", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Original illustrations and poster design for Kodak-hosted events at the 2024 Cannes Film Festival.", "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"], "category": "design", "images": [{"src": "assets/images/design/cannes-2024/01.png", "alt": "Cannes 2024", "webp": null}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": null}, {"src": "assets/images/design/cannes-2024/03.png", "alt": "Cannes 2024", "webp": null}, {"src": "assets/images/design/cannes-2024/04.png", "alt": "Cannes 2024", "webp": null}], "thumb": "assets/images/design/cannes-2024/thumb.png", "missing": false}, {"slug": "nice-knives", "title": "Nice Knives", "role": "Poster Design + Film Score", "location": "New York City", "description": "Poster design for Nice Knives Directed by Connor Copeland Distributed by BAM In Motion Little Tube Productions New York City, 2023", "palette": ["#1C1916", "#141210", "#0F0D0B"], "category": "design", "images": [{"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": null}], "thumb": "assets/images/design/nice-knives/thumb.png", "missing": false}], "2023": [{"slug": "hollyshorts-19", "title": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Art Director", "location": "TCL Chinese Theatres, Hollywood", "description": "19th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2023", "palette": ["#1E1E32", "#28283E", "#2E2E42"], "category": "design", "images": [{"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/03.jpg", "alt": "IMG_2157.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/04.jpg", "alt": "IMG_2159.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/05.jpeg", "alt": "IMG_2163.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/06.jpeg", "alt": "IMG_2162.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/07.jpg", "alt": "53116870852_38ed7647c2_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/08.jpeg", "alt": "IMG_2106.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/09.jpg", "alt": "53129550845_82942014eb_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/10.jpeg", "alt": "IMG_2222.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/11.png", "alt": "Steven.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/12.jpeg", "alt": "IMG_2114.jpeg", "webp": null}, {"src": "assets/images/design/hollyshorts19/13.jpg", "alt": "53116882592_c5664cc898_o.jpg", "webp": null}, {"src": "assets/images/design/hollyshorts19/14.png", "alt": "BitPix.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/15.png", "alt": "BitPix+Award+Winners+Bundle.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/16.png", "alt": "Day+Pass.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/17.png", "alt": "Staff.png", "webp": null}, {"src": "assets/images/design/hollyshorts19/18.png", "alt": "All+Access+A.png", "webp": null}], "thumb": "assets/images/design/hollyshorts19/thumb.png", "missing": false}, {"slug": "cannes-2023", "title": "Cannes 2023", "role": "Designer / Illustrator", "location": "Cannes, France", "description": "Cannes Film Festival 2023 Cannes, France • May 2023", "palette": ["#D0C9BD", "#C5BEB2", "#BAB3A7"], "category": "design", "images": [{"src": "assets/images/design/cannes/01.png", "alt": "Cannes 2023", "webp": null}, {"src": "assets/images/design/cannes/02.png", "alt": "Cannes 2023", "webp": null}], "thumb": "assets/images/design/cannes/thumb.png", "missing": false}], "2022": [{"slug": "hollyshorts-18", "title": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "role": "Designer", "location": "TCL Chinese Theatres", "description": "18th Annual Oscar-Qualifying HollyShorts Film Festival TCL Chinese Theatres • Hollywood, California • August 2022", "palette": ["#222238", "#2A2A40", "#1A1A30"], "category": "design", "images": [{"src": "assets/images/design/hsff18/01.png", "alt": "18th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": "assets/images/design/hsff18/01.webp"}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp"}, {"src": "assets/images/design/hsff18/03.png", "alt": "6+copy.png", "webp": "assets/images/design/hsff18/03.webp"}, {"src": "assets/images/design/hsff18/04.jpg", "alt": "D3E8F9F0-AE46-4052-B1FB-AFAF48D065CF.jpg", "webp": null}, {"src": "assets/images/design/hsff18/05.jpeg", "alt": "IMG_6421.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/06.jpeg", "alt": "IMG_6416.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/07.jpeg", "alt": "IMG_6402.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/08.jpeg", "alt": "IMG_6408.jpeg", "webp": null}, {"src": "assets/images/design/hsff18/09.png", "alt": "HollyShorts+Laurel+2.png", "webp": null}, {"src": "assets/images/design/hsff18/10.png", "alt": "Hollyshorts18.png", "webp": "assets/images/design/hsff18/10.webp"}, {"src": "assets/images/design/hsff18/11.jpg", "alt": "F+is+for+Film+Black.jpg", "webp": null}, {"src": "assets/images/design/hsff18/12.jpg", "alt": "F+is+for+Film+white.jpg", "webp": null}], "thumb": "assets/images/design/hsff18/thumb.png", "missing": false}], "2019": [{"slug": "hdtracks", "title": "HDtracks", "role": "Director of Marketing, Lead Designer", "location": "New York City", "description": "HDtracks The world’s leading online Hi-Res music store", "palette": ["#2C2C2C", "#363636", "#222222"], "category": "design", "images": [{"src": "assets/images/design/hdtracks/01.png", "alt": "HDtracks", "webp": null}, {"src": "assets/images/design/hdtracks/02.png", "alt": "HDtracks+SplashPage+Mock+Up.png", "webp": null}, {"src": "assets/images/design/hdtracks/03.png", "alt": "Screen+Shot+2021-05-10+at+12.58.46+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/04.png", "alt": "Screen+Shot+2021-05-10+at+1.04.37+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/05.png", "alt": "Screen+Shot+2021-05-10+at+1.06.42+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/06.png", "alt": "Chuck.png", "webp": null}, {"src": "assets/images/design/hdtracks/07.png", "alt": "Screen+Shot+2021-05-10+at+1.18.22+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/08.png", "alt": "Screen+Shot+2021-05-10+at+1.18.33+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/09.jpg", "alt": "10470178_663675363703231_3821372901395509111_o.jpg", "webp": null}, {"src": "assets/images/design/hdtracks/10.png", "alt": "65303997_2952501178124033_8095062357006352384_n.png", "webp": null}, {"src": "assets/images/design/hdtracks/11.png", "alt": "Screen+Shot+2020-09-16+at+12.17.22+PM.png", "webp": null}, {"src": "assets/images/design/hdtracks/12.png", "alt": "Screen+Shot+2021-05-10+at+1.17.14+PM.png", "webp": null}], "thumb": "assets/images/design/hdtracks/thumb.png", "missing": false}, {"slug": "alchemy", "title": "Alchemy (film score)", "role": "Composer, Music Supervisor", "location": "New York City", "description": "Original score and music supervision for Documentary short, Alchemy Directed by Remington Long • New York City, 2019 Documentary about Bonnie Ohara, the founder of a one-woman bakery in Modesto, California. Winner of over ten awards including: American Documentary and Animation Festival Paris Short Film Fest Greenwich Village Film Fest , Best Documentary", "palette": ["#E3DDD2", "#D8D2C6", "#CEC8BC"], "category": "music", "images": [], "thumb": "assets/images/music/alchemy/thumb.png", "missing": true}, {"slug": "boys-will-be-flowers", "title": "Boys Will Be Flowers (film score)", "role": "Composer", "location": "El Capitolio, Cuba", "description": "Original score for short film, Boys Will Be Flowers Directed by Daddy Ramazani • El Capitolio, Cuba, 2019 “A nostalgic portrait that captures the carefree children of Cuba, a softly cinematic study of young Cuban skaters hanging out on sun-drenched street.” Official Selection Le Festival International du Film sur l’Art Featured by Nowness", "palette": ["#C4BDA8", "#B8B19C", "#ACA590"], "category": "music", "images": [], "thumb": "assets/images/music/boys/thumb.png", "missing": true}]}, "gallery": [{"src": "assets/images/design/hcsff6/02.jpg", "alt": "img_0484_52043317890_o.jpg", "webp": null, "speed": 0.055}, {"src": "assets/images/design/cannes-2024/02.png", "alt": "Cannes 2024", "webp": null, "speed": 0.069}, {"src": "assets/images/design/hcsff7/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.061}, {"src": "assets/images/design/skyfire-artists/02.png", "alt": "SA Tall - Black.png", "webp": null, "speed": 0.069}, {"src": "assets/images/design/hollyshorts20/02.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null, "speed": 0.057}, {"src": "assets/images/design/hollyshorts20/01.png", "alt": "20th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null, "speed": 0.035}, {"src": "assets/images/design/hsff18/02.png", "alt": "5.png", "webp": "assets/images/design/hsff18/02.webp", "speed": 0.048}, {"src": "assets/images/design/hcsff7/02.png", "alt": "Blue+3.png", "webp": "assets/images/design/hcsff7/02.webp", "speed": 0.033}, {"src": "assets/images/design/feeling/01.png", "alt": "Let This Feeling Go", "webp": "assets/images/design/feeling/01.webp", "speed": 0.057}, {"src": "assets/images/design/miles-regis/01.jpg", "alt": "Miles Regis", "webp": null, "speed": 0.043}, {"src": "assets/images/design/hollyshorts-london/02.jpg", "alt": "468035841_602743562326775_6681752195368308140_n.jpg", "webp": null, "speed": 0.049}, {"src": "assets/images/design/hollyshortswebsite/01.png", "alt": "Hollyshorts.com", "webp": null, "speed": 0.034}, {"src": "assets/images/design/hollyshorts19/02.png", "alt": "Hollyshorts+2023+Poster.png", "webp": null, "speed": 0.065}, {"src": "assets/images/design/hollyshorts-comedy-2025/01.png", "alt": "HollyShorts Comedy 2025", "webp": null, "speed": 0.075}, {"src": "assets/images/design/hcsff7-2/01.jpg", "alt": "7th Annual Hollywood Comedy Shorts Film Festival", "webp": null, "speed": 0.065}, {"src": "assets/images/design/nice-knives/01.png", "alt": "Nice Knives", "webp": null, "speed": 0.072}, {"src": "assets/images/design/skyfire-artists/01.png", "alt": "SA Tall - White.png", "webp": null, "speed": 0.058}, {"src": "assets/images/design/hollyshorts21/01.png", "alt": "21st Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null, "speed": 0.08}, {"src": "assets/images/design/hcsff7-2/02.png", "alt": "Blue+3.png", "webp": null, "speed": 0.076}, {"src": "assets/images/design/hollyshorts19/01.png", "alt": "19th Annual Oscar-Qualifying HollyShorts Film Festival", "webp": null, "speed": 0.051}, {"src": "assets/images/design/hollyshorts-london/01.jpg", "alt": "472232574_3853868371592674_5703217189292259182_n.jpg", "webp": null, "speed": 0.031}, {"src": "assets/images/design/little-issues/01.png", "alt": "LiTTLE iSSUES", "webp": null, "speed": 0.059}], "blurBySrc": {}}</script>
+  <script>
+(function () {
+  var SITE = JSON.parse(document.getElementById("site-data").textContent);
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mergeAssetHints(blurMap) {
+    if (!blurMap) return;
+    if (blurMap.blurBySrc) SITE.blurBySrc = blurMap.blurBySrc;
+    if (blurMap.webpBySrc) {
+      var wmap = blurMap.webpBySrc;
+      (SITE.gallery || []).forEach(function (im) {
+        if (wmap[im.src]) im.webp = wmap[im.src];
+      });
+      Object.keys(SITE.projectsByYear || {}).forEach(function (y) {
+        (SITE.projectsByYear[y] || []).forEach(function (proj) {
+          (proj.images || []).forEach(function (im) {
+            if (wmap[im.src]) im.webp = wmap[im.src];
+          });
+        });
+      });
+    }
+  }
+
+  var state = {
+    page: "home",
+    year: null,
+    projectSlug: null
+  };
+
+  function $(sel) { return document.querySelector(sel); }
+  function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  function escapeHtml(s) {
+    var d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function disciplineLabel(cat) {
+    if (!cat) return "";
+    var c = String(cat);
+    return c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+  }
+
+  function thumbUrl(proj) {
+    if (proj.thumb) return proj.thumb;
+    if (proj.images && proj.images.length) return proj.images[0].src;
+    return null;
+  }
+
+  function getOrderedProjects() {
+    var out = [];
+    var years = (SITE.years || []).slice().sort(function (a, b) { return b - a; });
+    years.forEach(function (y) {
+      (SITE.projectsByYear[String(y)] || []).forEach(function (proj) {
+        var t = thumbUrl(proj);
+        if (t) out.push({ year: y, project: proj, thumb: t });
+      });
+    });
+    return out;
+  }
+
+  function findProject(slug) {
+    var years = SITE.years || [];
+    for (var yi = 0; yi < years.length; yi++) {
+      var y = years[yi];
+      var list = SITE.projectsByYear[String(y)] || [];
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].slug === slug) return { year: y, project: list[i] };
+      }
+    }
+    return null;
+  }
+
+  function scrollTop() {
+    window.scrollTo(0, 0);
+  }
+
+  function buildNav() {
+    var list = $("#navList");
+    list.innerHTML = "";
+
+    function addBtn(text, navId, onClick) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "nav-btn";
+      btn.textContent = text;
+      btn.setAttribute("data-nav", navId);
+      btn.addEventListener("click", onClick);
+      li.appendChild(btn);
+      list.appendChild(li);
+      return btn;
+    }
+
+    addBtn("Work", "work", function () {
+      state.page = "work";
+      state.year = null;
+      state.projectSlug = null;
+      showView("work");
+      showWorkLanding();
+      scrollTop();
+      updateNavClasses();
+    });
+    addBtn("About", "about", function () {
+      state.page = "about";
+      state.year = null;
+      state.projectSlug = null;
+      showView("about");
+      scrollTop();
+      updateNavClasses();
+    });
+    addBtn("Press", "press", function () {
+      state.page = "press";
+      state.year = null;
+      state.projectSlug = null;
+      showView("press");
+      scrollTop();
+      updateNavClasses();
+    });
+    addBtn("Contact", "contact", function () {
+      state.page = "contact";
+      state.year = null;
+      state.projectSlug = null;
+      showView("contact");
+      scrollTop();
+      updateNavClasses();
+    });
+  }
+
+  function showView(name) {
+    var map = { home: "viewHome", work: "viewWork", about: "viewAbout", press: "viewPress", contact: "viewContact" };
+    var nextId = map[name];
+    var next = nextId ? document.getElementById(nextId) : null;
+    var current = document.querySelector(".view.visible");
+    if (!next) return;
+    if (current === next) return;
+    var outMs = reduced ? 0 : 300;
+    function reveal() {
+      $all(".view").forEach(function (v) {
+        v.classList.remove("visible", "fade-out");
+      });
+      next.classList.add("visible");
+    }
+    if (!current || reduced) {
+      reveal();
+      return;
+    }
+    current.classList.add("fade-out");
+    setTimeout(function () {
+      reveal();
+    }, outMs);
+  }
+
+  function updateNavClasses() {
+    $all(".nav-btn").forEach(function (b) {
+      b.classList.remove("active");
+    });
+    var map = { home: null, about: "about", press: "press", contact: "contact", work: "work" };
+    var id = map[state.page];
+    if (state.page === "work") id = "work";
+    if (id) {
+      var b = $('.nav-btn[data-nav="' + id + '"]');
+      if (b) b.classList.add("active");
+    }
+  }
+
+  function pictureTag(img, lazy) {
+    var blur = SITE.blurBySrc && SITE.blurBySrc[img.src] ? SITE.blurBySrc[img.src] : "";
+    var style = blur ? ' style="background-image:url(\'' + blur + '\');background-size:cover"' : "";
+    var loadAttr = lazy !== false ? ' loading="lazy" decoding="async"' : "";
+    var inner = "";
+    if (img.webp) {
+      inner =
+        "<picture><source srcset=\"" +
+        img.webp +
+        "\" type=\"image/webp\" /><img src=\"" +
+        img.src +
+        "\" alt=\"" +
+        escapeHtml(img.alt) +
+        "\"" +
+        loadAttr +
+        ' width="1200" height="800" /></picture>';
+    } else {
+      inner = "<img src=\"" + img.src + "\" alt=\"" + escapeHtml(img.alt) + "\"" + loadAttr + " />";
+    }
+    return '<div class="img-wrap"' + style + ">" + inner + "</div>";
+  }
+
+  function heroImgTag(proj) {
+    var first = proj.images && proj.images[0];
+    if (!first) return "";
+    return pictureTag({ src: first.src, alt: first.alt, webp: first.webp }, false);
+  }
+
+  function caseStudyLayout(images) {
+    if (!images.length) return "";
+    var html = '<div class="case-study">';
+    var i = 0;
+    var row = 0;
+    while (i < images.length) {
+      if (row % 2 === 0) {
+        html += '<div class="case-study__full">' + pictureTag(images[i]) + "</div>";
+        i += 1;
+      } else {
+        html += '<div class="case-study__pair">';
+        html += '<div class="cell">' + pictureTag(images[i]) + "</div>";
+        if (images[i + 1]) html += '<div class="cell">' + pictureTag(images[i + 1]) + "</div>";
+        i += images[i + 1] ? 2 : 1;
+        html += "</div>";
+      }
+      row += 1;
+    }
+    html += "</div>";
+    return html;
+  }
+
+  function workGridMarkup() {
+    var items = getOrderedProjects();
+    if (!items.length) return "<p class=\"body-text\">Work coming soon.</p>";
+    var hero = items[0];
+    var rest = items.slice(1);
+    var cat = disciplineLabel(hero.project.category);
+    var html = "";
+    html += '<article class="work-hero">';
+    html +=
+      '<a class="work-hero__link" href="#" data-open-project="' +
+      escapeHtml(hero.project.slug) +
+      '" data-year="' +
+      String(hero.year) +
+      '">';
+    html += '<img class="work-hero__media" src="' + escapeHtml(hero.thumb) + '" alt="' + escapeHtml(hero.project.title) + '" />';
+    html += '<h2 class="work-hero__title">' + escapeHtml(hero.project.title) + "</h2>";
+    html += "</a></article>";
+    if (rest.length) {
+      html += '<div class="work-grid">';
+      rest.forEach(function (item) {
+        var d = disciplineLabel(item.project.category);
+        html += '<button type="button" class="work-card" data-open-project="' + escapeHtml(item.project.slug) + '" data-year="' + String(item.year) + '">';
+        html += '<span class="work-card__frame"><img class="work-card__img" src="' + escapeHtml(item.thumb) + '" alt="' + escapeHtml(item.project.title) + '" loading="lazy" decoding="async" /></span>';
+        html += '<span class="work-card__title">' + escapeHtml(item.project.title) + "</span>";
+        html += '<span class="work-card__tags">' + escapeHtml(d) + "</span>";
+        html += "</button>";
+      });
+      html += "</div>";
+    }
+    return html;
+  }
+
+  function bindWorkGrid(root) {
+    if (!root) return;
+    root.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-open-project]");
+      if (!a || !root.contains(a)) return;
+      e.preventDefault();
+      var slug = a.getAttribute("data-open-project");
+      var found = findProject(slug);
+      if (!found) return;
+      state.page = "work";
+      state.year = found.year;
+      state.projectSlug = slug;
+      showView("work");
+      renderProject(found.project);
+      scrollTop();
+      updateNavClasses();
+    });
+  }
+
+  function renderWorkGrids() {
+    var html = workGridMarkup();
+    var w1 = $("#workLanding");
+    var w2 = $("#workGridOnHome");
+    if (w1) w1.innerHTML = html;
+    if (w2) w2.innerHTML = html;
+  }
+
+  function showWorkLanding() {
+    $("#workProject").style.display = "none";
+    $("#workLanding").style.display = "block";
+    state.projectSlug = null;
+    renderWorkGrids();
+  }
+
+  function renderProject(proj) {
+    $("#workLanding").style.display = "none";
+    $("#workProject").style.display = "block";
+    var y = state.year;
+    var disc = disciplineLabel(proj.category);
+    var html = '<div class="project-page">';
+    html += '<button type="button" class="project-back" id="projectBack">Back to work</button>';
+
+    if (!proj.missing && proj.images && proj.images.length) {
+      html += '<div class="project-hero">' + heroImgTag(proj) + "</div>";
+    }
+
+    html += '<header class="project-head">';
+    html += '<h1 class="page-title">' + escapeHtml(proj.title) + "</h1>";
+    html += '<div class="project-meta-row">';
+    html += "<span>" + escapeHtml(proj.role) + "</span>";
+    html += '<span class="meta-sep" aria-hidden="true">·</span>';
+    html += "<span>" + escapeHtml(proj.location || "") + "</span>";
+    if (y) {
+      html += '<span class="meta-sep" aria-hidden="true">·</span>';
+      html += "<span>" + String(y) + "</span>";
+    }
+    if (disc) {
+      html += '<span class="meta-sep" aria-hidden="true">·</span>';
+      html += "<span>" + escapeHtml(disc) + "</span>";
+    }
+    html += "</div></header>";
+    html += '<div class="body-text"><p>' + escapeHtml(proj.description) + "</p></div>";
+
+    if (proj.missing) {
+      html += placeholderBlocks(proj);
+    } else if (proj.images && proj.images.length > 1) {
+      html += caseStudyLayout(
+        proj.images.slice(1).map(function (im) {
+          return { src: im.src, alt: im.alt, webp: im.webp };
+        })
+      );
+    } else if (proj.images && proj.images.length === 1) {
+      html += "";
+    }
+
+    html += "</div>";
+    $("#workProject").innerHTML = html;
+    var back = $("#projectBack");
+    if (back) {
+      back.addEventListener("click", function () {
+        state.projectSlug = null;
+        state.year = null;
+        $("#workProject").style.display = "none";
+        $("#workLanding").style.display = "block";
+        scrollTop();
+        updateNavClasses();
+      });
+    }
+  }
+
+  function placeholderBlocks(proj) {
+    var html = "";
+    var pal = proj.palette || ["#D2D2D7", "#F5F5F7"];
+    for (var i = 0; i < 3; i++) {
+      var c = pal[i % pal.length];
+      html +=
+        '<div class="project-block"><svg class="svg-ph" viewBox="0 0 3 4" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><rect width="3" height="4" fill="' +
+        c +
+        '"/></svg></div>';
+    }
+    return html;
+  }
+
+  var slideshowTimer = null;
+  function initSlideshow() {
+    var root = $("#homeSlideshow");
+    if (!root) return;
+    var items = SITE.gallery || [];
+    if (!items.length) return;
+    if (slideshowTimer) {
+      clearInterval(slideshowTimer);
+      slideshowTimer = null;
+    }
+    if (reduced) {
+      root.innerHTML =
+        '<div class="home-slideshow__layer is-front" style="background-image:url(\'' +
+        items[0].src.replace(/'/g, "\\'") +
+        '\')"></div>';
+      return;
+    }
+    root.innerHTML = "";
+    var l0 = document.createElement("div");
+    var l1 = document.createElement("div");
+    l0.className = "home-slideshow__layer";
+    l1.className = "home-slideshow__layer";
+    [l0, l1].forEach(function (el) {
+      el.style.position = "absolute";
+      el.style.inset = "0";
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+      el.style.transition = "opacity 0.6s ease-in-out";
+      root.appendChild(el);
+    });
+    var cur = 0;
+    l0.style.backgroundImage = 'url("' + items[0].src + '")';
+    l0.style.opacity = "1";
+    l0.style.zIndex = "2";
+    l1.style.opacity = "0";
+    l1.style.zIndex = "1";
+    var top = l0;
+    var bot = l1;
+    slideshowTimer = setInterval(function () {
+      var next = (cur + 1) % items.length;
+      bot.style.backgroundImage = 'url("' + items[next].src + '")';
+      bot.style.zIndex = "3";
+      bot.style.opacity = "1";
+      top.style.opacity = "0";
+      setTimeout(function () {
+        cur = next;
+        var tmp = top;
+        top = bot;
+        bot = tmp;
+        top.style.zIndex = "2";
+        top.style.opacity = "1";
+        bot.style.zIndex = "1";
+        bot.style.opacity = "0";
+      }, 600);
+    }, 2500);
+  }
+
+  function goHome() {
+    state.page = "home";
+    state.year = null;
+    state.projectSlug = null;
+    showView("home");
+    scrollTop();
+    updateNavClasses();
+  }
+
+  function boot() {
+    buildNav();
+    $("#brandHome").addEventListener("click", function (e) {
+      e.preventDefault();
+      goHome();
+    });
+    bindWorkGrid($("#workLanding"));
+    bindWorkGrid($("#workGridOnHome"));
+    renderWorkGrids();
+    showView("home");
+    updateNavClasses();
+    initSlideshow();
+  }
+
+  fetch("blur_map.json")
+    .then(function (r) {
+      return r.ok ? r.json() : null;
+    })
+    .catch(function () {
+      return null;
+    })
+    .then(function (blurMap) {
+      mergeAssetHints(blurMap);
+      boot();
+    });
+
+  document.addEventListener("keydown", function (e) {
+    var keys = ["ArrowUp", "ArrowDown", "Enter"];
+    if (keys.indexOf(e.key) < 0) return;
+    var btns = $all(".site-nav .nav-btn");
+    if (!btns.length) return;
+    var idx = btns.indexOf(document.activeElement);
+    if (idx < 0 && e.key.indexOf("Arrow") === 0) {
+      btns[0].focus();
+      e.preventDefault();
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      var n = Math.min(btns.length - 1, idx + 1);
+      btns[n].focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      var p = Math.max(0, idx - 1);
+      btns[p].focus();
+    } else if (e.key === "Enter" && document.activeElement && document.activeElement.click) {
+      document.activeElement.click();
+    }
+  });
+
+  window.addEventListener("load", function () {
+    var wb = $('.nav-btn[data-nav="work"]');
+    if (wb) wb.focus();
+  });
+})();
+  </script>
+</body>
+</html>

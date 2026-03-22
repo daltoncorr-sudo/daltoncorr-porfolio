@@ -1,0 +1,137 @@
+{
+  "slugToMeta": {
+    "hollyshorts-21": {
+      "urlSlug": "hollyshorts21",
+      "category": "design",
+      "year": 2025,
+      "role": "Art Director",
+      "location": "TCL Chinese Theatres, Los Angeles",
+      "description": "Art directed the 21st anniversary festival. Poster, merch, badges, award design, and full production design across the festival, Alta Global Media Film Summit, and award show.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "comedy-rebrand": {
+      "urlSlug": "hollyshorts-comedy-2025",
+      "category": "design",
+      "year": 2025,
+      "role": "Art Director — Led Rebrand",
+      "location": "Los Angeles",
+      "description": "Led the full rebrand — new logo, color palette, typography, design system, AR activations, website, and event production.",
+      "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"]
+    },
+    "hollyshorts-london": {
+      "urlSlug": "hollyshorts-london",
+      "category": "design",
+      "year": 2025,
+      "role": "Creative Director",
+      "location": "London, United Kingdom",
+      "description": "Creative direction and design for the inaugural HollyShorts London. New visual identity for the festival's international expansion.",
+      "palette": ["#DAD5C9", "#D0CAC0", "#C8C2B8"]
+    },
+    "dont-mind-me": {
+      "title": "Don't Mind Me",
+      "urlSlug": null,
+      "category": "music",
+      "year": 2025,
+      "role": "Composer — Feature Film",
+      "location": "Dir. Isaiah Hoban Halvorsen",
+      "description": "First feature-length film score. Full soundtrack for the feature. The career milestone — shorts to features.",
+      "palette": ["#0A0A08", "#0E0E0B", "#121210"]
+    },
+    "hollyshorts-20": {
+      "urlSlug": "hollyshorts20",
+      "category": "design",
+      "year": 2024,
+      "role": "Art Director",
+      "location": "TCL Chinese · Egyptian Theater · Japan House, Los Angeles",
+      "description": "Three venues. Original illustration. Award design. A full merch line. Production design for the festival, film summit, and award show. Press in Variety, Deadline, and Daily Mail.",
+      "palette": ["#0D0D1A", "#161628", "#1C1C30"]
+    },
+    "cannes-2024": {
+      "urlSlug": "cannes-2024",
+      "category": "design",
+      "year": 2024,
+      "role": "Designer / Illustrator",
+      "location": "Cannes, France",
+      "description": "Original illustrations and poster design for Kodak-hosted events at the 2024 Cannes Film Festival.",
+      "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"]
+    },
+    "nice-knives": {
+      "urlSlug": "nice-knives",
+      "category": "design",
+      "year": 2024,
+      "role": "Poster Design + Film Score",
+      "location": "New York City",
+      "description": "Designed the poster and composed the score. Two disciplines, one film. Directed by Connor Copeland, distributed by BAM In Motion.",
+      "palette": ["#1C1916", "#141210", "#0F0D0B"]
+    },
+    "hollyshorts-19": {
+      "urlSlug": "hollyshorts19",
+      "category": "design",
+      "year": 2023,
+      "role": "Art Director",
+      "location": "TCL Chinese Theatres, Hollywood",
+      "description": "Art direction and lead design for the 19th annual festival. Developed the look-and-feel alongside the executive team.",
+      "palette": ["#1E1E32", "#28283E", "#2E2E42"]
+    },
+    "cannes-2023": {
+      "urlSlug": "cannes",
+      "category": "design",
+      "year": 2023,
+      "role": "Designer / Illustrator",
+      "location": "Cannes, France",
+      "description": "Original artwork and invitation design for HollyShorts events at Cannes.",
+      "palette": ["#D0C9BD", "#C5BEB2", "#BAB3A7"]
+    },
+    "hollyshorts-18": {
+      "urlSlug": "hsff18",
+      "category": "design",
+      "year": 2022,
+      "role": "Designer",
+      "location": "TCL Chinese Theatres",
+      "description": "Festival design for the 18th edition.",
+      "palette": ["#222238", "#2A2A40", "#1A1A30"]
+    },
+    "hdtracks": {
+      "urlSlug": "hdtracks",
+      "category": "design",
+      "year": 2019,
+      "role": "Director of Marketing, Lead Designer",
+      "location": "New York City",
+      "description": "Complete rebranding and website redesign for the Grammy-connected music platform. UX/UI, branding, logos, ad campaigns.",
+      "palette": ["#2C2C2C", "#363636", "#222222"]
+    },
+    "alchemy": {
+      "urlSlug": "alchemy",
+      "category": "music",
+      "year": 2019,
+      "role": "Composer, Music Supervisor",
+      "location": "New York City",
+      "description": "Score and music supervision for the award-winning documentary directed by Remington Long. 10+ festival awards including Sundance Collab and Hamptons.",
+      "palette": ["#E3DDD2", "#D8D2C6", "#CEC8BC"]
+    },
+    "boys-will-be-flowers": {
+      "urlSlug": "boys",
+      "category": "music",
+      "year": 2019,
+      "role": "Composer",
+      "location": "El Capitolio, Cuba",
+      "description": "Film score for the short directed by Daddy Ramazani. Featured on NOWNESS. Official Selection at Le Festival International du Film sur l'Art.",
+      "palette": ["#C4BDA8", "#B8B19C", "#ACA590"]
+    }
+  },
+  "navOrder": [
+    "hollyshorts-21",
+    "comedy-rebrand",
+    "hollyshorts-london",
+    "dont-mind-me",
+    "hollyshorts-20",
+    "cannes-2024",
+    "nice-knives",
+    "hollyshorts-19",
+    "cannes-2023",
+    "hollyshorts-18",
+    "hdtracks",
+    "alchemy",
+    "boys-will-be-flowers"
+  ]
+}
