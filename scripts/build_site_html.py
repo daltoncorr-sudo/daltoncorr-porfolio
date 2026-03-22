@@ -57,17 +57,19 @@ def build() -> None:
         (ROOT / "scripts" / "curated_projects.json").read_text(encoding="utf-8")
     )
     slug_meta = curated["slugToMeta"]
-    nav_order = curated["navOrder"]
+    nav_design = curated["navOrderDesign"]
+    nav_music = curated["navOrderMusic"]
     projects_manifest = manifest.get("projects", {})
 
-    merged_by_year: dict[int, list[dict]] = {}
+    design_projects: list[dict] = []
+    music_projects: list[dict] = []
     all_paths_for_blur: list[Path] = []
 
-    for slug in nav_order:
+    for slug in nav_design + nav_music:
         meta = slug_meta[slug]
         url_slug = meta.get("urlSlug")
         year = meta["year"]
-        merged_by_year.setdefault(year, [])
+        category = meta["category"]
         entry = {
             "slug": slug,
             "title": "",
@@ -75,25 +77,30 @@ def build() -> None:
             "location": meta["location"],
             "description": meta["description"],
             "palette": meta["palette"],
-            "category": meta["category"],
+            "category": category,
+            "year": year,
             "images": [],
             "thumb": None,
             "missing": False,
         }
         if not url_slug:
-            entry["title"] = meta.get("title") or (
-                "Don't Mind Me" if slug == "dont-mind-me" else slug.replace("-", " ").title()
-            )
+            entry["title"] = meta.get("title") or slug.replace("-", " ").title()
             entry["missing"] = True
-            merged_by_year[year].append(entry)
+            if category == "design":
+                design_projects.append(entry)
+            else:
+                music_projects.append(entry)
             continue
 
-        key = f"{meta['category']}/{url_slug}"
+        key = f"{category}/{url_slug}"
         m = projects_manifest.get(key)
         if not m:
             entry["missing"] = True
             entry["title"] = meta.get("title", slug)
-            merged_by_year[year].append(entry)
+            if category == "design":
+                design_projects.append(entry)
+            else:
+                music_projects.append(entry)
             continue
 
         scraped_title = (m.get("title") or "").strip()
@@ -131,9 +138,10 @@ def build() -> None:
             # Editorial pacing: cap per project for load and layout
             entry["images"] = entry["images"][:18]
 
-        merged_by_year[year].append(entry)
-
-    years_sorted = sorted(merged_by_year.keys(), reverse=True)
+        if category == "design":
+            design_projects.append(entry)
+        else:
+            music_projects.append(entry)
 
     # Gallery mix: sample images across all manifest projects for Work landing
     gallery: list[dict] = []
@@ -190,8 +198,9 @@ def build() -> None:
                 blur_by_src[src] = b
 
     site_data = {
-        "years": years_sorted,
-        "projectsByYear": {str(y): merged_by_year[y] for y in years_sorted},
+        "categories": ["design", "music"],
+        "designProjects": design_projects,
+        "musicProjects": music_projects,
         "gallery": gallery,
         "blurBySrc": blur_by_src,
     }

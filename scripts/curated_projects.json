@@ -27,16 +27,6 @@
       "description": "Creative direction and design for the inaugural HollyShorts London. New visual identity for the festival's international expansion.",
       "palette": ["#DAD5C9", "#D0CAC0", "#C8C2B8"]
     },
-    "dont-mind-me": {
-      "title": "Don't Mind Me",
-      "urlSlug": null,
-      "category": "music",
-      "year": 2025,
-      "role": "Composer — Feature Film",
-      "location": "Dir. Isaiah Hoban Halvorsen",
-      "description": "First feature-length film score. Full soundtrack for the feature. The career milestone — shorts to features.",
-      "palette": ["#0A0A08", "#0E0E0B", "#121210"]
-    },
     "hollyshorts-20": {
       "urlSlug": "hollyshorts20",
       "category": "design",
@@ -64,6 +54,42 @@
       "description": "Designed the poster and composed the score. Two disciplines, one film. Directed by Connor Copeland, distributed by BAM In Motion.",
       "palette": ["#1C1916", "#141210", "#0F0D0B"]
     },
+    "hcsff8": {
+      "urlSlug": "hcsff8",
+      "category": "design",
+      "year": 2024,
+      "role": "Art Director",
+      "location": "TCL Chinese Theatres, Hollywood",
+      "description": "Art direction and design for the 8th Annual Hollywood Comedy Shorts Film Festival.",
+      "palette": ["#1E1E32", "#28283E", "#2E2E42"]
+    },
+    "hollyshortswebsite": {
+      "urlSlug": "hollyshortswebsite",
+      "category": "design",
+      "year": 2024,
+      "role": "Designer / Developer",
+      "location": "Los Angeles",
+      "description": "Website design for Hollyshorts.com.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "little-issues": {
+      "urlSlug": "little-issues",
+      "category": "design",
+      "year": 2024,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Design for LiTTLE iSSUES.",
+      "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"]
+    },
+    "skyfire-artists": {
+      "urlSlug": "skyfire-artists",
+      "category": "design",
+      "year": 2024,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Branding and design for Skyfire Artists.",
+      "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"]
+    },
     "hollyshorts-19": {
       "urlSlug": "hollyshorts19",
       "category": "design",
@@ -82,6 +108,51 @@
       "description": "Original artwork and invitation design for HollyShorts events at Cannes.",
       "palette": ["#D0C9BD", "#C5BEB2", "#BAB3A7"]
     },
+    "hcsff7": {
+      "urlSlug": "hcsff7",
+      "category": "design",
+      "year": 2023,
+      "role": "Art Director",
+      "location": "TCL Chinese Theatres, Hollywood",
+      "description": "Art direction and design for the 7th Annual Hollywood Comedy Shorts Film Festival.",
+      "palette": ["#1E1E32", "#28283E", "#2E2E42"]
+    },
+    "feeling": {
+      "urlSlug": "feeling",
+      "category": "design",
+      "year": 2023,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Original artwork and poster design for Let This Feeling Go, directed by Andrew De Zen.",
+      "palette": ["#C9C3B5", "#B8B2A4", "#D4CFC4"]
+    },
+    "hallelujah": {
+      "urlSlug": "hallelujah",
+      "category": "design",
+      "year": 2023,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Poster design for Hallelujah, directed by Victor Gabriel. Executive produced by Spike Lee.",
+      "palette": ["#1C1916", "#141210", "#0F0D0B"]
+    },
+    "survived-by": {
+      "urlSlug": "survived-by",
+      "category": "design",
+      "year": 2023,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Poster design for Survived By.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "timewriter": {
+      "urlSlug": "timewriter",
+      "category": "design",
+      "year": 2023,
+      "role": "Designer",
+      "location": "Los Angeles",
+      "description": "Design for Timewriter.",
+      "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"]
+    },
     "hollyshorts-18": {
       "urlSlug": "hsff18",
       "category": "design",
@@ -90,6 +161,15 @@
       "location": "TCL Chinese Theatres",
       "description": "Festival design for the 18th edition.",
       "palette": ["#222238", "#2A2A40", "#1A1A30"]
+    },
+    "hcsff6": {
+      "urlSlug": "hcsff6",
+      "category": "design",
+      "year": 2022,
+      "role": "Art Director",
+      "location": "TCL Chinese Theatres, Hollywood",
+      "description": "Art direction and design for the 6th Annual Hollywood Comedy Shorts Film Festival.",
+      "palette": ["#1E1E32", "#28283E", "#2E2E42"]
     },
     "hdtracks": {
       "urlSlug": "hdtracks",
@@ -100,6 +180,124 @@
       "description": "Complete rebranding and website redesign for the Grammy-connected music platform. UX/UI, branding, logos, ad campaigns.",
       "palette": ["#2C2C2C", "#363636", "#222222"]
     },
+    "miles-regis": {
+      "urlSlug": "miles-regis",
+      "category": "design",
+      "year": 2018,
+      "role": "Designer",
+      "location": "New York City",
+      "description": "Design work for Miles Regis.",
+      "palette": ["#2C2C2C", "#363636", "#222222"]
+    },
+    "chop-suey-club": {
+      "urlSlug": "chop-suey-club",
+      "category": "design",
+      "year": 2016,
+      "role": "Designer",
+      "location": "New York City",
+      "description": "Design for Chop Suey Club Contemporary Art Gallery.",
+      "palette": ["#2C2C2C", "#363636", "#222222"]
+    },
+    "welcome-home": {
+      "urlSlug": "welcome-home",
+      "category": "design",
+      "year": 2016,
+      "role": "Designer",
+      "location": "New York City",
+      "description": "Design for Welcome Home.",
+      "palette": ["#EDE8DC", "#E4DDD0", "#DDD6C8"]
+    },
+    "dont-mind-me": {
+      "title": "Don't Mind Me",
+      "urlSlug": null,
+      "category": "music",
+      "year": 2025,
+      "role": "Composer — Feature Film",
+      "location": "Dir. Isaiah Hoban Halvorsen",
+      "description": "First feature-length film score. Full soundtrack for the feature.",
+      "palette": ["#0A0A08", "#0E0E0B", "#121210"]
+    },
+    "nice-knives-score": {
+      "urlSlug": "nice-knives",
+      "category": "music",
+      "year": 2024,
+      "role": "Composer",
+      "location": "New York City",
+      "description": "Film score for Nice Knives, directed by Connor Copeland. Distributed by BAM In Motion.",
+      "palette": ["#1C1916", "#141210", "#0F0D0B"]
+    },
+    "kid-nicoleman": {
+      "urlSlug": "kid-nicoleman",
+      "category": "music",
+      "year": 2023,
+      "role": "Composer",
+      "location": "Los Angeles",
+      "description": "Soundtrack for Into The Ether With Kid Nicoleman.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "gazoo": {
+      "urlSlug": "gazoo",
+      "category": "music",
+      "year": 2022,
+      "role": "Composer",
+      "location": "Los Angeles",
+      "description": "Film score for Gazoo Interview.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "leave-me": {
+      "urlSlug": "leave-me",
+      "category": "music",
+      "year": 2022,
+      "role": "Composer",
+      "location": "Los Angeles",
+      "description": "Composition for Leave Me Alone music video.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "cheeky": {
+      "urlSlug": "cheeky",
+      "category": "music",
+      "year": 2022,
+      "role": "Composer",
+      "location": "Prague",
+      "description": "Original score for the comedy short Cheeky, directed by Johnny Frohman and Yair Vurnbrand.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "tan": {
+      "urlSlug": "tan",
+      "category": "music",
+      "year": 2022,
+      "role": "Composer",
+      "location": "San Francisco",
+      "description": "Film score for Tan Paints The Tenderloin.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "no-regrets-remix": {
+      "urlSlug": "no-regrets-remix",
+      "category": "music",
+      "year": 2022,
+      "role": "Producer",
+      "location": "Los Angeles",
+      "description": "No Regrets Remix.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "2022-reel": {
+      "urlSlug": "2022-reel",
+      "category": "music",
+      "year": 2022,
+      "role": "Composer",
+      "location": "Los Angeles",
+      "description": "2022 Composition Reel — a selection of recent film scores and original compositions.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "the-future-is-ow": {
+      "urlSlug": "the-future-is-ow-theme-song",
+      "category": "music",
+      "year": 2021,
+      "role": "Composer",
+      "location": "Los Angeles",
+      "description": "Theme song for The Future Is Ow.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
     "alchemy": {
       "urlSlug": "alchemy",
       "category": "music",
@@ -109,6 +307,15 @@
       "description": "Score and music supervision for the award-winning documentary directed by Remington Long. 10+ festival awards including Sundance Collab and Hamptons.",
       "palette": ["#E3DDD2", "#D8D2C6", "#CEC8BC"]
     },
+    "higher": {
+      "urlSlug": "higher",
+      "category": "music",
+      "year": 2019,
+      "role": "Artist",
+      "location": "New York City",
+      "description": "Higher — original song.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
     "boys-will-be-flowers": {
       "urlSlug": "boys",
       "category": "music",
@@ -117,21 +324,116 @@
       "location": "El Capitolio, Cuba",
       "description": "Film score for the short directed by Daddy Ramazani. Featured on NOWNESS. Official Selection at Le Festival International du Film sur l'Art.",
       "palette": ["#C4BDA8", "#B8B19C", "#ACA590"]
+    },
+    "baxter": {
+      "urlSlug": "baxter",
+      "category": "music",
+      "year": 2018,
+      "role": "Composer",
+      "location": "New York City",
+      "description": "Original music for the BAXTER music video.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "i-think": {
+      "urlSlug": "i-think",
+      "category": "music",
+      "year": 2017,
+      "role": "Artist",
+      "location": "New York City",
+      "description": "I Think Of You — music video.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "dizzy": {
+      "urlSlug": "dizzy",
+      "category": "music",
+      "year": 2015,
+      "role": "Bass",
+      "location": "New York City",
+      "description": "Dizzy — live from St. Mark's. Directed by Connor Smith.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "paper-rose": {
+      "urlSlug": "paper-rose",
+      "category": "music",
+      "year": 2015,
+      "role": "Composer",
+      "location": "New York City",
+      "description": "Film score for The Paper Rose.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "brake-heel": {
+      "urlSlug": "brake-heel",
+      "category": "music",
+      "year": 2014,
+      "role": "Composer, Performer",
+      "location": "Prague",
+      "description": "Original song composed for the short film Itch City, directed by Lelia Garrison. Vocals by Tavia Young.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "on-strings": {
+      "urlSlug": "on-strings",
+      "category": "music",
+      "year": 2014,
+      "role": "Composer",
+      "location": "Prague",
+      "description": "Film score for On Strings.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
+    },
+    "prague": {
+      "urlSlug": "prague",
+      "category": "music",
+      "year": 2014,
+      "role": "Performer",
+      "location": "Prague",
+      "description": "Live from Prague — music video.",
+      "palette": ["#1a1a2e", "#2d2d3f", "#23233a"]
     }
   },
-  "navOrder": [
+  "navOrderDesign": [
     "hollyshorts-21",
     "comedy-rebrand",
     "hollyshorts-london",
-    "dont-mind-me",
     "hollyshorts-20",
     "cannes-2024",
     "nice-knives",
+    "hcsff8",
+    "hollyshortswebsite",
+    "little-issues",
+    "skyfire-artists",
     "hollyshorts-19",
     "cannes-2023",
+    "hcsff7",
+    "feeling",
+    "hallelujah",
+    "survived-by",
+    "timewriter",
     "hollyshorts-18",
+    "hcsff6",
     "hdtracks",
+    "miles-regis",
+    "chop-suey-club",
+    "welcome-home"
+  ],
+  "navOrderMusic": [
+    "dont-mind-me",
+    "nice-knives-score",
+    "kid-nicoleman",
+    "gazoo",
+    "leave-me",
+    "cheeky",
+    "tan",
+    "no-regrets-remix",
+    "2022-reel",
+    "the-future-is-ow",
     "alchemy",
-    "boys-will-be-flowers"
+    "higher",
+    "boys-will-be-flowers",
+    "baxter",
+    "i-think",
+    "dizzy",
+    "paper-rose",
+    "brake-heel",
+    "on-strings",
+    "prague"
   ]
 }
