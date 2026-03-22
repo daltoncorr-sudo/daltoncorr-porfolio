@@ -433,11 +433,49 @@
     a.contact-link:hover {
       border-bottom-color: var(--accent);
     }
+    .home-intro {
+      max-width: var(--page-max);
+      margin: 0 auto;
+      padding: var(--section-pad) var(--content-pad-mobile) 0;
+    }
+    @media (min-width: 600px) {
+      .home-intro { padding-left: var(--content-pad-tablet); padding-right: var(--content-pad-tablet); }
+    }
+    @media (min-width: 1248px) {
+      .home-intro { padding-left: 0; padding-right: 0; }
+    }
+    .home-intro .body-text {
+      margin-bottom: 0;
+    }
+    .home-contact {
+      margin-top: 1.5rem;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+    .home-contact a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .home-contact a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .press-heading {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text-primary);
+      margin: 2rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .press-heading:first-child { margin-top: 0; }
     .press-year {
       font-weight: 600;
-      font-size: 21px;
+      font-size: 17px;
       color: var(--text-primary);
-      margin: 2.5rem 0 0.75rem;
+      margin: 2.5rem 0 0.5rem;
     }
     .press-year:first-child { margin-top: 0; }
     .press-item {
@@ -573,6 +611,17 @@
   <main id="main">
     <section class="view visible" id="viewHome" aria-label="Home">
       <div class="home-slideshow" id="homeSlideshow" aria-hidden="true"></div>
+      <div class="home-intro">
+        <div class="body-text">
+          <p>Dalton Corr is a musician and designer based in New York City and Los Angeles. His music and visual art has received international recognition through live performances, festivals, and album releases in North America, Europe, and Asia. Collaborators include the Oscar-qualifying HollyShorts Film Festival, Grammy-winners David and Norman Chesky, and New York University's Village Records.</p>
+          <p>Dalton's music includes feature-length film scores, original studio albums, and international live performances. He is the founder of the music production house, Espresso Tempo.</p>
+          <p>Dalton's design work includes art direction for the Oscar-qualifying HollyShorts Film Festival, art direction for HollyShorts London, artwork for the 2023 Cannes Film Festival, theatrical movie poster designs, artwork for the Grammy Award-winning Chesky Records, and design for Manhattan art gallery, Chop Suey Club.</p>
+        </div>
+        <div class="home-contact">
+          <a href="mailto:daltoncorr@gmail.com">daltoncorr@gmail.com</a><br />
+          instagram <a href="https://www.instagram.com/daltoncorr" target="_blank" rel="noopener">@daltoncorr</a>
+        </div>
+      </div>
       <div class="work-section" id="workGridOnHome"></div>
     </section>
     <section class="view" id="viewWork" aria-label="Work">
@@ -583,11 +632,10 @@
       <div class="page-wrap">
         <h2 class="page-title">About</h2>
         <div class="body-text">
-        <p>Dalton Corr is an independent creative director, designer, and composer based in Venice, Los Angeles.</p>
-        <p>He art directs international film festivals, scores the films that play in them, and builds brands for the people who make them. Currently art director for HollyShorts Film Festival and composing his first feature-length film score.</p>
-        <p>Interested in working together —<br />
-          <a class="contact-link" href="mailto:hello@daltoncorr.com">hello@daltoncorr.com</a>
-        </p>
+        <p>Dalton Corr is a musician and designer based in New York City and Los Angeles. His music and visual art has received international recognition through live performances, festivals, and album releases in North America, Europe, and Asia. Collaborators include the Oscar-qualifying HollyShorts Film Festival, Grammy-winners David and Norman Chesky, and New York University's Village Records.</p>
+        <p>Dalton's music includes feature-length film scores, original studio albums, and international live performances. He is the founder of the music production house, Espresso Tempo.</p>
+        <p>Dalton's design work includes art direction for the Oscar-qualifying HollyShorts Film Festival, art direction for HollyShorts London, artwork for the 2023 Cannes Film Festival, theatrical movie poster designs, artwork for the Grammy Award-winning Chesky Records, and design for Manhattan art gallery, Chop Suey Club.</p>
+        <p><a class="contact-link" href="mailto:daltoncorr@gmail.com">daltoncorr@gmail.com</a></p>
         </div>
       </div>
     </section>
@@ -595,17 +643,62 @@
       <div class="page-wrap">
       <h2 class="page-title">Press &amp; Awards</h2>
       <div class="body-text">
-        <div class="press-year">2024</div>
-        <div class="press-item"><a href="http://www.festivalinla.com/2024/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener"><strong>Festival in LA</strong> — "The World's Best Film Festival Posters"</a></div>
-        <div class="press-item"><a href="https://variety.com/2024/film/global/hollyshorts-film-festival-20th-anniversary-zoe-saldana-jamie-lee-curtis-1236067159/" target="_blank" rel="noopener"><strong>Variety</strong> — HollyShorts 20th anniversary coverage</a></div>
-        <div class="press-item"><a href="https://deadline.com/2024/07/hollyshorts-film-festival-2024-jurors-1236016173/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 20th coverage</a></div>
-        <div class="press-item"><a href="https://canvasrebel.com/meet-dalton-corr/" target="_blank" rel="noopener"><strong>Canvas Rebel</strong> — Interview</a></div>
-        <div class="press-item"><strong>Daily Mail</strong> — Festival coverage</div>
-        <div class="press-year">2023</div>
-        <div class="press-item"><a href="http://www.festivalinla.com/2023/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener"><strong>Festival in LA</strong> — "The World's Best Film Festival Posters"</a></div>
-        <div class="press-item"><a href="https://deadline.com/2023/07/19th-hollyshorts-film-festival-liineup-announcement-news-1235441960/" target="_blank" rel="noopener"><strong>Deadline</strong> — HollyShorts 19th coverage</a></div>
-        <div class="press-item"><strong>Radio du Cinéma</strong> — Interview</div>
-        <div class="press-item"><strong>LAist</strong> — "Things To Do This Week"</div>
+
+        <div class="press-year">art director — 20th Annual Oscar-Qualifying HollyShorts Film Festival</div>
+        <div class="press-item"><a href="http://www.festivalinla.com/2024/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener">World's greatest film festival posters of 2024 — <strong>FestivalsinLA</strong></a></div>
+        <div class="press-item"><a href="https://canvasrebel.com/meet-dalton-corr/" target="_blank" rel="noopener">Interviewed by <strong>Canvas Rebel Magazine</strong></a></div>
+        <div class="press-item">Top 50 Film Festivals — <strong>MovieMaker Magazine</strong></div>
+        <div class="press-item"><a href="https://variety.com/2024/film/global/hollyshorts-film-festival-20th-anniversary-zoe-saldana-jamie-lee-curtis-1236067159/" target="_blank" rel="noopener"><strong>Variety Magazine</strong></a></div>
+        <div class="press-item"><strong>Daily Mail</strong></div>
+        <div class="press-item"><a href="https://deadline.com/2024/07/hollyshorts-film-festival-2024-jurors-1236016173/" target="_blank" rel="noopener"><strong>Deadline</strong></a></div>
+        <div class="press-item"><strong>AwardsDaily</strong></div>
+        <div class="press-item"><strong>TimeOut Magazine</strong></div>
+
+        <div class="press-year">art director — 19th Annual Oscar-Qualifying HollyShorts Film Festival</div>
+        <div class="press-item"><a href="http://www.festivalinla.com/2023/11/the-worlds-best-film-festival-posters.html" target="_blank" rel="noopener">World's greatest film festival posters of 2023 — <strong>FestivalsInLA</strong></a></div>
+        <div class="press-item">Interviewed by <strong>Radio du Cin&eacute;ma</strong></div>
+        <div class="press-item"><a href="https://deadline.com/2023/07/19th-hollyshorts-film-festival-liineup-announcement-news-1235441960/" target="_blank" rel="noopener"><strong>Deadline</strong></a></div>
+        <div class="press-item"><a href="https://variety.com/2024/film/global/hollyshorts-film-festival-20th-anniversary-zoe-saldana-jamie-lee-curtis-1236067159/" target="_blank" rel="noopener"><strong>Variety Magazine</strong></a></div>
+
+        <div class="press-year">producer — No Regrets Remix</div>
+        <div class="press-item">Reviewed by <strong>Darian Burns</strong></div>
+        <div class="press-item">Reviewed by <strong>Dope Hip Hop</strong></div>
+
+        <div class="press-year">Lennon and McCartney: Painting With Sound</div>
+        <div class="press-item">Cited in <strong>Acknowledgments</strong></div>
+
+        <div class="press-year">lead designer — 7th Annual Hollywood Comedy Shorts Film Festival</div>
+        <div class="press-item">Featured in <strong>LAist</strong> Things To Do This Week</div>
+
+        <div class="press-year">lead designer — 6th Annual Hollywood Comedy Shorts Film Festival</div>
+        <div class="press-item">Featured in <strong>LAist</strong> Things To Do This Week</div>
+        <div class="press-item">Featured in <strong>Broadway World</strong></div>
+        <div class="press-item">Featured on <strong>RichGirl Network TV</strong></div>
+
+        <div class="press-year">composer — Boys Will Be Flowers</div>
+        <div class="press-item">NOWNESS Feature 2018</div>
+        <div class="press-item">Official Selection Le Festival International du Film sur l'Art</div>
+
+        <div class="press-year">I Think Of You — single and music video</div>
+        <div class="press-item">Released through Village Records</div>
+        <div class="press-item">Washington Square News print interview</div>
+        <div class="press-item">Washington Square News online interview</div>
+        <div class="press-item">Review by <strong>Gilchrist Green</strong></div>
+
+        <div class="press-year">composer — Tan Paints The Tenderloin</div>
+        <div class="press-item">SF Shorts Film Festival 2020</div>
+
+        <div class="press-year">composer — Alchemy</div>
+        <div class="press-item">Sundance Collab 2019</div>
+        <div class="press-item">Paris Short Film Fest 2019</div>
+        <div class="press-item">Greenwich Village Film Festival 2019</div>
+        <div class="press-item">Napa Valley Film Fest 2019</div>
+        <div class="press-item">Hamptons Film Fest 2019</div>
+
+        <div class="press-year">After The Show EP</div>
+        <div class="press-item">Et musique pour tous Review</div>
+        <div class="press-item">Noon Pacific Feature</div>
+
       </div>
       </div>
     </section>
