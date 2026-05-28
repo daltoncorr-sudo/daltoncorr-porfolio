@@ -133,53 +133,46 @@ body.is-work-grid .filter-btn.active::before {
 .nav-submenu { display: none; }
 
 @media (max-width: 767px) {
-  :root { --nav-width: 130px; }
-  .nav { padding: 1.25rem 0.75rem 1rem; }
-  .nav-link { font-size: 0.95rem; padding: 0.2rem 0 0.2rem 0.75rem; }
-  .nav-footer { font-size: 0.85rem; opacity: 0.6; }
-  .filter-btn { font-size: 0.95rem; padding: 0.2rem 0 0.2rem 0.75rem; }
+  :root { --topbar-h: 3rem; --filterbar-h: 2.75rem; }
 
-  /* Nav submenus inherit nav-link layout exactly — only color shifts */
-  .nav-sublink, .nav-subsublink {
-    display: block;
-    text-decoration: none;
-    font-size: 0.95rem;
-    padding: 0.2rem 0 0.2rem 0.75rem;
-    transition: color 150ms var(--ease);
+  /* Nav becomes a fixed one-row top bar: brand on the left, Work · About right */
+  .nav {
+    flex-direction: row; align-items: center;
+    width: 100%; height: var(--topbar-h);
+    padding: 0 1rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
   }
-  .nav-sublink     { color: rgba(17,17,17,0.50); }
-  .nav-subsublink  { color: rgba(17,17,17,0.30); }
-  .nav-sublink:hover, .nav-subsublink:hover { color: var(--text); }
-  .nav-sublink.is-active, .nav-subsublink.is-active { color: var(--text); }
+  .nav > div { display: flex; flex: 1; min-width: 0; }
+  .nav-links { flex-direction: row; align-items: center; gap: 1.5rem; width: 100%; }
+  .nav-links > li:nth-child(2) { margin-right: auto; }  /* brand pushes the rest right */
+  .nav-link { font-size: 0.95rem; padding: 0; }
+  .nav-link.active { border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  .nav-footer { display: none; }
 
-  /* Strip default ul styling so submenus flow as plain blocks */
-  .nav-submenu { padding: 0; margin: 0; list-style: none; }
-  .nav-submenu li { padding: 0; margin: 0; }
+  /* Filtering moves into the toolbar filter row, so drop the vertical tree,
+     the single moving dot and the breadcrumb dots */
+  .nav-submenu { display: none; }
+  .dot { display: none; }
+  .nav-dot-active::before, .nav-dot-ancestor::before { content: none; }
 
-  body.is-work-page .nav-submenu--work { display: block; }
-  body.is-filter-visual .nav-submenu--visual { display: block; }
-  body.is-filter-music  .nav-submenu--music  { display: block; }
-
-  /* Breadcrumb dots in the expanded work tree: a grey dot trails each ancestor
-     (Work, and Visual/Music) and a blue dot marks the active leaf. Replaces the
-     single moving #dot, which only handles top-level links on other pages. */
-  body.is-work-page .dot { display: none; }
-  body.is-work-page .nav-link,
-  body.is-work-page .nav-sublink,
-  body.is-work-page .nav-subsublink { position: relative; }
-  body.is-work-page .nav-dot-active::before,
-  body.is-work-page .nav-dot-ancestor::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+  /* Work filter row: horizontal, scrollable chips fixed under the top bar */
+  body.is-work-grid .work-toolbar {
+    display: flex; flex-direction: row; align-items: center;
+    position: fixed; top: var(--topbar-h); left: 0;
+    width: 100%; height: var(--filterbar-h);
+    padding: 0 1rem; gap: 1.25rem;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+    opacity: 1; overflow-x: auto; z-index: 98;
   }
-  body.is-work-page .nav-dot-active::before   { background: var(--accent); }
-  body.is-work-page .nav-dot-ancestor::before { background: #C4C4C4; }
+  .work-toolbar .filter-bar,
+  .work-toolbar .filter-group { flex-direction: row; align-items: center; gap: 1.25rem; padding-top: 0; }
+  .work-toolbar .filter-submenu { flex-direction: row; gap: 1.25rem; max-height: none; }
+  .work-toolbar .filter-group.is-open .filter-submenu { max-height: none; }
+  .work-toolbar .filter-btn { font-size: 0.95rem; padding: 0; white-space: nowrap; }
+  .work-toolbar .filter-btn::before { display: none; }
+  body.is-work-grid .filter-btn.active { color: var(--accent); }
+  .work-toolbar .sort-toggle { display: none; }
 }
 
 /* ── Layout ── */
@@ -508,14 +501,15 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
    at equal specificity they win the cascade. Keeping every mobile override
    here, at the very end, guarantees it overrides those base rules. */
 @media (max-width: 767px) {
-  /* Hide the floating work-toolbar everywhere; filter UI lives in the nav */
-  .work-toolbar { display: none !important; }
-  /* Project + work pages: single nav-width margin on mobile */
-  .work-page-body { margin-left: var(--nav-width); }
+  /* Top-bar layout: content clears the fixed bar(s) instead of a left column */
+  .work-toolbar { display: none; }
+  .page-body { margin-left: 0; padding-top: var(--topbar-h); }
+  .work-page-body { margin-left: 0; padding-top: calc(var(--topbar-h) + var(--filterbar-h)); }
+  body.is-blog-grid .page-body { margin-left: 0; }
+  .blog-toolbar { display: none; }
 
-  /* Slideshow fills most of the content column (trim .home padding so the
-     image isn't lost in whitespace next to the 130px nav) */
-  .home { padding: 1rem 0.75rem; }
+  /* Slideshow fills the width below the top bar */
+  .home { min-height: calc(100vh - var(--topbar-h)); padding: 1rem 0.75rem; }
   .slideshow { max-width: 92vw; }
   .slide img { max-height: 80vh; }
 
