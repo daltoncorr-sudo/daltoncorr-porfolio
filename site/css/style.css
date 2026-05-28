@@ -519,13 +519,13 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .slideshow { max-width: 92vw; }
   .slide img { max-height: 80vh; }
 
-  /* Work grid: one item per row — small thumbnail + text beside it,
-     so several projects are visible at once without oversized previews */
-  .work-grid { grid-template-columns: 1fr; gap: 0.85rem; padding-bottom: 3rem; }
-  .project-card { display: flex; align-items: center; gap: 0.85rem; }
-  .card-image { width: 84px; flex: none; aspect-ratio: 4/5; margin-bottom: 0; }
-  .card-info { flex: 1; min-width: 0; padding-top: 0; }
-  .card-title { font-size: 0.85rem; line-height: 1.25; font-weight: 700; margin-bottom: 0.1rem; }
+  /* Work grid: two columns with text below each preview, so previews stay
+     small and several projects are visible at once */
+  .work-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem 0.85rem; padding-bottom: 3rem; }
+  .project-card { display: block; }
+  .card-image { width: 100%; aspect-ratio: 4/5; margin-bottom: 0.4rem; }
+  .card-info { padding-top: 0; }
+  .card-title { font-size: 0.82rem; line-height: 1.25; font-weight: 700; margin-bottom: 0.1rem; }
   .card-role  { display: block; font-size: 0.72rem; line-height: 1.25; margin-bottom: 0; }
   .card-year  { display: block; font-size: 0.72rem; line-height: 1.25; }
 
