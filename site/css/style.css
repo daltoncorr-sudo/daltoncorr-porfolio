@@ -139,10 +139,6 @@ body.is-work-grid .filter-btn.active::before {
   .nav-footer { font-size: 0.85rem; opacity: 0.6; }
   .filter-btn { font-size: 0.95rem; padding: 0.2rem 0 0.2rem 0.75rem; }
 
-  /* Mobile: hide the floating work-toolbar — filter UI lives in the nav instead */
-  .work-toolbar { display: none; }
-  .work-page-body { margin-left: var(--nav-width); }
-
   /* Nav submenus inherit nav-link layout exactly — only color shifts */
   .nav-sublink, .nav-subsublink {
     display: block;
@@ -496,3 +492,18 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms; transition-duration: 0.01ms; scroll-behavior: auto; }
 }
+
+/* ── Mobile overrides (must come AFTER base rules to win the cascade) ── */
+@media (max-width: 767px) {
+  /* Hide the floating work-toolbar everywhere; filter UI lives in the nav */
+  .work-toolbar { display: none !important; }
+  /* Project + work pages: single nav-width margin on mobile */
+  .work-page-body { margin-left: var(--nav-width); }
+  /* Bigger slideshow image */
+  .slideshow { max-width: 92vw; }
+  .slide img { max-height: 80vh; }
+}
+
+/* Bigger slideshow on desktop too (was capped at 720px / 55vw) */
+.slideshow { max-width: min(900px, 65vw); }
+@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(720px, 60vw); } }
