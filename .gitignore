@@ -1,7 +1,15 @@
+# macOS
 .DS_Store
-__pycache__/
-*.pyc
-.venv/
-venv/
+**/.DS_Store
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node (if you ever re-add the build step)
 node_modules/
-*.orig
+
+# Tool outputs
+.cache/

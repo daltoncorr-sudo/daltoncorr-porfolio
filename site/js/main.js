@@ -75,6 +75,12 @@ function initFilters() {
     if (f === currentFilter) return;
     currentFilter = f;
     btns.forEach(function(b) { b.classList.toggle('active', b.dataset.filter === f); });
+    // Open the filter group that owns the active button (or close all for "All")
+    var activeBtn = bar.querySelector('.filter-btn.active');
+    var activeGroup = activeBtn ? activeBtn.closest('.filter-group') : null;
+    $$('.filter-group', bar).forEach(function(g) {
+      g.classList.toggle('is-open', g === activeGroup);
+    });
     if (dot) dot.classList.add('muted');
     history.replaceState(null, '', f === 'all' ? location.pathname : '#' + f);
 
@@ -568,6 +574,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initLightbox();
   initToolbar();
   initStickyCards();
-  initAdminReorder();
+  // Admin reorder (drag-to-reorder + Ctrl+Shift+E) — only loads when ?admin=1 is set,
+  // keeping the prod bundle's behavior lean for visitors.
+  if (/[?&]admin=1\b/.test(location.search)) initAdminReorder();
 });
 })();

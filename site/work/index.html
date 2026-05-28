@@ -8,7 +8,7 @@
   <meta property="og:title" content="Work — Dalton Corr">
   <meta property="og:description" content="Design, art direction, and music composition by Dalton Corr.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="../css/style.css?v=28">
+  <link rel="stylesheet" href="../css/style.css?v=34">
   <link rel="icon" href="../favicon.ico?v=2" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
 </head>
@@ -28,12 +28,22 @@
   <div class="work-toolbar">
     <div class="filter-bar">
       <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="design">Design</button>
-      <button class="filter-btn" data-filter="music">Music</button>
-      <button class="filter-btn" data-filter="art-direction">Art Direction</button>
-      <button class="filter-btn" data-filter="illustration">Illustration</button>
-      <button class="filter-btn" data-filter="poster">Posters</button>
-      <button class="filter-btn" data-filter="film-score">Film Scores</button>
+      <div class="filter-group">
+        <button class="filter-btn" data-filter="visual">Visual</button>
+        <div class="filter-submenu">
+          <button class="filter-btn filter-sub" data-filter="art-direction">Art Direction</button>
+          <button class="filter-btn filter-sub" data-filter="illustration">Illustration</button>
+          <button class="filter-btn filter-sub" data-filter="poster">Posters</button>
+          <button class="filter-btn filter-sub" data-filter="branding">Branding</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn" data-filter="music">Music</button>
+        <div class="filter-submenu">
+          <button class="filter-btn filter-sub" data-filter="original-music">Original Music</button>
+          <button class="filter-btn filter-sub" data-filter="film-score">Film Scores</button>
+        </div>
+      </div>
     </div>
     <button class="sort-toggle" aria-label="Sort order">Sort: Default</button>
   </div>
@@ -45,217 +55,227 @@
 
         <!-- ===== DESIGN ===== -->
 
-        <a href="weissman.html" class="project-card" data-sort-order="0" data-year="2025" data-filters="design art-direction">
+        <a href="weissman.html" class="project-card" data-sort-order="0" data-year="2025" data-filters="visual art-direction">
           <div class="card-image"><img src="../images/design/Weissmans/catalog-pages/Screenshot%202026-03-24%20at%202.49.37%20PM.webp" alt="Weissman Character Edition 2025/2026 Catalog" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Weissman Character Edition 2025/2026 Catalog</h3>
             <span class="card-role">Production Artist · Catalog Designer</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="hollyshorts-21.html" class="project-card" data-sort-order="1" data-year="2025" data-filters="design art-direction poster">
+        <a href="hollyshorts-21.html" class="project-card" data-sort-order="1" data-year="2025" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/hollyshorts-21/Poster-Small-1949f7.webp" alt="21st Annual HollyShorts Film Festival" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">21st Annual HollyShorts Film Festival</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="hollyshorts-dubai.html" class="project-card" data-sort-order="6" data-year="2025" data-filters="design art-direction">
+        <a href="hollyshorts-dubai.html" class="project-card" data-sort-order="6" data-year="2025" data-filters="visual art-direction">
           <div class="card-image"><img src="../images/design/hollyshorts-dubai/poster.webp" alt="HollyShorts Dubai 2025" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">HollyShorts Dubai 2025</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="tremor-house.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="design">
-          <div class="card-image" style="background:#111;display:flex;align-items:center;justify-content:center;"><span style="color:#333;font-size:0.85rem;font-weight:500;letter-spacing:0.15em;">TBA</span></div>
+        <a href="tremor-house.html" class="project-card" data-sort-order="99" data-year="2025" data-filters="visual">
+          <div class="card-image card-image--placeholder"><span class="card-image--placeholder-label">TBA</span></div>
           <div class="card-info">
             <h3 class="card-title">Tremor House</h3>
             <span class="card-role">Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="red-mask.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="design illustration poster">
+        <a href="dont-mind-me.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="music film-score">
+          <div class="card-image"><img src="../images/design/dont-mind-me/favorite.webp" alt="Don't Mind Me" loading="lazy"></div>
+          <div class="card-info">
+            <h3 class="card-title">Don't Mind Me</h3>
+            <span class="card-role">Composer</span>
+            <div class="card-tags"><span>Music</span><span>Film Scores</span></div>
+            <span class="card-year">2025</span>
+          </div>
+        </a>
+
+        <a href="red-mask.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual poster">
           <div class="card-image"><img src="../images/design/red-mask/thumb.webp" alt="Red Mask — fictional poster series for Ritesh Films" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Red Mask</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span><span>Poster</span></div>
+            <div class="card-tags"><span>Visual</span><span>Poster</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="kimberla-lawson-roby.html" class="project-card" data-sort-order="2" data-year="2024" data-filters="design branding">
-          <div class="card-image" style="background:#111;display:flex;align-items:center;justify-content:center;"><span style="color:#333;font-size:0.85rem;font-weight:500;letter-spacing:0.15em;">TBA</span></div>
+        <a href="kimberla-lawson-roby.html" class="project-card" data-sort-order="99" data-year="2024" data-filters="visual branding">
+          <div class="card-image card-image--placeholder"><span class="card-image--placeholder-label">TBA</span></div>
           <div class="card-info">
             <h3 class="card-title">Kimberla Lawson Roby</h3>
             <span class="card-role">Brand Designer</span>
-            <div class="card-tags"><span>Design</span><span>Branding</span></div>
+            <div class="card-tags"><span>Visual</span><span>Branding</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="anonymous-poetry.html" class="project-card" data-sort-order="20" data-year="2024" data-filters="design">
-          <div class="card-image" style="background:#111;display:flex;align-items:center;justify-content:center;"><span style="color:#333;font-size:0.85rem;font-weight:500;letter-spacing:0.15em;">PRIVATE</span></div>
+        <a href="anonymous-poetry.html" class="project-card" data-sort-order="20" data-year="2024" data-filters="visual">
+          <div class="card-image card-image--placeholder"><span class="card-image--placeholder-label">PRIVATE</span></div>
           <div class="card-info">
             <h3 class="card-title">Poetry Book</h3>
             <span class="card-role">Book Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="sunnys-journal.html" class="project-card" data-sort-order="2" data-year="2024" data-filters="design illustration">
+        <a href="sunnys-journal.html" class="project-card" data-sort-order="2" data-year="2024" data-filters="visual illustration">
           <div class="card-image"><img src="../images/design/sunnys-journal/thumb.webp" alt="Sunny's Journal and Press" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Sunny's Journal and Press</h3>
             <span class="card-role">Illustrator</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="polish-film-festival.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="design illustration poster">
+        <a href="polish-film-festival.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/design/polish-film-festival/poster-hollywood-thumb.webp" alt="Polish Film Festival North America" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Polish Film Festival North America</h3>
             <span class="card-role">Illustrator</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span><span>Poster</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span><span>Poster</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="creatives-for-ukraine.html" class="project-card" data-sort-order="2" data-year="2026" data-filters="design">
+        <a href="creatives-for-ukraine.html" class="project-card" data-sort-order="2" data-year="2026" data-filters="visual">
           <div class="card-image" style="background:#111;display:flex;align-items:center;justify-content:center;padding:1.5rem;"><img src="https://www.creativesforukraine.uk/_next/image?url=%2Flogo-text-right.png&w=256&q=75" alt="Creatives for Ukraine" loading="lazy" style="width:70%;height:auto;object-fit:contain;"></div>
           <div class="card-info">
             <h3 class="card-title">Creatives for Ukraine</h3>
             <span class="card-role">Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2026</span>
           </div>
         </a>
 
-        <a href="hollyshorts-london-2025.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="design art-direction poster">
+        <a href="hollyshorts-london-2025.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual art-direction poster">
           <div class="card-image"><img src="hs-london-2025/poster.webp" alt="HollyShorts London 2025" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">HollyShorts London 2025</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="hollyshorts-comedy-2025.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="design art-direction poster">
+        <a href="hollyshorts-comedy-2025.html" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/index/Poster_-fae31e.webp" alt="HollyShorts Comedy 2025" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">HollyShorts Comedy 2025</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="hollyshorts-london.html" class="project-card" data-sort-order="3" data-year="2025" data-filters="design art-direction poster">
+        <a href="hollyshorts-london.html" class="project-card" data-sort-order="3" data-year="2025" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/index/472232574_3853868371592674_5703217189292259182_n-7cc96f.webp" alt="HollyShorts London 2024" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">HollyShorts London 2024</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="hollyshorts-20.html" class="project-card" data-sort-order="4" data-year="2024" data-filters="design art-direction illustration poster">
+        <a href="hollyshorts-20.html" class="project-card" data-sort-order="4" data-year="2024" data-filters="visual art-direction illustration poster">
           <div class="card-image"><img src="../images/cdn/index/HS20-Official-Poster-1-4ee4d4.webp" alt="20th Annual HollyShorts Film Festival" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">20th Annual HollyShorts Film Festival</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span><span>Illustration</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="dont-let-them-out.html" class="project-card" data-sort-order="4" data-year="2025" data-filters="design illustration poster">
+        <a href="dont-let-them-out.html" class="project-card" data-sort-order="4" data-year="2025" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/design/dont-let-them-out/final-a.webp" alt="Don't Let Them Out" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Don't Let Them Out</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span><span>Poster</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span><span>Poster</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
 
-        <a href="cannes-2024.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="design illustration poster">
+        <a href="cannes-2024.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Lorem-3-b6e43e.webp" alt="Cannes 2024" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Cannes 2024</h3>
             <span class="card-role">Illustrator</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="hdtracks.html" class="project-card" data-sort-order="7" data-year="2019" data-filters="design">
+        <a href="hdtracks.html" class="project-card" data-sort-order="7" data-year="2019" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/hdtrackstall-d2b743.webp" alt="HDtracks" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">HDtracks</h3>
             <span class="card-role">Director of Marketing, Lead Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2019</span>
           </div>
         </a>
 
-        <a href="hcsff-8.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="design art-direction poster">
+        <a href="hcsff-8.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/index/art-2024-Hollywood-Comedy-Short-Film-Festival-Poster-307bb6.webp" alt="8th Hollywood Comedy Shorts" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">8th Hollywood Comedy Shorts</h3>
             <span class="card-role">Art Director</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="nice-knives.html" class="project-card" data-sort-order="9" data-year="2023" data-filters="design illustration poster">
+        <a href="nice-knives.html" class="project-card" data-sort-order="9" data-year="2023" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Nice-Knives-poster-copy-2-392b2f.webp" alt="Nice Knives" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Nice Knives</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="skyfire-artists.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="design">
+        <a href="skyfire-artists.html" class="project-card" data-sort-order="5" data-year="2024" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/Sign-d19ff7.webp" alt="Skyfire Artists" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Skyfire Artists</h3>
             <span class="card-role">Brand Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="hollyshorts-19.html" class="project-card" data-sort-order="11" data-year="2023" data-filters="design art-direction poster">
+        <a href="hollyshorts-19.html" class="project-card" data-sort-order="11" data-year="2023" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/index/HollyShorts-Wide-ce3798.webp" alt="19th Annual HollyShorts Film Festival" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">19th Annual HollyShorts Film Festival</h3>
             <span class="card-role">Art Director, Lead Designer</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="miles-regis.html" class="project-card" data-sort-order="12" data-year="2023" data-filters="illustration">
+        <a href="miles-regis.html" class="project-card" data-sort-order="12" data-year="2023" data-filters="visual illustration">
           <div class="card-image"><img src="../images/cdn/index/Miles-Respect-My-Pronouns-81d22e.webp" alt="Miles Regis" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Miles Regis</h3>
@@ -265,129 +285,129 @@
           </div>
         </a>
 
-        <a href="survived-by.html" class="project-card" data-sort-order="13" data-year="2022" data-filters="design illustration poster">
+        <a href="survived-by.html" class="project-card" data-sort-order="13" data-year="2022" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Survived-By---Final-Large-d34582.webp" alt="Survived By" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Survived By</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2022</span>
           </div>
         </a>
 
-        <a href="let-this-feeling-go.html" class="project-card" data-sort-order="14" data-year="2023" data-filters="design illustration poster">
+        <a href="let-this-feeling-go.html" class="project-card" data-sort-order="14" data-year="2023" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Poster-5-title-copy-f7524e.webp" alt="Let This Feeling Go" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Let This Feeling Go</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="welcome-home.html" class="project-card" data-sort-order="15" data-year="2022" data-filters="design illustration poster">
+        <a href="welcome-home.html" class="project-card" data-sort-order="15" data-year="2022" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Welcome-Home-poster-B1-e0de2e.webp" alt="Welcome Home" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Welcome Home</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2022</span>
           </div>
         </a>
 
-        <a href="timewriter.html" class="project-card" data-sort-order="16" data-year="2021" data-filters="design">
+        <a href="timewriter.html" class="project-card" data-sort-order="16" data-year="2021" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/Timewriter-poster-d2f705.webp" alt="Timewriter" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Timewriter</h3>
             <span class="card-role">Art Department</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2021</span>
           </div>
         </a>
 
-        <a href="hcsff-7.html" class="project-card" data-sort-order="17" data-year="2023" data-filters="design art-direction poster">
+        <a href="hcsff-7.html" class="project-card" data-sort-order="17" data-year="2023" data-filters="visual art-direction poster">
           <div class="card-image"><img src="../images/cdn/index/Red-2-1-4b3f9c.webp" alt="7th Hollywood Comedy Shorts" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">7th Hollywood Comedy Shorts</h3>
             <span class="card-role">Lead Designer</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="cannes-2023.html" class="project-card" data-sort-order="7" data-year="2023" data-filters="design illustration poster">
+        <a href="cannes-2023.html" class="project-card" data-sort-order="7" data-year="2023" data-filters="visual illustration poster">
           <div class="card-image"><img src="../images/cdn/index/Cannes-Invite-Alt-4-d2fa0c.webp" alt="Cannes 2023" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Cannes 2023</h3>
             <span class="card-role">Designer, Illustrator</span>
-            <div class="card-tags"><span>Design</span><span>Illustration</span></div>
+            <div class="card-tags"><span>Visual</span><span>Illustration</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="little-issues.html" class="project-card" data-sort-order="6" data-year="2024" data-filters="design poster">
+        <a href="little-issues.html" class="project-card" data-sort-order="6" data-year="2024" data-filters="visual poster">
           <div class="card-image"><img src="../images/cdn/little-issues/Little-Issues-2x3-30068c.webp" alt="LiTTLE iSSUES" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">LiTTLE iSSUES</h3>
             <span class="card-role">Poster Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2024</span>
           </div>
         </a>
 
-        <a href="hallelujah.html" class="project-card" data-sort-order="20" data-year="2023" data-filters="design">
+        <a href="hallelujah.html" class="project-card" data-sort-order="20" data-year="2023" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/365fc9c7c0-poster-9b1e1a.webp" alt="Hallelujah" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Hallelujah</h3>
             <span class="card-role">Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
-        <a href="hollyshorts-18.html" class="project-card" data-sort-order="21" data-year="2022" data-filters="design art-direction">
+        <a href="hollyshorts-18.html" class="project-card" data-sort-order="21" data-year="2022" data-filters="visual art-direction">
           <div class="card-image"><img src="../images/cdn/index/5-1-6874f9.webp" alt="18th Annual HollyShorts Film Festival" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">18th Annual HollyShorts Film Festival</h3>
             <span class="card-role">Designer</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2022</span>
           </div>
         </a>
 
-        <a href="hcsff-6.html" class="project-card" data-sort-order="22" data-year="2022" data-filters="design art-direction">
+        <a href="hcsff-6.html" class="project-card" data-sort-order="22" data-year="2022" data-filters="visual art-direction">
           <div class="card-image"><img src="../images/cdn/index/Story-5-d652fc.webp" alt="6th Hollywood Comedy Shorts" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">6th Hollywood Comedy Shorts</h3>
             <span class="card-role">Lead Designer</span>
-            <div class="card-tags"><span>Design</span><span>Art Direction</span></div>
+            <div class="card-tags"><span>Visual</span><span>Art Direction</span></div>
             <span class="card-year">2022</span>
           </div>
         </a>
 
-        <a href="chop-suey-club.html" class="project-card" data-sort-order="23" data-year="2016" data-filters="design">
+        <a href="chop-suey-club.html" class="project-card" data-sort-order="23" data-year="2016" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/Unknown-27cdbe.webp" alt="Chop Suey Club" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Chop Suey Club</h3>
             <span class="card-role">Assistant Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2016</span>
           </div>
         </a>
 
-        <a href="hollyshorts-website.html" class="project-card" data-sort-order="23" data-year="2023" data-filters="design">
+        <a href="hollyshorts-website.html" class="project-card" data-sort-order="23" data-year="2023" data-filters="visual">
           <div class="card-image"><img src="../images/cdn/index/HS-website-e14dc6.webp" alt="Hollyshorts.com" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Hollyshorts.com</h3>
             <span class="card-role">Website Designer</span>
-            <div class="card-tags"><span>Design</span></div>
+            <div class="card-tags"><span>Visual</span></div>
             <span class="card-year">2023</span>
           </div>
         </a>
 
         <!-- ===== MUSIC ===== -->
 
-        <a href="composition-reel-2025.html" class="project-card" data-sort-order="24" data-year="2025" data-filters="film-score">
+        <a href="composition-reel-2025.html" class="project-card" data-sort-order="24" data-year="2025" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/Screen-Shot-2022-10-17-at-8.38.49-PM-1bed7d.webp" alt="2025 Composition Reel" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">2025 Composition Reel</h3>
@@ -397,7 +417,7 @@
           </div>
         </a>
 
-        <a href="nice-knives-score.html" class="project-card" data-sort-order="9" data-year="2023" data-filters="film-score">
+        <a href="nice-knives-score.html" class="project-card" data-sort-order="9" data-year="2023" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/Nice-Knives-poster-copy-2-f9662b.webp" alt="Nice Knives Score" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Nice Knives (Score)</h3>
@@ -407,7 +427,7 @@
           </div>
         </a>
 
-        <a href="boys-will-be-flowers.html" class="project-card" data-sort-order="9" data-year="2019" data-filters="film-score">
+        <a href="boys-will-be-flowers.html" class="project-card" data-sort-order="9" data-year="2019" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/Boys2-9d15ae.webp" alt="Boys Will Be Flowers" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Boys Will Be Flowers</h3>
@@ -417,7 +437,7 @@
           </div>
         </a>
 
-        <a href="kid-nicoleman.html" class="project-card" data-sort-order="10" data-year="2023" data-filters="film-score">
+        <a href="kid-nicoleman.html" class="project-card" data-sort-order="10" data-year="2023" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/tempImage8Qsevl-a9d49d.webp" alt="Kid Nicoleman" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Kid Nicoleman</h3>
@@ -427,7 +447,7 @@
           </div>
         </a>
 
-        <a href="no-regrets-remix.html" class="project-card" data-sort-order="10" data-year="2022" data-filters="music">
+        <a href="no-regrets-remix.html" class="project-card" data-sort-order="10" data-year="2022" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/a0161206767_10-d906a5.webp" alt="No Regrets Remix" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">No Regrets Remix</h3>
@@ -437,7 +457,7 @@
           </div>
         </a>
 
-        <a href="i-think-of-you.html" class="project-card" data-sort-order="29" data-year="2017" data-filters="music">
+        <a href="i-think-of-you.html" class="project-card" data-sort-order="29" data-year="2017" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/17903869_10209162716328741_4070730285216596924_n_10209162716328741-90606c.webp" alt="I Think Of You" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">I Think Of You</h3>
@@ -447,7 +467,7 @@
           </div>
         </a>
 
-        <a href="leave-me-alone.html" class="project-card" data-sort-order="11" data-year="2019" data-filters="music">
+        <a href="leave-me-alone.html" class="project-card" data-sort-order="11" data-year="2019" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/Screen-Shot-2022-11-03-at-1.53.28-AM-cc3b14.webp" alt="Leave Me Alone" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Leave Me Alone</h3>
@@ -457,7 +477,7 @@
           </div>
         </a>
 
-        <a href="higher.html" class="project-card" data-sort-order="31" data-year="2019" data-filters="music">
+        <a href="higher.html" class="project-card" data-sort-order="31" data-year="2019" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/LucasMusic-38d02c.webp" alt="Higher" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Higher</h3>
@@ -467,7 +487,7 @@
           </div>
         </a>
 
-        <a href="dizzy.html" class="project-card" data-sort-order="32" data-year="2015" data-filters="music">
+        <a href="dizzy.html" class="project-card" data-sort-order="32" data-year="2015" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/Dizzy-1df646.webp" alt="Dizzy" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Dizzy Live from St. Marks</h3>
@@ -477,7 +497,7 @@
           </div>
         </a>
 
-        <a href="live-from-prague.html" class="project-card" data-sort-order="33" data-year="2014" data-filters="music">
+        <a href="live-from-prague.html" class="project-card" data-sort-order="33" data-year="2014" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/live-from-prague/DSC_0706-50c5d1.webp" alt="Live from Prague" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Live from Prague</h3>
@@ -487,7 +507,7 @@
           </div>
         </a>
 
-        <a href="alchemy.html" class="project-card" data-sort-order="34" data-year="2019" data-filters="film-score">
+        <a href="alchemy.html" class="project-card" data-sort-order="34" data-year="2019" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/alchemy-poster-eaeae9.webp" alt="Alchemy" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Alchemy</h3>
@@ -497,7 +517,7 @@
           </div>
         </a>
 
-        <a href="baxter.html" class="project-card" data-sort-order="35" data-year="2018" data-filters="music">
+        <a href="baxter.html" class="project-card" data-sort-order="35" data-year="2018" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/61oz-xgxeOL._UXNaN_FMjpg_QL85_-392532.webp" alt="BAXTER" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">BAXTER</h3>
@@ -507,7 +527,7 @@
           </div>
         </a>
 
-        <a href="tan-paints-tenderloin.html" class="project-card" data-sort-order="36" data-year="2020" data-filters="film-score">
+        <a href="tan-paints-tenderloin.html" class="project-card" data-sort-order="36" data-year="2020" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/091ARK---Tan-Sirinumas-bec2fc.webp" alt="Tan Paints the Tenderloin" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Tan Paints the Tenderloin</h3>
@@ -517,7 +537,7 @@
           </div>
         </a>
 
-        <a href="composition-reel-2022.html" class="project-card" data-sort-order="37" data-year="2022" data-filters="film-score">
+        <a href="composition-reel-2022.html" class="project-card" data-sort-order="37" data-year="2022" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/umut-ozdemir-HpwaMD6cz3c-unsplash-856d79.webp" alt="2022 Composition Reel" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">2022 Composition Reel</h3>
@@ -527,7 +547,7 @@
           </div>
         </a>
 
-        <a href="cheeky.html" class="project-card" data-sort-order="38" data-year="2014" data-filters="film-score">
+        <a href="cheeky.html" class="project-card" data-sort-order="38" data-year="2014" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/Screen-Shot-2022-01-31-at-9.09.49-AM-9eb932.webp" alt="Cheeky" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Cheeky</h3>
@@ -537,7 +557,7 @@
           </div>
         </a>
 
-        <a href="paper-rose.html" class="project-card" data-sort-order="39" data-year="2015" data-filters="film-score">
+        <a href="paper-rose.html" class="project-card" data-sort-order="39" data-year="2015" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/299802091_390940859847594_6997181176760793953_n-c63569.webp" alt="The Paper Rose" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">The Paper Rose</h3>
@@ -547,7 +567,7 @@
           </div>
         </a>
 
-        <a href="on-strings.html" class="project-card" data-sort-order="40" data-year="2014" data-filters="film-score">
+        <a href="on-strings.html" class="project-card" data-sort-order="40" data-year="2014" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/index/Onstringsshort-6b5fc6.webp" alt="On Strings" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">On Strings</h3>
@@ -557,7 +577,7 @@
           </div>
         </a>
 
-        <a href="gazoo.html" class="project-card" data-sort-order="41" data-year="2021" data-filters="film-score">
+        <a href="gazoo.html" class="project-card" data-sort-order="41" data-year="2021" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/gazoo/Screen-Shot-2022-02-01-at-8.36.26-PM-741961.webp" alt="Gazoo" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Gazoo Interview</h3>
@@ -567,7 +587,7 @@
           </div>
         </a>
 
-        <a href="future-is-ow.html" class="project-card" data-sort-order="42" data-year="2018" data-filters="music">
+        <a href="future-is-ow.html" class="project-card" data-sort-order="42" data-year="2018" data-filters="music original-music">
           <div class="card-image"><img src="../images/cdn/index/Screen-Shot-2021-05-05-at-2.20.19-PM-534474.webp" alt="The Future Is Ow" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">The Future Is Ow</h3>
@@ -577,7 +597,7 @@
           </div>
         </a>
 
-        <a href="brake-my-heel.html" class="project-card" data-sort-order="43" data-year="2014" data-filters="film-score">
+        <a href="brake-my-heel.html" class="project-card" data-sort-order="43" data-year="2014" data-filters="music film-score">
           <div class="card-image"><img src="../images/cdn/brake-my-heel/IMG_7417-0319e2.webp" alt="Brake My Heel" loading="lazy"></div>
           <div class="card-info">
             <h3 class="card-title">Brake My Heel</h3>
@@ -589,22 +609,12 @@
 
 
 
-        <a href="jeff-black.html" class="project-card" data-sort-order="47" data-year="2025" data-filters="music">
+        <a href="jeff-black.html" class="project-card" data-sort-order="47" data-year="2025" data-filters="visual branding">
           <div class="card-image card-image--placeholder"></div>
           <div class="card-info">
-            <h3 class="card-title">Jeff Black?</h3>
-            <span class="card-role">Artist</span>
-            <div class="card-tags"><span>Music</span></div>
-            <span class="card-year">2025</span>
-          </div>
-        </a>
-
-        <a href="dont-mind-me.html" class="project-card" data-sort-order="48" data-year="2025" data-filters="music film-score">
-          <div class="card-image"><img src="../images/design/dont-mind-me/favorite.webp" alt="Don't Mind Me" loading="lazy"></div>
-          <div class="card-info">
-            <h3 class="card-title">Don't Mind Me</h3>
-            <span class="card-role">Composer</span>
-            <div class="card-tags"><span>Music</span><span>Film Scores</span></div>
+            <h3 class="card-title">Jeff Black</h3>
+            <span class="card-role">Brand Designer</span>
+            <div class="card-tags"><span>Visual</span><span>Branding</span></div>
             <span class="card-year">2025</span>
           </div>
         </a>
@@ -615,6 +625,6 @@
   </main>
 
   </div>
-  <script src="../js/main.js?v=99" defer></script>
+  <script src="../js/main.js?v=100" defer></script>
 </body>
 </html>
