@@ -5,6 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  # Force Node.js 24 for all JS actions ahead of the June 2 2026 default flip.
+  # GitHub deprecated Node 20 actions; this opts us in across all checkout/pages/deploy actions
+  # without having to bump each action version individually. See:
+  # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
   pages: write
