@@ -153,6 +153,24 @@ body.is-work-grid .filter-btn.active::before {
   .dot { display: none; }
   .nav-dot-active::before, .nav-dot-ancestor::before { content: none; }
 
+  /* Tapping "Work" off the work page reveals its submenu as a centered row
+     dropping below the top bar — no navigation until a filter is picked. */
+  body.is-nav-work-open .nav-submenu--work {
+    display: flex;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: row; align-items: center; justify-content: center;
+    gap: 2rem;
+    margin: 0; padding: 0 1.5rem 1.25rem;
+    background: var(--bg); list-style: none;
+  }
+  body.is-nav-work-open .nav-submenu--work > li { margin: 0; }
+  body.is-nav-work-open .nav-submenu--work .nav-submenu { display: none; }
+  .nav-submenu--work .nav-sublink {
+    font-size: 0.875rem; font-weight: 400; color: var(--text);
+    text-decoration: none; padding: 0;
+  }
+
   /* Filter rows: All · Visual · Music on one centered row, and the open
      sub-group centered on the row below it. Everything fits, no scroll.
      No bar chrome — flows right under the menu. */
@@ -173,7 +191,7 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-submenu {
     order: 1; flex-basis: 100%;
     flex-direction: row; flex-wrap: wrap;
-    justify-content: center; gap: 1.25rem;
+    justify-content: center; gap: 1.75rem;
     max-height: none; overflow: visible;
   }
   .work-toolbar .filter-btn,
@@ -186,6 +204,25 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-btn.active { color: var(--text); }
   .work-toolbar .sort-toggle { display: none; }
 
+  /* Sort lives in a fixed bar pinned to the bottom of the viewport. */
+  body.is-work-grid .sort-bar {
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    gap: 1.5rem;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 98;
+    padding: 0.85rem 1.5rem calc(0.85rem + env(safe-area-inset-bottom));
+    background: var(--bg);
+  }
+  .sort-bar .sort-bar-label {
+    font-size: 0.875rem; font-weight: 400; color: #999;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .sort-bar .sort-opt {
+    font-size: 0.875rem; font-weight: 400; color: var(--text);
+    padding: 0; white-space: nowrap;
+  }
+  /* Leave room so the last grid row clears the fixed sort bar. */
+  body.is-work-grid .work-grid { padding-bottom: 4.5rem; }
+
   /* Breadcrumb dots on the LEFT of each label. A blue dot marks the active
      leaf; grey dots mark its ancestors in the menu tree (e.g. Work shows a
      grey dot while a Visual sub-filter is selected). */
@@ -194,10 +231,12 @@ body.is-work-grid .filter-btn.active::before {
   body:not(.is-work-grid) .nav-link.active,
   body.is-work-grid .nav-link.active,
   body.is-work-grid .filter-btn.active,
+  body.is-work-grid .sort-opt.active,
   body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 9px; }
   body:not(.is-work-grid) .nav-link.active::after,
   body.is-work-grid .nav-link.active::after,
   body.is-work-grid .filter-btn.active::after,
+  body.is-work-grid .sort-opt.active::after,
   body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
     content: ''; position: absolute; left: 0; top: 50%;
     transform: translateY(-50%);
@@ -205,6 +244,7 @@ body.is-work-grid .filter-btn.active::before {
   }
   /* Blue = active leaf */
   body:not(.is-work-grid) .nav-link.active::after,
+  body.is-work-grid .sort-opt.active::after,
   body.is-work-grid .filter-btn.active::after { background: var(--accent); }
   /* Grey = ancestor in the active tree */
   body.is-work-grid .nav-link.active::after,
@@ -247,6 +287,8 @@ body.is-work-grid .filter-btn.active::before {
   display: block; margin-top: 1rem; text-align: left;
   padding: 0.25rem 0 0.25rem 0.875rem; font-size: 0.9375rem;
 }
+/* Mobile-only sort bar (fixed at the bottom); hidden on desktop. */
+.sort-bar { display: none; }
 
 /* Filter submenus (Design/Music groups expand below) */
 .filter-group { display: flex; flex-direction: column; }
@@ -395,6 +437,200 @@ body.is-work-grid .filter-btn.active::before {
   .weissman-hero img { flex: 1; min-width: 0; object-fit: cover; max-height: 400px; order: -1; }
   .weissman-hero-catalog { flex: 1; min-width: 0; }
   .weissman-hero-catalog #catalog-3d { height: 500px; }
+}
+
+/* Badge Fan 3D */
+#badge-fan {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1800px;
+  margin: 0 auto;
+  overflow: visible;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.badge-card {
+  position: absolute;
+  width: 180px;
+  aspect-ratio: 825 / 1350;
+  transform-style: preserve-3d;
+  transform-origin: 50% 95%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateX(var(--bx, 0px)) rotateZ(var(--ba, 0deg)) translateY(0);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), filter 0.25s ease;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
+}
+.badge-card.badge-hover,
+.badge-card.badge-flipped {
+  transform: translateX(var(--bx, 0px)) rotateZ(var(--ba, 0deg)) translateY(-10px);
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
+}
+
+.badge-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  border-radius: 10px;
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.badge-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.badge-card-front {
+  background: #1a1a1a;
+}
+.badge-card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+}
+
+.badge-card-back {
+  transform: rotateY(180deg);
+  background: #fff;
+  border: 1px solid #e5e5e5;
+}
+
+.badge-back-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 1.25rem;
+  box-sizing: border-box;
+  color: #111;
+  text-align: center;
+}
+
+.badge-hole {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.25);
+  border: 1.5px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.badge-hole--back {
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.04);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.badge-back-hs {
+  width: 120px;
+  height: 54px;
+  margin-top: 0.25rem;
+}
+
+.badge-back-type {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #aaa;
+  margin: 0.1rem 0 0;
+}
+
+.badge-back-barcode {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.badge-back-barcode svg {
+  width: 90px;
+  height: 28px;
+  opacity: 0.65;
+}
+.badge-back-barcode span {
+  font-family: 'SF Mono', ui-monospace, 'Courier New', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  color: #bbb;
+}
+
+.badge-back-fine {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.32rem;
+  line-height: 1.6;
+  color: #c0c0c0;
+  margin-top: 0.5rem;
+}
+
+/* Lanyard clip */
+.badge-card::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  background: linear-gradient(180deg, #aaa, #888);
+  border-radius: 2px 2px 0 0;
+  z-index: 3;
+  opacity: 0.45;
+}
+.badge-card::after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(150,150,150,0.35);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+@media (min-width: 1024px) {
+  #badge-fan { height: 580px; }
+  .badge-card { width: 220px; }
+  .badge-card-inner, .badge-card-face, .badge-card-front img { border-radius: 12px; }
+}
+@media (min-width: 1400px) {
+  #badge-fan { height: 620px; }
+  .badge-card { width: 240px; }
+}
+
+@media (max-width: 767px) {
+  #badge-fan { height: 340px; }
+  .badge-card { width: 110px; }
+  .badge-card-inner, .badge-card-face, .badge-card-front img { border-radius: 6px; }
+  .badge-back-hs { width: 80px; height: 36px; }
+  .badge-back-type { font-size: 0.4rem; }
+  .badge-back-barcode svg { width: 60px; height: 20px; }
+  .badge-back-fine { font-size: 0.24rem; }
+  .badge-back-content { padding: 1.25rem 0.5rem 0.75rem; }
+  .badge-hole { width: 10px; height: 10px; top: 6px; }
+  .badge-card::before { width: 14px; height: 8px; top: -5px; }
+  .badge-card::after { width: 8px; height: 8px; top: -11px; }
 }
 
 /* Admin reorder */
@@ -559,14 +795,16 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .card-role  { display: block; font-size: 0.72rem; line-height: 1.25; margin-bottom: 0; }
   .card-year  { display: block; font-size: 0.72rem; line-height: 1.25; }
 
-  /* Project page: tighter top padding + smaller type */
+  /* Project page: tighter top padding. Keep a clear type hierarchy —
+     title > section header > body/description text. */
   .project-meta { padding: 1.5rem var(--page-margin) 0; }
-  .project-meta h1 { font-size: 1.05rem; }
-  .project-meta .project-details { font-size: 0.78rem; }
+  .project-meta h1 { font-size: 1.35rem; line-height: 1.25; }
+  .project-meta .project-details { font-size: 0.85rem; }
   .project-body { padding: 0 var(--page-margin); }
-  .project-body p { font-size: 0.85rem; line-height: 1.55; }
+  .project-body p { font-size: 0.95rem; line-height: 1.55; }
   .project-section { padding: 1.5rem var(--page-margin) 0; }
-  .project-section h2 { font-size: 1rem; }
+  .project-section h2 { font-size: 1.15rem; }
+  .project-section .section-sub { font-size: 0.95rem; }
 
   /* About page: stop mid-word breaks (overflow-wrap:anywhere split the email
      as "daltoncorr@g / mail.com") and tighten loose line spacing */

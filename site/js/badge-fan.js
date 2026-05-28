@@ -5,21 +5,24 @@
   if (!container) return;
 
   var BADGES = [
-    { name: 'Film Summit',  file: 'Film%20Summit.png' },
-    { name: 'Sponsor',      file: 'Sponsor.png' },
-    { name: 'Staff',        file: 'Staff.png' },
-    { name: 'Screenwriter', file: 'Screenwriter.png' },
-    { name: 'Press',        file: 'Press.png' },
-    { name: 'Filmmaker',    file: 'Filmmaker.png' },
-    { name: 'Day Pass',     file: 'Day%20Pass.png' },
-    { name: 'All Access',   file: 'All%20Access.png' }
+    { name: 'Film Summit',  file: 'Film%20Summit.webp' },
+    { name: 'Sponsor',      file: 'Sponsor.webp' },
+    { name: 'Staff',        file: 'Staff.webp' },
+    { name: 'Screenwriter', file: 'Screenwriter.webp' },
+    { name: 'Press',        file: 'Press.webp' },
+    { name: 'Filmmaker',    file: 'Filmmaker.webp' },
+    { name: 'Day Pass',     file: 'Day%20Pass.webp' },
+    { name: 'All Access',   file: 'All%20Access.webp' }
   ];
 
   var IMG_BASE = '../images/design/hollyshorts21/badges/';
   var N = BADGES.length;
-  var FAN_ARC = 70;
+  var isMobile = window.matchMedia('(max-width: 767px)').matches;
+  var FAN_ARC = isMobile ? 48 : 70;
   var MID = (N - 1) / 2;
-  var SPREAD = Math.min(container.offsetWidth * 0.6, 500);
+  var SPREAD = isMobile
+    ? container.offsetWidth * 0.42
+    : Math.min(container.offsetWidth * 0.6, 500);
 
   /* ── BARCODE ── */
   function barcode(seed) {

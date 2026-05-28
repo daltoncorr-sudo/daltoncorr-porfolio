@@ -193,8 +193,10 @@ function initFilters() {
 
 /* ── Sort ── */
 function initSort() {
-  var btn = $('.sort-toggle'), grid = $('.work-grid');
-  if (!btn || !grid) return;
+  var grid = $('.work-grid');
+  if (!grid) return;
+  var btn = $('.sort-toggle');
+  var opts = $$('.sort-opt');
   var byYear = false;
   function applySort() {
     [].slice.call(grid.children).sort(function(a, b) {
@@ -203,11 +205,16 @@ function initSort() {
         : (parseInt(a.dataset.sortOrder) || 0) - (parseInt(b.dataset.sortOrder) || 0);
     }).forEach(function(el) { grid.appendChild(el); });
   }
-  applySort();
-  btn.addEventListener('click', function() {
-    byYear = !byYear;
-    btn.textContent = byYear ? 'Sort: Chronological' : 'Sort: Default';
+  function setMode(yr) {
+    byYear = yr;
+    if (btn) btn.textContent = byYear ? 'Sort: Chronological' : 'Sort: Default';
+    opts.forEach(function(o) { o.classList.toggle('active', (o.dataset.sort === 'year') === byYear); });
     applySort();
+  }
+  setMode(false);
+  if (btn) btn.addEventListener('click', function() { setMode(!byYear); });
+  opts.forEach(function(o) {
+    o.addEventListener('click', function() { setMode(o.dataset.sort === 'year'); });
   });
 }
 
@@ -265,6 +272,33 @@ function initToolbar() {
       }, { once: true });
     });
   }
+}
+
+/* ── Mobile: tap "Work" off the work page to reveal its submenu inline ── */
+// Instead of navigating straight to the work grid, the first tap drops the
+// All/Visual/Music row below the top bar; picking one of those navigates.
+function initMobileWorkMenu() {
+  var item = $('.nav-item--work');
+  if (!item) return;
+  var workLink = item.querySelector(':scope > .nav-link');
+  if (!workLink) return;
+  var mq = window.matchMedia('(max-width: 767px)');
+
+  function close() { document.body.classList.remove('is-nav-work-open'); }
+
+  workLink.addEventListener('click', function(e) {
+    // Only intercept on mobile and only when we're not already on the work grid.
+    if (!mq.matches || $('.work-grid')) return;
+    e.preventDefault();
+    document.body.classList.toggle('is-nav-work-open');
+  });
+
+  // Dismiss when tapping outside the menu, and reset on resize to desktop.
+  document.addEventListener('click', function(e) {
+    if (!document.body.classList.contains('is-nav-work-open')) return;
+    if (!e.target.closest('.nav-item--work')) close();
+  });
+  mq.addEventListener('change', function(e) { if (!e.matches) close(); });
 }
 
 /* ── Blue dot ── */
@@ -654,6 +688,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initSort();
   initLightbox();
   initToolbar();
+  initMobileWorkMenu();
   initStickyCards();
   window.addEventListener('hashchange', function() {
     syncMobileNavState();
