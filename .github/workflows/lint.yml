@@ -1,0 +1,34 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Confirm shared templates are in sync
+        run: python3 scripts/sync_includes.py --check
+
+      - name: Confirm work/index.html matches projects.json
+        run: python3 scripts/build_work_index.py --check
+
+      - name: Image size budget — flag any WebP > 3 MB
+        run: |
+          large=$(find site/images -name "*.webp" -size +3M)
+          if [ -n "$large" ]; then
+            echo "::warning::WebP files exceeding 3 MB budget:"
+            echo "$large"
+            # Soft warning — comment the next line if you want strict failure:
+            # exit 1
+          else
+            echo "✓ All WebP images within 3 MB budget."
+          fi

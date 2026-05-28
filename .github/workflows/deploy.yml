@@ -30,6 +30,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+
+      # Regenerate cache-busting params from content hashes + build sitemap.
+      # Source files stay clean; deploy artifact gets hashed refs automatically.
+      - name: Bump cache refs + build sitemap
+        run: |
+          python3 scripts/bump_cache.py
+          python3 scripts/build_sitemap.py
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
