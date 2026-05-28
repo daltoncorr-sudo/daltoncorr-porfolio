@@ -143,24 +143,22 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar { display: none; }
   .work-page-body { margin-left: var(--nav-width); }
 
-  /* Nav submenus appear when their context applies (body classes set by JS) */
+  /* Nav submenus inherit nav-link layout exactly — only color shifts */
   .nav-sublink, .nav-subsublink {
     display: block;
     text-decoration: none;
+    font-size: 0.95rem;
+    padding: 0.2rem 0 0.2rem 0.75rem;
     transition: color 150ms var(--ease);
   }
-  .nav-sublink {
-    padding: 0.15rem 0 0.15rem 1.5rem;
-    font-size: 0.85rem;
-    color: rgba(17,17,17,0.55);
-  }
-  .nav-subsublink {
-    padding: 0.1rem 0 0.1rem 2.25rem;
-    font-size: 0.78rem;
-    color: rgba(17,17,17,0.42);
-  }
+  .nav-sublink     { color: rgba(17,17,17,0.50); }
+  .nav-subsublink  { color: rgba(17,17,17,0.30); }
   .nav-sublink:hover, .nav-subsublink:hover { color: var(--text); }
   .nav-sublink.is-active, .nav-subsublink.is-active { color: var(--text); }
+
+  /* Strip default ul styling so submenus flow as plain blocks */
+  .nav-submenu { padding: 0; margin: 0; list-style: none; }
+  .nav-submenu li { padding: 0; margin: 0; }
 
   body.is-work-page .nav-submenu--work { display: block; }
   body.is-filter-visual .nav-submenu--visual { display: block; }
