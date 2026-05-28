@@ -2,7 +2,28 @@
   <div>
     <ul class="nav-links"><li id="dot" class="dot" aria-hidden="true"></li>
       <li><a href="{HOME}" class="nav-link{HOME_ACTIVE}"{HOME_ARIA}>Dalton Corr</a></li>
-      <li><a href="{WORK}" class="nav-link{WORK_ACTIVE}"{WORK_ARIA}>Work</a></li>
+      <li class="nav-item nav-item--work">
+        <a href="{WORK}" class="nav-link{WORK_ACTIVE}"{WORK_ARIA}>Work</a>
+        <ul class="nav-submenu nav-submenu--work">
+          <li><a href="{WORK}#all" class="nav-sublink" data-mobile-filter="all">All</a></li>
+          <li class="nav-item nav-item--visual">
+            <a href="{WORK}#visual" class="nav-sublink" data-mobile-filter="visual">Visual</a>
+            <ul class="nav-submenu nav-submenu--visual">
+              <li><a href="{WORK}#art-direction" class="nav-subsublink" data-mobile-filter="art-direction">Art Direction</a></li>
+              <li><a href="{WORK}#illustration" class="nav-subsublink" data-mobile-filter="illustration">Illustration</a></li>
+              <li><a href="{WORK}#poster" class="nav-subsublink" data-mobile-filter="poster">Posters</a></li>
+              <li><a href="{WORK}#branding" class="nav-subsublink" data-mobile-filter="branding">Branding</a></li>
+            </ul>
+          </li>
+          <li class="nav-item nav-item--music">
+            <a href="{WORK}#music" class="nav-sublink" data-mobile-filter="music">Music</a>
+            <ul class="nav-submenu nav-submenu--music">
+              <li><a href="{WORK}#original-music" class="nav-subsublink" data-mobile-filter="original-music">Original Music</a></li>
+              <li><a href="{WORK}#film-score" class="nav-subsublink" data-mobile-filter="film-score">Film Scores</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
       <li><a href="{ABOUT}" class="nav-link{ABOUT_ACTIVE}"{ABOUT_ARIA}>About</a></li>
     </ul>
   </div>

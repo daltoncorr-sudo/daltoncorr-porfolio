@@ -564,6 +564,26 @@ function initAdminReorder() {
   });
 }
 
+/* ── Mobile nav state ── */
+// Sets body classes that drive which nav-submenu(s) are visible on mobile.
+// Re-runs on hashchange so taps in the nav update the submenu open state live.
+function syncMobileNavState() {
+  var body = document.body;
+  var onWork = location.pathname.indexOf('/work/') !== -1;
+  body.classList.toggle('is-work-page', onWork);
+
+  var hash = location.hash.replace('#', '');
+  var visualFilters = { 'visual': 1, 'art-direction': 1, 'illustration': 1, 'poster': 1, 'branding': 1 };
+  var musicFilters  = { 'music': 1, 'original-music': 1, 'film-score': 1 };
+  body.classList.toggle('is-filter-visual', onWork && hash in visualFilters);
+  body.classList.toggle('is-filter-music',  onWork && hash in musicFilters);
+
+  // Highlight the active nav sublink
+  $$('.nav-sublink, .nav-subsublink').forEach(function(a) {
+    a.classList.toggle('is-active', a.dataset.mobileFilter === hash || (!hash && a.dataset.mobileFilter === 'all'));
+  });
+}
+
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', function() {
   initDot();
@@ -574,6 +594,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initLightbox();
   initToolbar();
   initStickyCards();
+  syncMobileNavState();
+  window.addEventListener('hashchange', syncMobileNavState);
   // Admin reorder (drag-to-reorder + Ctrl+Shift+E) — only loads when ?admin=1 is set,
   // keeping the prod bundle's behavior lean for visitors.
   if (/[?&]admin=1\b/.test(location.search)) initAdminReorder();
