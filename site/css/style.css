@@ -133,14 +133,15 @@ body.is-work-grid .filter-btn.active::before {
 .nav-submenu { display: none; }
 
 @media (max-width: 767px) {
-  :root { --topbar-h: 3rem; }
+  :root { --topbar-h: 69px; }
 
-  /* No bars — just the menus. Brand · Work · About centered in one row. */
+  /* Just the menus (no border chrome), frozen at the top while scrolling. */
   .nav {
     flex-direction: row; align-items: center; justify-content: center;
-    width: 100%; height: auto; position: static;
-    padding: 1.5rem 1.5rem 0;
-    background: none; border-bottom: none;
+    width: 100%; height: auto;
+    position: sticky; top: 0; z-index: 99;
+    padding: 1.5rem 1.5rem 1.25rem;
+    background: var(--bg); border-bottom: none;
   }
   .nav > div { display: flex; flex: 1; justify-content: center; }
   .nav-links { flex-direction: row; align-items: center; justify-content: center; gap: 2.25rem; }
@@ -157,10 +158,10 @@ body.is-work-grid .filter-btn.active::before {
      No bar chrome — flows right under the menu. */
   body.is-work-grid .work-toolbar {
     display: flex; flex-direction: column; align-items: stretch;
-    position: static;
+    position: sticky; top: calc(var(--topbar-h) - 1px); left: 0;
     width: 100%; height: auto;
-    padding: 1.1rem 1.5rem 0.25rem;
-    background: none; border-bottom: none;
+    padding: 1px 1.5rem 0.75rem;
+    background: var(--bg); border-bottom: none;
     opacity: 1; z-index: 98;
   }
   .work-toolbar .filter-bar {
@@ -188,16 +189,18 @@ body.is-work-grid .filter-btn.active::before {
   /* Breadcrumb dots on the LEFT of each label. A blue dot marks the active
      leaf; grey dots mark its ancestors in the menu tree (e.g. Work shows a
      grey dot while a Visual sub-filter is selected). */
+  /* The dot lives in the flow (reserved left padding) rather than jutting
+     outside the row, so each row stays optically centered. */
   body:not(.is-work-grid) .nav-link.active,
   body.is-work-grid .nav-link.active,
   body.is-work-grid .filter-btn.active,
-  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; }
+  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 9px; }
   body:not(.is-work-grid) .nav-link.active::after,
   body.is-work-grid .nav-link.active::after,
   body.is-work-grid .filter-btn.active::after,
   body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
-    content: ''; position: absolute; right: 100%; top: 50%;
-    transform: translateY(-50%); margin-right: 3px;
+    content: ''; position: absolute; left: 0; top: 50%;
+    transform: translateY(-50%);
     width: 6px; height: 6px; border-radius: 50%;
   }
   /* Blue = active leaf */
