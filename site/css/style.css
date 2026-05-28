@@ -179,6 +179,8 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-btn.filter-sub { font-size: 0.8rem; }
   .work-toolbar .filter-btn::before { display: none; }
   /* Equal weight/color for every label — only the dot signals selection */
+  .work-toolbar .filter-btn,
+  .work-toolbar .filter-btn.filter-sub,
   .work-toolbar .filter-btn.filter-sub.active,
   .work-toolbar .filter-btn.active { color: var(--text); }
   .work-toolbar .sort-toggle { display: none; }
