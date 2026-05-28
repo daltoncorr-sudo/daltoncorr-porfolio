@@ -175,8 +175,8 @@ body.is-work-grid .filter-btn.active::before {
     justify-content: center; gap: 0.9rem;
     max-height: none; overflow: visible;
   }
-  .work-toolbar .filter-btn { font-size: 0.95rem; font-weight: 400; padding: 0; white-space: nowrap; }
-  .work-toolbar .filter-btn.filter-sub { font-size: 0.8rem; }
+  .work-toolbar .filter-btn,
+  .work-toolbar .filter-btn.filter-sub { font-size: 0.95rem; font-weight: 400; padding: 0; white-space: nowrap; }
   .work-toolbar .filter-btn::before { display: none; }
   /* Equal weight/color for every label — only the dot signals selection */
   .work-toolbar .filter-btn,
