@@ -81,7 +81,12 @@ function initFilters() {
     $$('.filter-group', bar).forEach(function(g) {
       g.classList.toggle('is-open', g === activeGroup);
     });
-    if (dot) dot.classList.add('muted');
+    // Desktop greys the dot to signal an active filter; mobile points it at the
+    // visible active sub-item, where it stays accent-colored.
+    if (dot) {
+      var sub = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
+      dot.classList.toggle('muted', !(sub && sub.offsetParent !== null));
+    }
     history.replaceState(null, '', f === 'all' ? location.pathname : '#' + f);
 
     var toHide = [], toShow = [], toMove = [];
@@ -175,6 +180,14 @@ function initFilters() {
     apply(b.dataset.filter, true);
   });
 
+  // Mobile nav sublinks are <a href="...#visual"> on this same page, so tapping
+  // them only changes the hash without reloading. Mirror that into the grid.
+  window.addEventListener('hashchange', function() {
+    var f = location.hash.replace('#', '') || 'all';
+    if (busy) { pending = f; return; }
+    apply(f, true);
+  });
+
   apply(location.hash.replace('#', '') || 'all', false);
 }
 
@@ -255,13 +268,39 @@ function initToolbar() {
 }
 
 /* ── Blue dot ── */
-function initDot() {
+// On mobile the submenu is visible, so point the dot at the active sub-item
+// (e.g. "Illustration") rather than the top-level "Work". Falls back to the
+// top-level link on desktop, where submenus are display:none (offsetParent null).
+function dotTarget() {
+  var sub = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
+  if (sub && sub.offsetParent !== null) return sub;
+  return document.querySelector('.nav-link.active');
+}
+function positionDot(animate) {
   var dot = document.getElementById('dot');
-  var current = document.querySelector('.nav-link.active');
+  var current = dotTarget();
   if (!dot || !current) return;
   var navTop = dot.parentElement.getBoundingClientRect().top;
   var rect = current.getBoundingClientRect();
   var target = rect.top - navTop + rect.height / 2 - 3;
+  // When the dot lands on a real sub-item it marks the active selection, so
+  // keep it accent-colored instead of the grey "filtered" state.
+  if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
+    dot.classList.remove('muted');
+  }
+  if (animate) dot.classList.add('animated');
+  dot.style.top = target + 'px';
+}
+function initDot() {
+  var dot = document.getElementById('dot');
+  var current = dotTarget();
+  if (!dot || !current) return;
+  var navTop = dot.parentElement.getBoundingClientRect().top;
+  var rect = current.getBoundingClientRect();
+  var target = rect.top - navTop + rect.height / 2 - 3;
+  if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
+    dot.classList.remove('muted');
+  }
   var from = sessionStorage.getItem('dotTop');
   if (from !== null) {
     dot.style.top = from + 'px';
@@ -586,6 +625,7 @@ function syncMobileNavState() {
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', function() {
+  syncMobileNavState();
   initDot();
   initSlideshow();
   initFilters();
@@ -594,8 +634,10 @@ document.addEventListener('DOMContentLoaded', function() {
   initLightbox();
   initToolbar();
   initStickyCards();
-  syncMobileNavState();
-  window.addEventListener('hashchange', syncMobileNavState);
+  window.addEventListener('hashchange', function() {
+    syncMobileNavState();
+    positionDot(true);
+  });
   // Admin reorder (drag-to-reorder + Ctrl+Shift+E) — only loads when ?admin=1 is set,
   // keeping the prod bundle's behavior lean for visitors.
   if (/[?&]admin=1\b/.test(location.search)) initAdminReorder();

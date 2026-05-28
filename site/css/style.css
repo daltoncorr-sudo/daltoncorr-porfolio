@@ -221,14 +221,6 @@ body.is-work-grid .filter-btn.active::before {
 @media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
 @media (min-width: 1100px) { .work-grid { grid-template-columns: repeat(3, 1fr); } }
 
-/* Mobile cards: smaller text */
-@media (max-width: 767px) {
-  .card-title { font-size: 0.8rem; line-height: 1.3; }
-  .card-role  { font-size: 0.7rem; line-height: 1.3; }
-  .card-year  { font-size: 0.7rem; }
-  .card-info  { padding-top: 0.5rem; }
-}
-
 .project-card { display: block; text-decoration: none; color: inherit; }
 .project-card.card-hidden { display: none; }
 .project-card.card-exiting {
@@ -276,15 +268,6 @@ body.is-work-grid .filter-btn.active::before {
 }
 .project-meta { text-align: left; padding: 2rem var(--page-margin) 0; }
 .project-meta h1 { font-size: 1.5rem; font-weight: 600; line-height: 1.4; letter-spacing: 0; text-transform: none; color: var(--text); margin-bottom: 0.25rem; }
-@media (max-width: 767px) {
-  .project-meta { padding: 1.5rem var(--page-margin) 0; }
-  .project-meta h1 { font-size: 1.05rem; }
-  .project-meta .project-details { font-size: 0.78rem; }
-  .project-body { padding: 0 var(--page-margin); }
-  .project-body p { font-size: 0.85rem; line-height: 1.55; }
-  .project-section { padding: 1.5rem var(--page-margin) 0; }
-  .project-section h2 { font-size: 1rem; }
-}
 .project-details { font-size: 1rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text); margin-bottom: 0.5rem; line-height: 1.75; }
 .project-details--meta { color: var(--text); font-size: 1rem; margin-top: 0; margin-bottom: 2rem; }
 .project-body { text-align: left; padding: 0.5rem 0 0; color: var(--text); }
@@ -493,17 +476,56 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   *, *::before, *::after { animation-duration: 0.01ms; transition-duration: 0.01ms; scroll-behavior: auto; }
 }
 
-/* ── Mobile overrides (must come AFTER base rules to win the cascade) ── */
+/* Bigger slideshow on desktop too (was capped at 720px / 55vw) */
+.slideshow { max-width: min(900px, 65vw); }
+@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(720px, 60vw); } }
+
+/* ── Mobile overrides ──
+   This block MUST be the last thing in the file. Several base rules
+   (.card-title, .slideshow, .project-body p, .project-section h2/padding)
+   live further down the stylesheet than the per-component mobile blocks, so
+   at equal specificity they win the cascade. Keeping every mobile override
+   here, at the very end, guarantees it overrides those base rules. */
 @media (max-width: 767px) {
   /* Hide the floating work-toolbar everywhere; filter UI lives in the nav */
   .work-toolbar { display: none !important; }
   /* Project + work pages: single nav-width margin on mobile */
   .work-page-body { margin-left: var(--nav-width); }
-  /* Bigger slideshow image */
+
+  /* Slideshow fills most of the content column (trim .home padding so the
+     image isn't lost in whitespace next to the 130px nav) */
+  .home { padding: 1rem 0.75rem; }
   .slideshow { max-width: 92vw; }
   .slide img { max-height: 80vh; }
-}
 
-/* Bigger slideshow on desktop too (was capped at 720px / 55vw) */
-.slideshow { max-width: min(900px, 65vw); }
-@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(720px, 60vw); } }
+  /* Work grid: one item per row — small thumbnail + text beside it,
+     so several projects are visible at once without oversized previews */
+  .work-grid { grid-template-columns: 1fr; gap: 0.85rem; padding-bottom: 3rem; }
+  .project-card { display: flex; align-items: center; gap: 0.85rem; }
+  .card-image { width: 84px; flex: none; aspect-ratio: 4/5; margin-bottom: 0; }
+  .card-info { flex: 1; min-width: 0; padding-top: 0; }
+  .card-title { font-size: 0.85rem; line-height: 1.25; font-weight: 700; margin-bottom: 0.1rem; }
+  .card-role  { display: block; font-size: 0.72rem; line-height: 1.25; margin-bottom: 0; }
+  .card-year  { display: block; font-size: 0.72rem; line-height: 1.25; }
+
+  /* Project page: tighter top padding + smaller type */
+  .project-meta { padding: 1.5rem var(--page-margin) 0; }
+  .project-meta h1 { font-size: 1.05rem; }
+  .project-meta .project-details { font-size: 0.78rem; }
+  .project-body { padding: 0 var(--page-margin); }
+  .project-body p { font-size: 0.85rem; line-height: 1.55; }
+  .project-section { padding: 1.5rem var(--page-margin) 0; }
+  .project-section h2 { font-size: 1rem; }
+
+  /* About page: stop mid-word breaks (overflow-wrap:anywhere split the email
+     as "daltoncorr@g / mail.com") and tighten loose line spacing */
+  .about-layout p, .about-layout a, .about-layout h2, .about-layout h3 { overflow-wrap: break-word; }
+  .about-bio p { line-height: 1.5; }
+  .about-contact-list { flex-direction: column; gap: 0.4rem; }
+  /* Press: outlet on its own line, grey description below it, with clear
+     space between entries so each outlet+description pair reads as one group */
+  .press-entry { padding: 0; margin-bottom: 0.85rem; }
+  .press-entry a { line-height: 1.3; }
+  .press-entry .press-outlet { display: block; }
+  .press-entry .press-desc { display: block; font-size: 0.78rem; line-height: 1.3; }
+}
