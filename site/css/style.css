@@ -135,18 +135,16 @@ body.is-work-grid .filter-btn.active::before {
 @media (max-width: 767px) {
   :root { --topbar-h: 3rem; }
 
-  /* Top bar: brand · Work · About, centered in one row, sticky at the top */
+  /* No bars — just the menus. Brand · Work · About centered in one row. */
   .nav {
     flex-direction: row; align-items: center; justify-content: center;
-    width: 100%; height: auto; min-height: var(--topbar-h);
-    position: sticky; top: 0;
-    padding: 0 1rem;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
+    width: 100%; height: auto; position: static;
+    padding: 0.75rem 1rem 0;
+    background: none; border-bottom: none;
   }
   .nav > div { display: flex; flex: 1; justify-content: center; }
   .nav-links { flex-direction: row; align-items: center; justify-content: center; gap: 1.75rem; }
-  .nav-link { font-size: 0.95rem; padding: 0; }
+  .nav-link { font-size: 0.95rem; font-weight: 400; padding: 0; }
   .nav-footer { display: none; }
 
   /* Filtering uses centered rows below; drop the vertical tree and old dots */
@@ -156,19 +154,19 @@ body.is-work-grid .filter-btn.active::before {
 
   /* Filter rows: All · Visual · Music on one centered row, and the open
      sub-group centered on the row below it. Everything fits, no scroll.
-     Sticky directly under the top bar. */
+     No bar chrome — flows right under the menu. */
   body.is-work-grid .work-toolbar {
     display: flex; flex-direction: column; align-items: stretch;
-    position: sticky; top: var(--topbar-h); left: 0;
+    position: static;
     width: 100%; height: auto;
-    padding: 0.4rem 1rem 0.5rem;
-    background: var(--bg); border-bottom: 1px solid var(--border);
+    padding: 0.5rem 1rem 0.25rem;
+    background: none; border-bottom: none;
     opacity: 1; z-index: 98;
   }
   .work-toolbar .filter-bar {
     display: flex; flex-wrap: wrap; flex-direction: row;
     justify-content: center; align-items: center;
-    gap: 0.4rem 1.5rem; padding-top: 0;
+    gap: 0.5rem 1.5rem; padding-top: 0;
   }
   .work-toolbar .filter-group { display: contents; }
   .work-toolbar .filter-submenu {
@@ -177,21 +175,35 @@ body.is-work-grid .filter-btn.active::before {
     justify-content: center; gap: 0.9rem;
     max-height: none; overflow: visible;
   }
-  .work-toolbar .filter-btn { font-size: 0.95rem; padding: 0; white-space: nowrap; }
+  .work-toolbar .filter-btn { font-size: 0.95rem; font-weight: 400; padding: 0; white-space: nowrap; }
   .work-toolbar .filter-btn.filter-sub { font-size: 0.8rem; }
   .work-toolbar .filter-btn::before { display: none; }
+  /* Equal weight/color for every label — only the dot signals selection */
+  .work-toolbar .filter-btn.filter-sub.active,
+  .work-toolbar .filter-btn.active { color: var(--text); }
   .work-toolbar .sort-toggle { display: none; }
 
-  /* Single blue dot to the right of the active item, vertically centered. On
-     the work grid it marks the active filter; elsewhere the active nav link. */
+  /* Breadcrumb dots on the LEFT of each label. A blue dot marks the active
+     leaf; grey dots mark its ancestors in the menu tree (e.g. Work shows a
+     grey dot while a Visual sub-filter is selected). */
   body:not(.is-work-grid) .nav-link.active,
-  body.is-work-grid .filter-btn.active { position: relative; }
+  body.is-work-grid .nav-link.active,
+  body.is-work-grid .filter-btn.active,
+  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; }
   body:not(.is-work-grid) .nav-link.active::after,
-  body.is-work-grid .filter-btn.active::after {
-    content: ''; position: absolute; left: 100%; top: 50%;
-    transform: translateY(-50%); margin-left: 6px;
-    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+  body.is-work-grid .nav-link.active::after,
+  body.is-work-grid .filter-btn.active::after,
+  body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
+    content: ''; position: absolute; right: 100%; top: 50%;
+    transform: translateY(-50%); margin-right: 6px;
+    width: 6px; height: 6px; border-radius: 50%;
   }
+  /* Blue = active leaf */
+  body:not(.is-work-grid) .nav-link.active::after,
+  body.is-work-grid .filter-btn.active::after { background: var(--accent); }
+  /* Grey = ancestor in the active tree */
+  body.is-work-grid .nav-link.active::after,
+  body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after { background: #bbb; }
 }
 
 /* ── Layout ── */
