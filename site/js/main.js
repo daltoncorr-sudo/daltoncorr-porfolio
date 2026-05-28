@@ -621,6 +621,27 @@ function syncMobileNavState() {
   $$('.nav-sublink, .nav-subsublink').forEach(function(a) {
     a.classList.toggle('is-active', a.dataset.mobileFilter === hash || (!hash && a.dataset.mobileFilter === 'all'));
   });
+
+  // Breadcrumb dots: blue on the active leaf, grey on each of its ancestors
+  // (Work always; Visual/Music when one of their sub-items is the leaf).
+  $$('.nav-link, .nav-sublink, .nav-subsublink').forEach(function(a) {
+    a.classList.remove('nav-dot-active', 'nav-dot-ancestor');
+  });
+  if (onWork) {
+    var workMenu = document.querySelector('.nav-submenu--work');
+    var workLink = workMenu && workMenu.previousElementSibling;
+    if (workLink) workLink.classList.add('nav-dot-ancestor');
+
+    var leaf = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
+    if (leaf) {
+      leaf.classList.add('nav-dot-active');
+      if (leaf.classList.contains('nav-subsublink')) {
+        var group = leaf.closest('.nav-submenu--visual, .nav-submenu--music');
+        var groupLink = group && group.previousElementSibling;
+        if (groupLink) groupLink.classList.add('nav-dot-ancestor');
+      }
+    }
+  }
 }
 
 /* ── Init ── */

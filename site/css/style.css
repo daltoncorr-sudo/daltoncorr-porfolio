@@ -159,6 +159,27 @@ body.is-work-grid .filter-btn.active::before {
   body.is-work-page .nav-submenu--work { display: block; }
   body.is-filter-visual .nav-submenu--visual { display: block; }
   body.is-filter-music  .nav-submenu--music  { display: block; }
+
+  /* Breadcrumb dots in the expanded work tree: a grey dot trails each ancestor
+     (Work, and Visual/Music) and a blue dot marks the active leaf. Replaces the
+     single moving #dot, which only handles top-level links on other pages. */
+  body.is-work-page .dot { display: none; }
+  body.is-work-page .nav-link,
+  body.is-work-page .nav-sublink,
+  body.is-work-page .nav-subsublink { position: relative; }
+  body.is-work-page .nav-dot-active::before,
+  body.is-work-page .nav-dot-ancestor::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  body.is-work-page .nav-dot-active::before   { background: var(--accent); }
+  body.is-work-page .nav-dot-ancestor::before { background: #C4C4C4; }
 }
 
 /* ── Layout ── */
