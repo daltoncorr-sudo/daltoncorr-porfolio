@@ -245,10 +245,10 @@ body.is-work-grid .filter-btn.active::before {
 .project-body p { font-size: 1.125rem; font-weight: 400; color: var(--text); line-height: 1.75; }
 .project-body p + p { margin-top: 0.35rem; }
 
-/* Masonry gallery */
-.project-gallery { columns: 2; column-gap: 0.5rem; padding: 0 var(--page-margin) 3rem; max-width: 1100px; margin: 0 auto; }
-.project-gallery img { width: 100%; margin-bottom: 0.5rem; break-inside: avoid; display: block; cursor: zoom-in; }
-@media (max-width: 767px) { .project-gallery { columns: 1; } }
+/* 2-up gallery — row-major order (1,2 / 3,4 …), NOT CSS columns which flow top-down per column */
+.project-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; align-items: start; padding: 0 var(--page-margin) 3rem; max-width: 1100px; margin: 0 auto; }
+.project-gallery img { width: 100%; display: block; cursor: zoom-in; }
+@media (max-width: 767px) { .project-gallery { grid-template-columns: 1fr; } }
 
 /* Square grid gallery */
 .project-gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: 0 var(--page-margin) 3rem; max-width: 1100px; margin: 0 auto; }
@@ -284,9 +284,9 @@ body.is-work-grid .filter-btn.active::before {
 .project-section h2 + .project-gallery { margin-top: 1.5rem; }
 .project-section .section-sub + .project-gallery { margin-top: 1.5rem; }
 .project-section .section-sub { font-size: 1rem; font-weight: 400; text-transform: none; text-align: center; color: var(--text); margin-top: 0; margin-bottom: 0; line-height: 1.4; }
-.project-section .project-gallery { padding: 0; margin-top: 0.75rem; columns: 2; column-gap: 0.5rem; }
-.project-section .project-gallery img { width: 100%; margin-bottom: 0.5rem; break-inside: avoid; display: block; cursor: zoom-in; }
-@media (max-width: 767px) { .project-section .project-gallery { columns: 1; } }
+.project-section .project-gallery { padding: 0; margin-top: 0.75rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; align-items: start; }
+.project-section .project-gallery img { width: 100%; display: block; cursor: zoom-in; }
+@media (max-width: 767px) { .project-section .project-gallery { grid-template-columns: 1fr; } }
 /* Poster hero — match heights, tops aligned */
 .poster-hero-wrap { margin: 0 auto; padding: 0; }
 .poster-hero-wrap .poster-hero { columns: unset; display: flex; gap: 0.5rem; justify-content: center; align-items: flex-start; }
