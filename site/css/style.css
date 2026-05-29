@@ -41,7 +41,7 @@ a:hover { color: var(--text); }
 
 /* Reusable utility classes (replace inline styles) */
 .card-image--placeholder { background: #111; display: flex; align-items: center; justify-content: center; }
-.card-image--placeholder-label { color: #333; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.15em; }
+.card-image--placeholder-label { color: #333; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; }
 .media-center { display: flex; justify-content: center; margin: 1rem 0; }
 .media-center img { max-width: 600px; width: 100%; height: auto; }
 .text-subdued { margin-top: 1rem; opacity: 0.5; }
