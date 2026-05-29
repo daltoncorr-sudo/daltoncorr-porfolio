@@ -63,7 +63,7 @@
     "tags": [
       "Visual"
     ],
-    "placeholder": "TBA"
+    "placeholder": "Available upon request"
   },
   {
     "slug": "dont-mind-me",
@@ -113,7 +113,7 @@
       "Visual",
       "Branding"
     ],
-    "placeholder": "TBA"
+    "placeholder": "Available upon request"
   },
   {
     "slug": "anonymous-poetry",
@@ -295,12 +295,14 @@
     "sort": 7,
     "year": 2019,
     "filters": [
-      "visual"
+      "visual",
+      "branding"
     ],
     "title": "HDtracks",
     "role": "Director of Marketing, Lead Designer",
     "tags": [
-      "Visual"
+      "Visual",
+      "Branding"
     ],
     "image": "../images/cdn/index/hdtrackstall-d2b743.webp",
     "alt": "HDtracks"
@@ -346,12 +348,14 @@
     "sort": 5,
     "year": 2024,
     "filters": [
-      "visual"
+      "visual",
+      "branding"
     ],
     "title": "Skyfire Artists",
     "role": "Brand Designer",
     "tags": [
-      "Visual"
+      "Visual",
+      "Branding"
     ],
     "image": "../images/cdn/index/Sign-d19ff7.webp",
     "alt": "Skyfire Artists"
@@ -565,12 +569,14 @@
     "sort": 23,
     "year": 2016,
     "filters": [
-      "visual"
+      "visual",
+      "branding"
     ],
     "title": "Chop Suey Club",
     "role": "Assistant Designer",
     "tags": [
-      "Visual"
+      "Visual",
+      "Branding"
     ],
     "image": "../images/cdn/index/Unknown-27cdbe.webp",
     "alt": "Chop Suey Club"
@@ -580,12 +586,14 @@
     "sort": 23,
     "year": 2023,
     "filters": [
-      "visual"
+      "visual",
+      "branding"
     ],
     "title": "Hollyshorts.com",
     "role": "Website Designer",
     "tags": [
-      "Visual"
+      "Visual",
+      "Branding"
     ],
     "image": "../images/cdn/index/HS-website-e14dc6.webp",
     "alt": "Hollyshorts.com"
@@ -924,6 +932,6 @@
       "Visual",
       "Branding"
     ],
-    "placeholder": ""
+    "placeholder": "Available upon request"
   }
 ]

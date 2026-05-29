@@ -222,29 +222,39 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-btn.active { color: var(--text); }
   .work-toolbar .sort-toggle { display: none; }
 
-  /* Breadcrumb dots on the LEFT of each label. A blue dot marks the active
-     leaf; grey dots mark its ancestors in the menu tree (e.g. Work shows a
-     grey dot while a Visual sub-filter is selected). */
-  /* The dot lives in the flow (reserved left padding) rather than jutting
-     outside the row, so each row stays optically centered. */
+  /* Breadcrumb dots sit to the LEFT of each label. The blue active-leaf dot is a
+     single shared element (.filter-flydot) that glides between buttons, and the
+     grey ancestor dot juts left without taking layout space — so choosing a new
+     filter never shifts the labels, only the dot moves. */
+
+  /* Nav links keep an in-flow dot (their active state changes only on page navigation). */
   body:not(.is-work-grid) .nav-link.active,
-  body.is-work-grid .nav-link.active,
-  body.is-work-grid .filter-btn.active,
-  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 13px; }
+  body.is-work-grid .nav-link.active { position: relative; padding-left: 13px; }
   body:not(.is-work-grid) .nav-link.active::after,
-  body.is-work-grid .nav-link.active::after,
-  body.is-work-grid .filter-btn.active::after,
-  body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
+  body.is-work-grid .nav-link.active::after {
     content: ''; position: absolute; left: 0; top: 50%;
     transform: translateY(-50%);
     width: 6px; height: 6px; border-radius: 50%;
   }
-  /* Blue = active leaf */
-  body:not(.is-work-grid) .nav-link.active::after,
-  body.is-work-grid .filter-btn.active::after { background: var(--accent); }
-  /* Grey = ancestor in the active tree */
-  body.is-work-grid .nav-link.active::after,
-  body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after { background: #bbb; }
+  body:not(.is-work-grid) .nav-link.active::after { background: var(--accent); }
+  body.is-work-grid .nav-link.active::after { background: #bbb; }
+
+  /* Grey ancestor dot on the open group's parent — juts left, no layout shift. */
+  body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
+    content: ''; position: absolute; left: -13px; top: 50%;
+    transform: translateY(-50%);
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #bbb;
+  }
+
+  /* The flying blue dot for the active filter. */
+  .work-toolbar .filter-flydot {
+    display: block; position: absolute; top: 0; left: 0;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none; z-index: 1;
+    transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 /* ── Layout ── */
@@ -273,6 +283,7 @@ body.is-work-grid .filter-btn.active::before {
 }
 .work-toolbar > * { pointer-events: auto; }
 .filter-bar { display: flex; flex-direction: column; padding-top: calc(2rem + 0.25rem + 1.5rem + 0.25rem + 0.25rem); position: relative; }
+.filter-flydot { display: none; }
 .filter-btn {
   position: relative; display: block; text-align: left;
   padding: 0.25rem 0 0.25rem 0.875rem;

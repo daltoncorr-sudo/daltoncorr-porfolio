@@ -62,6 +62,27 @@ function initFilters() {
   var busy = false;
   var currentFilter = null;
 
+  // Single blue dot that glides to the active filter (mobile breadcrumb).
+  var flyDot = document.createElement('span');
+  flyDot.className = 'filter-flydot';
+  bar.appendChild(flyDot);
+
+  function positionFlyDot(animate) {
+    var active = bar.querySelector('.filter-btn.active');
+    if (!active) return;
+    // Accumulate offsets up to the bar — sub buttons sit inside a transformed
+    // submenu, so their offsetParent isn't the bar directly.
+    var x = 0, y = 0, el = active;
+    while (el && el !== bar) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+    x -= 13;
+    y += (active.offsetHeight - 6) / 2;
+    if (!animate) flyDot.style.transition = 'none';
+    flyDot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    if (!animate) { flyDot.offsetWidth; flyDot.style.transition = ''; }
+  }
+  window.addEventListener('resize', function () { positionFlyDot(false); });
+  window.addEventListener('load', function () { positionFlyDot(false); });
+
   // Pre-cache filter sets per card
   var cardFilters = cards.map(function(c) {
     return c.dataset.filters.split(' ');
@@ -81,6 +102,7 @@ function initFilters() {
     $$('.filter-group', bar).forEach(function(g) {
       g.classList.toggle('is-open', g === activeGroup);
     });
+    positionFlyDot(animate);
     // Desktop greys the dot to signal an active filter; mobile points it at the
     // visible active sub-item, where it stays accent-colored.
     if (dot) {
