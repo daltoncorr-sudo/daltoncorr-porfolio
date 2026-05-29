@@ -230,7 +230,7 @@ body.is-work-grid .filter-btn.active::before {
   body:not(.is-work-grid) .nav-link.active,
   body.is-work-grid .nav-link.active,
   body.is-work-grid .filter-btn.active,
-  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 9px; }
+  body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 13px; }
   body:not(.is-work-grid) .nav-link.active::after,
   body.is-work-grid .nav-link.active::after,
   body.is-work-grid .filter-btn.active::after,
