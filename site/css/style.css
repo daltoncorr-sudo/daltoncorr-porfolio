@@ -719,7 +719,10 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .work-toolbar .filter-submenu {
     order: 1; flex-basis: 100%;
     flex-direction: row; flex-wrap: nowrap;
-    justify-content: center; gap: 1.15rem;
+    /* Spread the sub-options edge to edge across the row, with side padding,
+       so they use the full width instead of clustering in the center. */
+    justify-content: space-between; gap: 0.4rem;
+    padding: 0 0.5rem;
     max-height: none; overflow: visible;
     margin-bottom: 0.75rem;
   }
@@ -730,8 +733,11 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  /* line-height matches the .nav-sublink dropdown so the All·Visual·Music row
+     sits the same distance below the top bar on the work grid as it does in the
+     tap-to-open Work dropdown on every other page. */
   .work-toolbar .filter-btn,
-  .work-toolbar .filter-btn.filter-sub { font-size: 0.875rem; font-weight: 400; padding: 0; white-space: nowrap; }
+  .work-toolbar .filter-btn.filter-sub { font-size: 0.875rem; font-weight: 400; line-height: 1.18; padding: 0; white-space: nowrap; }
   .work-toolbar .filter-btn::before { display: none; }
   /* Equal weight/color for every label — only the dot signals selection */
   .work-toolbar .filter-btn,
