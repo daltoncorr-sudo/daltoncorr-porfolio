@@ -1,72 +1,71 @@
 # Dalton Corr portfolio — status & handoff
 
-Use this file to resume work in a new chat. The **source of truth for product spec** is `CLAUDE_CODE_PROMPT_portfolio_build (1).md`. A fuller execution outline lived in the user’s Cursor plan (`portfolio_build_plan_*.plan.md`); this file tracks **repo reality** and **what to do next**.
+A hand-maintained **static multi-page site**. No framework, no npm, no runtime
+data fetching. Source lives in `site/` and is deployed to GitHub Pages from
+`main` (auto-deploy on push).
 
 ---
 
-## Stack (locked)
+## Stack (current reality)
 
-- Single **`index.html`** — inline CSS + JS; Google Fonts (Cormorant Garamond) only; no npm/build.
-- **`manifest.json`** — scraped project data (paths, titles, descriptions, images).
-- **`assets/images/{design|music}/{slug}/`** — downloaded images (`01.jpg`, `thumb.*`, etc.).
-- **`scripts/curated_projects.json`** — canonical slug ↔ Squarespace URL slug map + year/role/location/palette for nav merge.
+- **`site/`** — every page is its own `.html` file (home, `work/`, `blog/`,
+  `about.html`, `404.html`, plus one page per project under `work/`).
+- **`site/css/style.css`** — all styling. One file.
+- **`site/js/main.js`** — all behavior (nav dot, slideshow, card filtering,
+  sticky cards, admin reorder). One file.
+- **`site/images/`** — all WebP assets.
+- **`data/projects.json`** — source of truth for the Work grid + nav order.
+- **`scripts/templates/`** — `nav.html` and `project-toolbar.html`, the shared
+  fragments injected into every page.
 
----
-
-## Done (in this repo)
-
-| Area | Notes |
-|------|--------|
-| Phase 0 migration | `scripts/scrape_migrate.py` — fetches `/design`, `/music`, downloads CDN images, writes `manifest.json` + `assets/images/...`. Run from repo root: `python3 scripts/scrape_migrate.py` |
-| Curated merge | Slugs in prompt (e.g. `hollyshorts-21`) map to URL paths (e.g. `hollyshorts21`) via `curated_projects.json`; `index.html` merges with manifest at runtime |
-| Site shell | `index.html` — left nav, blue dot, Home / Work (years + projects) / About / Press, keyboard nav, reduced-motion handling |
-| Work views | Landing grid, year filter, project detail; real `<img>` / `<picture>` when data exists |
-| Images pipeline | `scripts/optimize_images.py` — max width 2400px, large PNG → WebP sidecar, EXIF strip, tiny blur placeholders; writes **`blur_map.json`** at repo root |
-| Runtime | `index.html` fetches **`manifest.json`** and optionally **`blur_map.json`** (WebP + blur backgrounds). Requires **HTTP** (e.g. `python3 -m http.server`); `file://` will not load JSON |
-| Mobile tilt | Optional `DeviceOrientation` on narrow viewports; iOS permission via first interaction on work panel |
+CSS/JS are referenced with `?v=HASH` cache-busting params. Edit the source
+files directly, then re-stamp the hashes (see below).
 
 ---
 
-## Not done / verify
+## Build / maintenance scripts
 
-| Item | Action |
-|------|--------|
-| **`blur_map.json`** | Often **not committed** or not generated yet. Generate with: `python3 -m pip install -r scripts/requirements.txt && python3 scripts/optimize_images.py` (can take a long time on a full `assets/images/` tree). Site degrades gracefully if missing (no WebP/blur hints). |
-| **Total size &lt; 25 MB** | After optimize, check script output; compress or exclude heavy assets if over budget |
-| **Manual QA** | Safari / Chrome / Firefox, iOS Safari, keyboard-only, `prefers-reduced-motion` |
-| **Git** | Repo may have **no commits yet** — initial commit when ready |
-| **Deploy** | Any static host; root must expose `index.html`, `manifest.json`, `assets/`, and `blur_map.json` if used |
+| Script | Role |
+|--------|------|
+| `scripts/sync_includes.py` | Pushes `templates/nav.html` + `project-toolbar.html` into every page. `--check` for CI. |
+| `scripts/build_work_index.py` | Regenerates `site/work/index.html` from `data/projects.json`. `--check` for CI. |
+| `scripts/build_head_meta.py` | Idempotently adds canonical + Open Graph + description meta to every `<head>`. `--check` for CI. |
+| `scripts/bump_cache.py` | Re-stamps `?v=HASH` on CSS/JS refs from content hashes. **Run after editing css/js.** |
+| `scripts/build_sitemap.py` | Generates `sitemap.xml`. |
 
----
-
-## Next steps (priority order)
-
-1. **Generate `blur_map.json`** (if not present) — command above; confirm file appears at repo root next to `index.html`.
-2. **Local preview** — `python3 -m http.server 8080` → open `http://127.0.0.1:8080/` and click through Work → years → projects.
-3. **Content refresh** — If live site changed, re-run `scrape_migrate.py`, then `optimize_images.py`, spot-check `manifest.json` and a few folders under `assets/images/`.
-4. **Polish / gaps** — Cross-fade consistency, any missing projects in `curated_projects.json` + `navOrder`, `dont-mind-me` has no URL slug (placeholders until a real page exists).
-5. **Commit & deploy** — Add sensible `.gitignore` (e.g. `.DS_Store`, optional local server junk) if desired; push and point DNS/hosting.
+> **Note:** `site/generate.mjs` is STALE — do not run it. The site is
+> hand-edited HTML/CSS/JS, not generated. Many other one-off scripts in
+> `scripts/` (`scrape_migrate.py`, `optimize_images.py`, archive builders) were
+> used for the original Squarespace migration and are not part of the normal
+> workflow.
 
 ---
 
-## Key paths
+## Normal edit loop
 
-| Path | Role |
-|------|------|
-| `index.html` | Entire UI |
-| `manifest.json` | Scrape output |
-| `blur_map.json` | Generated by optimize script (optional for dev until generated) |
-| `scripts/scrape_migrate.py` | Refresh from daltoncorr.com |
-| `scripts/optimize_images.py` | Image pipeline + `blur_map.json` |
-| `scripts/curated_projects.json` | Slug map + metadata for nav |
-| `assets/images/` | All raster assets |
+1. Edit `site/**.html`, `site/css/style.css`, or `site/js/main.js` directly.
+2. If you touched a shared fragment, run `python3 scripts/sync_includes.py`.
+3. If you touched `data/projects.json`, run `python3 scripts/build_work_index.py`.
+4. Run `python3 scripts/bump_cache.py` so the browser picks up css/js changes.
+5. Preview locally: `cd site && python3 -m http.server 8080` → `http://127.0.0.1:8080/`.
+6. Commit + push to `main` (GitHub Pages auto-deploys; deploy also re-runs
+   `bump_cache.py` + `build_sitemap.py` against the artifact).
+
+---
+
+## CI
+
+- `.github/workflows/lint.yml` — runs the three `--check` scripts
+  (`sync_includes`, `build_work_index`, `build_head_meta`) and a WebP size
+  budget (warns over 3 MB).
+- `.github/workflows/deploy.yml` — deploys `site/` to Pages.
+
+Both pin `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` ahead of the June 2 2026
+Node-20 deprecation.
 
 ---
 
 ## Out of scope (per original brief)
 
-Frameworks, npm, React, dark mode, hamburger menus, image hover zoom, footers, sound, decorative gradients/shadows on chrome (gallery-style restraint).
-
----
-
-*Last updated for agent handoff — replace this line when you ship a milestone.*
+Frameworks, npm, React, dark mode, hamburger menus, image hover zoom, footers,
+sound, decorative gradients/shadows on chrome (gallery-style restraint).

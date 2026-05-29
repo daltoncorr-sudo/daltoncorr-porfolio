@@ -12,24 +12,33 @@ function initSlideshow() {
   var slides = $$('.slide', wrap), cur = 0, timer;
   if (slides.length < 2) return;
 
-  // Track loaded state per slide
+  // Track loaded state per slide. A slide with no image counts as ready so it
+  // never blocks the rotation; broken images stay unready and get skipped over.
   var ready = {};
   slides.forEach(function(s, i) {
     s.classList.remove('active');
     var img = s.querySelector('img');
-    if (!img) return;
+    if (!img) { ready[i] = true; return; }
     if (img.complete && img.naturalWidth > 0) { ready[i] = true; }
-    else { img.onload = function() { ready[i] = true; }; }
+    else { img.addEventListener('load', function() { ready[i] = true; }); }
   });
 
+  // Advance toward n, scanning forward for the next ready slide so an unloaded
+  // or broken image is skipped instead of permanently stalling the show.
   function go(n) {
-    var next = (n + slides.length) % slides.length;
-    if (!ready[next]) return; // skip unloaded — stay on current
-    slides[cur].classList.remove('active');
-    cur = next;
-    slides[cur].classList.add('active');
+    var len = slides.length;
+    for (var k = 0; k < len; k++) {
+      var idx = (n + k + len) % len;
+      if (ready[idx]) {
+        if (idx === cur) return;
+        slides[cur].classList.remove('active');
+        cur = idx;
+        slides[cur].classList.add('active');
+        return;
+      }
+    }
   }
-  function start() { timer = setInterval(function() { go(cur + 1); }, 1500); }
+  function start() { stop(); timer = setInterval(function() { go(cur + 1); }, 1500); }
   function stop() { clearInterval(timer); }
 
   slides[0].classList.add('active');
@@ -49,66 +58,24 @@ function initSlideshow() {
   });
 }
 
-/* ── Filters ── */
-function initFilters() {
-  var bar = $('.filter-bar');
-  var grid = $('.work-grid');
-  if (!bar || !grid) return;
-  document.body.classList.add('is-work-grid');
-  var btns = $$('.filter-btn', bar);
-  var cards = $$('[data-filters]');
-  var dot = document.getElementById('dot');
-  var pending = null;
-  var busy = false;
-  var currentFilter = null;
+/* ── Shared card-filter engine ──
+   FLIP show/hide/move animation plus the busy/pending queue, shared by the work
+   grid and the blog grid. After toggling the active button it calls
+   decorate(f, animate) so each caller can update its own chrome (filter-group
+   open state, flydot, dot muting). */
+function createCardFilter(opts) {
+  var btns = opts.btns, cards = opts.cards, decorate = opts.decorate;
+  var cardFilters = cards.map(function(c) { return c.dataset.filters.split(' '); });
+  var pending = null, busy = false, currentFilter = null;
 
-  // Single blue dot that glides to the active filter (mobile breadcrumb).
-  var flyDot = document.createElement('span');
-  flyDot.className = 'filter-flydot';
-  bar.appendChild(flyDot);
-
-  function positionFlyDot(animate) {
-    var active = bar.querySelector('.filter-btn.active');
-    if (!active) return;
-    // Accumulate offsets up to the bar — sub buttons sit inside a transformed
-    // submenu, so their offsetParent isn't the bar directly.
-    var x = 0, y = 0, el = active;
-    while (el && el !== bar) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
-    x -= 13;
-    y += (active.offsetHeight - 6) / 2;
-    if (!animate) flyDot.style.transition = 'none';
-    flyDot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
-    if (!animate) { flyDot.offsetWidth; flyDot.style.transition = ''; }
-  }
-  window.addEventListener('resize', function () { positionFlyDot(false); });
-  window.addEventListener('load', function () { positionFlyDot(false); });
-
-  // Pre-cache filter sets per card
-  var cardFilters = cards.map(function(c) {
-    return c.dataset.filters.split(' ');
-  });
-
-  function matches(i, f) {
-    return f === 'all' || cardFilters[i].indexOf(f) !== -1;
-  }
+  function matches(i, f) { return f === 'all' || cardFilters[i].indexOf(f) !== -1; }
 
   function apply(f, animate) {
+    if (busy) { pending = f; return; }
     if (f === currentFilter) return;
     currentFilter = f;
     btns.forEach(function(b) { b.classList.toggle('active', b.dataset.filter === f); });
-    // Open the filter group that owns the active button (or close all for "All")
-    var activeBtn = bar.querySelector('.filter-btn.active');
-    var activeGroup = activeBtn ? activeBtn.closest('.filter-group') : null;
-    $$('.filter-group', bar).forEach(function(g) {
-      g.classList.toggle('is-open', g === activeGroup);
-    });
-    positionFlyDot(animate);
-    // Desktop greys the dot to signal an active filter; mobile points it at the
-    // visible active sub-item, where it stays accent-colored.
-    if (dot) {
-      var sub = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
-      dot.classList.toggle('muted', !(sub && sub.offsetParent !== null));
-    }
+    if (decorate) decorate(f, animate);
     history.replaceState(null, '', f === 'all' ? location.pathname : '#' + f);
 
     var toHide = [], toShow = [], toMove = [];
@@ -131,9 +98,7 @@ function initFilters() {
 
     // FLIP: snapshot positions of cards that will move
     var oldRects = {};
-    toMove.forEach(function(item) {
-      oldRects[item.i] = item.el.getBoundingClientRect();
-    });
+    toMove.forEach(function(item) { oldRects[item.i] = item.el.getBoundingClientRect(); });
 
     // Phase 1: exit
     if (toHide.length) {
@@ -144,21 +109,16 @@ function initFilters() {
     }
 
     function phase2() {
-      toHide.forEach(function(c) {
-        c.classList.remove('card-exiting');
-        c.classList.add('card-hidden');
-      });
+      toHide.forEach(function(c) { c.classList.remove('card-exiting'); c.classList.add('card-hidden'); });
       toShow.forEach(function(c) { c.classList.remove('card-hidden'); });
 
-      // FLIP: read new positions synchronously (getBoundingClientRect forces layout)
-      // then set inverse transform — no rAF needed for this step
+      // FLIP: read new positions synchronously, then set inverse transform.
       var moversWithDelta = [];
       toMove.forEach(function(item) {
         var old = oldRects[item.i];
         if (!old) return;
         var now = item.el.getBoundingClientRect();
-        var dx = old.left - now.left;
-        var dy = old.top - now.top;
+        var dx = old.left - now.left, dy = old.top - now.top;
         if (dx * dx + dy * dy < 1) return;
         item.el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
         moversWithDelta.push(item.el);
@@ -166,10 +126,7 @@ function initFilters() {
 
       // Single rAF: add transition class + clear transform to animate
       requestAnimationFrame(function() {
-        moversWithDelta.forEach(function(el) {
-          el.classList.add('card-moving');
-          el.style.transform = '';
-        });
+        moversWithDelta.forEach(function(el) { el.classList.add('card-moving'); el.style.transform = ''; });
 
         // Stagger entries, cap total stagger at 200ms
         var stagger = toShow.length > 1 ? Math.min(30, 200 / (toShow.length - 1)) : 0;
@@ -184,10 +141,7 @@ function initFilters() {
         var enterDur = toShow.length ? 300 + Math.round((toShow.length - 1) * stagger) : 0;
         setTimeout(function() {
           moversWithDelta.forEach(function(el) { el.classList.remove('card-moving'); });
-          toShow.forEach(function(c) {
-            c.classList.remove('card-entering');
-            c.style.animationDelay = '';
-          });
+          toShow.forEach(function(c) { c.classList.remove('card-entering'); c.style.animationDelay = ''; });
           busy = false;
           if (pending) { var p = pending; pending = null; apply(p, true); }
         }, Math.max(moveDur, enterDur) + 20);
@@ -195,22 +149,79 @@ function initFilters() {
     }
   }
 
+  return { apply: apply };
+}
+
+/* ── Filters (work grid) ── */
+function initFilters() {
+  var bar = $('.filter-bar');
+  var grid = $('.work-grid');
+  if (!bar || !grid) return;
+  document.body.classList.add('is-work-grid');
+  var btns = $$('.filter-btn', bar);
+  var cards = $$('[data-filters]');
+  var dot = document.getElementById('dot');
+
+  // Single blue dot that glides to the active filter (mobile breadcrumb).
+  var flyDot = document.createElement('span');
+  flyDot.className = 'filter-flydot';
+  bar.appendChild(flyDot);
+
+  function positionFlyDot(animate) {
+    var active = bar.querySelector('.filter-btn.active');
+    if (!active) return;
+    // Accumulate offsets up to the bar — sub buttons sit inside a transformed
+    // submenu, so their offsetParent isn't the bar directly.
+    var x = 0, y = 0, el = active;
+    while (el && el !== bar) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+    x -= 11;
+    y += (active.offsetHeight - 6) / 2;
+    if (!animate) flyDot.style.transition = 'none';
+    flyDot.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    if (!animate) { flyDot.offsetWidth; flyDot.style.transition = ''; }
+  }
+  var resizeTick = false;
+  window.addEventListener('resize', function () {
+    if (resizeTick) return;
+    resizeTick = true;
+    requestAnimationFrame(function () { resizeTick = false; positionFlyDot(false); });
+  });
+  window.addEventListener('load', function () { positionFlyDot(false); });
+
+  var engine = createCardFilter({
+    btns: btns, cards: cards,
+    decorate: function(f, animate) {
+      // Open the filter group that owns the active button (or close all for "All")
+      var activeBtn = bar.querySelector('.filter-btn.active');
+      var activeGroup = activeBtn ? activeBtn.closest('.filter-group') : null;
+      $$('.filter-group', bar).forEach(function(g) { g.classList.toggle('is-open', g === activeGroup); });
+      positionFlyDot(animate);
+      // The nav dot greys out on the work grid: blue is reserved for the filter
+      // breadcrumb (the flydot). Desktop greys it whenever a filter is active.
+      if (dot) {
+        if (isMobileNav()) {
+          dot.classList.add('muted');
+        } else {
+          var sub = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
+          dot.classList.toggle('muted', !(sub && sub.offsetParent !== null));
+        }
+      }
+    }
+  });
+
   bar.addEventListener('click', function(e) {
     var b = e.target.closest('.filter-btn');
     if (!b) return;
-    if (busy) { pending = b.dataset.filter; return; }
-    apply(b.dataset.filter, true);
+    engine.apply(b.dataset.filter, true);
   });
 
   // Mobile nav sublinks are <a href="...#visual"> on this same page, so tapping
   // them only changes the hash without reloading. Mirror that into the grid.
   window.addEventListener('hashchange', function() {
-    var f = location.hash.replace('#', '') || 'all';
-    if (busy) { pending = f; return; }
-    apply(f, true);
+    engine.apply(location.hash.replace('#', '') || 'all', true);
   });
 
-  apply(location.hash.replace('#', '') || 'all', false);
+  engine.apply(location.hash.replace('#', '') || 'all', false);
 }
 
 /* ── Sort ── */
@@ -325,48 +336,92 @@ function dotTarget() {
   if (sub && sub.offsetParent !== null) return sub;
   return document.querySelector('.nav-link.active');
 }
-function positionDot(animate) {
-  var dot = document.getElementById('dot');
-  var current = dotTarget();
-  if (!dot || !current) return;
+// Gap between the dot and the label it marks (matches the CSS breadcrumb offset).
+var DOT_GAP = 11;
+function isMobileNav() { return window.matchMedia('(max-width: 767px)').matches; }
+function isWorkGridPage() { return !!(document.querySelector('.work-grid') && document.querySelector('.filter-bar')); }
+// On mobile the top bar is horizontal and tab switching is page navigation, so
+// the dot tracks the active top-level link (sublinks navigate away).
+function dotTargetMobile() { return document.querySelector('.nav-link.active'); }
+function dotTopFor(dot, current) {
   var navTop = dot.parentElement.getBoundingClientRect().top;
   var rect = current.getBoundingClientRect();
-  var target = rect.top - navTop + rect.height / 2 - 3;
+  return rect.top - navTop + rect.height / 2 - 3;
+}
+function dotXFor(dot, current) {
+  var navLeft = dot.parentElement.getBoundingClientRect().left;
+  var rect = current.getBoundingClientRect();
+  return rect.left - navLeft - DOT_GAP;
+}
+function positionDot(animate) {
+  var dot = document.getElementById('dot');
+  if (!dot) return;
+  var mobile = isMobileNav();
+  var current = mobile ? dotTargetMobile() : dotTarget();
+  if (!current) return;
   // When the dot lands on a real sub-item it marks the active selection, so
   // keep it accent-colored instead of the grey "filtered" state.
   if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
     dot.classList.remove('muted');
   }
   if (animate) dot.classList.add('animated');
-  dot.style.top = target + 'px';
+  if (mobile) {
+    // Horizontal glide; transform keeps labels from shifting. Grey on the work
+    // grid (blue is the filter flydot), accent on every other page.
+    dot.classList.toggle('muted', isWorkGridPage());
+    dot.style.top = dotTopFor(dot, current) + 'px';
+    dot.style.transform = 'translateX(' + dotXFor(dot, current) + 'px)';
+  } else {
+    dot.style.transform = '';
+    dot.style.top = dotTopFor(dot, current) + 'px';
+  }
 }
 function initDot() {
   var dot = document.getElementById('dot');
-  var current = dotTarget();
-  if (!dot || !current) return;
-  var navTop = dot.parentElement.getBoundingClientRect().top;
-  var rect = current.getBoundingClientRect();
-  var target = rect.top - navTop + rect.height / 2 - 3;
+  if (!dot) return;
+  var mobile = isMobileNav();
+  var current = mobile ? dotTargetMobile() : dotTarget();
+  if (!current) return;
   if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
     dot.classList.remove('muted');
   }
-  var from = sessionStorage.getItem('dotTop');
-  if (from !== null) {
-    dot.style.top = from + 'px';
-    requestAnimationFrame(function() {
+  if (mobile) {
+    dot.classList.toggle('muted', isWorkGridPage());
+    var targetX = dotXFor(dot, current);
+    dot.style.top = dotTopFor(dot, current) + 'px';
+    var fromX = sessionStorage.getItem('dotX');
+    if (fromX !== null) {
+      dot.style.transform = 'translateX(' + fromX + 'px)';
       requestAnimationFrame(function() {
-        dot.classList.add('animated');
-        dot.style.top = target + 'px';
+        requestAnimationFrame(function() {
+          dot.classList.add('animated');
+          dot.style.transform = 'translateX(' + targetX + 'px)';
+        });
       });
+    } else {
+      dot.style.transform = 'translateX(' + targetX + 'px)';
+    }
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.nav-link')) sessionStorage.setItem('dotX', String(targetX));
     });
   } else {
-    dot.style.top = target + 'px';
-  }
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.nav-link')) {
-      sessionStorage.setItem('dotTop', String(target));
+    var target = dotTopFor(dot, current);
+    var from = sessionStorage.getItem('dotTop');
+    if (from !== null) {
+      dot.style.top = from + 'px';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          dot.classList.add('animated');
+          dot.style.top = target + 'px';
+        });
+      });
+    } else {
+      dot.style.top = target + 'px';
     }
-  });
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.nav-link')) sessionStorage.setItem('dotTop', String(target));
+    });
+  }
 }
 
 /* ── Helpers ── */
@@ -410,12 +465,18 @@ function initStickyCards() {
     document.body.appendChild(bar);
 
     var barVisible = false;
+    var scrollTick = false;
     window.addEventListener('scroll', function() {
-      var show = card.getBoundingClientRect().bottom < 0;
-      if (show !== barVisible) {
-        barVisible = show;
-        bar.classList.toggle('visible', show);
-      }
+      if (scrollTick) return;
+      scrollTick = true;
+      requestAnimationFrame(function() {
+        scrollTick = false;
+        var show = card.getBoundingClientRect().bottom < 0;
+        if (show !== barVisible) {
+          barVisible = show;
+          bar.classList.toggle('visible', show);
+        }
+      });
     }, { passive: true });
   }
 
@@ -446,92 +507,17 @@ function initBlogFilters() {
   var btns = $$('.filter-btn', bar);
   var cards = $$('[data-filters]', grid);
   var dot = document.getElementById('dot');
-  var pending = null;
-  var busy = false;
-  var currentFilter = null;
 
-  var cardFilters = cards.map(function(c) {
-    return c.dataset.filters.split(' ');
+  var engine = createCardFilter({
+    btns: btns, cards: cards,
+    decorate: function() { if (dot) dot.classList.add('muted'); }
   });
-
-  function matches(i, f) {
-    return f === 'all' || cardFilters[i].indexOf(f) !== -1;
-  }
-
-  function apply(f, animate) {
-    if (f === currentFilter) return;
-    currentFilter = f;
-    btns.forEach(function(b) { b.classList.toggle('active', b.dataset.filter === f); });
-    if (dot) dot.classList.add('muted');
-    history.replaceState(null, '', f === 'all' ? location.pathname : '#' + f);
-
-    var toHide = [], toShow = [], toMove = [];
-    cards.forEach(function(c, i) {
-      var m = matches(i, f);
-      var visible = !c.classList.contains('card-hidden');
-      if (visible && !m) toHide.push(c);
-      else if (!visible && m) toShow.push(c);
-      else if (visible && m) toMove.push({ el: c, i: i });
-    });
-
-    if (!animate || (!toHide.length && !toShow.length)) {
-      toHide.forEach(function(c) { c.classList.add('card-hidden'); });
-      toShow.forEach(function(c) { c.classList.remove('card-hidden'); });
-      return;
-    }
-
-    busy = true;
-    var oldRects = {};
-    toMove.forEach(function(item) { oldRects[item.i] = item.el.getBoundingClientRect(); });
-
-    if (toHide.length) {
-      toHide.forEach(function(c) { c.classList.add('card-exiting'); });
-      onceTransition(toHide[0], 'opacity', 270, phase2);
-    } else {
-      phase2();
-    }
-
-    function phase2() {
-      toHide.forEach(function(c) { c.classList.remove('card-exiting'); c.classList.add('card-hidden'); });
-      toShow.forEach(function(c) { c.classList.remove('card-hidden'); });
-
-      var moversWithDelta = [];
-      toMove.forEach(function(item) {
-        var old = oldRects[item.i];
-        if (!old) return;
-        var now = item.el.getBoundingClientRect();
-        var dx = old.left - now.left, dy = old.top - now.top;
-        if (dx * dx + dy * dy < 1) return;
-        item.el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
-        moversWithDelta.push(item.el);
-      });
-
-      requestAnimationFrame(function() {
-        moversWithDelta.forEach(function(el) { el.classList.add('card-moving'); el.style.transform = ''; });
-        var stagger = toShow.length > 1 ? Math.min(30, 200 / (toShow.length - 1)) : 0;
-        toShow.forEach(function(c, i) {
-          var delay = Math.round(i * stagger);
-          c.style.animationDelay = delay ? delay + 'ms' : '';
-          c.classList.add('card-entering');
-        });
-        var moveDur = moversWithDelta.length ? 350 : 0;
-        var enterDur = toShow.length ? 300 + Math.round((toShow.length - 1) * stagger) : 0;
-        setTimeout(function() {
-          moversWithDelta.forEach(function(el) { el.classList.remove('card-moving'); });
-          toShow.forEach(function(c) { c.classList.remove('card-entering'); c.style.animationDelay = ''; });
-          busy = false;
-          if (pending) { var p = pending; pending = null; apply(p, true); }
-        }, Math.max(moveDur, enterDur) + 20);
-      });
-    }
-  }
 
   bar.addEventListener('click', function(e) {
     var b = e.target.closest('.filter-btn');
     if (!b) return;
     e.preventDefault();
-    if (busy) { pending = b.dataset.filter; return; }
-    apply(b.dataset.filter, true);
+    engine.apply(b.dataset.filter, true);
   });
 
   // Blog nav link hover shows toolbar
@@ -544,7 +530,7 @@ function initBlogFilters() {
   toolbar.addEventListener('mouseenter', show);
   toolbar.addEventListener('mouseleave', scheduleHide);
 
-  apply(location.hash.replace('#', '') || 'all', false);
+  engine.apply(location.hash.replace('#', '') || 'all', false);
 }
 
 /* ── Admin reorder (Shift+Ctrl+E) ── */

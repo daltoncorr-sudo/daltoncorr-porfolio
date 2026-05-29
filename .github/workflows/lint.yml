@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  # Force Node.js 24 for all JS actions ahead of the June 2 2026 default flip.
+  # GitHub deprecated Node 20 actions; this opts us in across all checkout/pages/deploy actions
+  # without having to bump each action version individually. See:
+  # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
 
@@ -20,6 +27,9 @@ jobs:
 
       - name: Confirm work/index.html matches projects.json
         run: python3 scripts/build_work_index.py --check
+
+      - name: Confirm every page has canonical + Open Graph meta
+        run: python3 scripts/build_head_meta.py --check
 
       - name: Image size budget — flag any WebP > 3 MB
         run: |
