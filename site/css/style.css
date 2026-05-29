@@ -133,14 +133,14 @@ body.is-work-grid .filter-btn.active::before {
 .nav-submenu { display: none; }
 
 @media (max-width: 767px) {
-  :root { --topbar-h: 69px; }
+  :root { --topbar-h: 63px; }
 
   /* Just the menus (no border chrome), frozen at the top while scrolling. */
   .nav {
     flex-direction: row; align-items: center; justify-content: center;
     width: 100%; height: auto;
     position: sticky; top: 0; z-index: 99;
-    padding: 1.5rem 1.5rem 1.25rem;
+    padding: 1.5rem 1.5rem 0.875rem;
     background: var(--bg); border-bottom: none;
   }
   .nav > div { display: flex; flex: 1; justify-content: center; }
@@ -155,14 +155,24 @@ body.is-work-grid .filter-btn.active::before {
 
   /* Tapping "Work" off the work page reveals its submenu as a centered row
      dropping below the top bar — no navigation until a filter is picked. */
-  body.is-nav-work-open .nav-submenu--work {
+  .nav-submenu--work {
     display: flex;
     position: absolute;
     top: 100%; left: 0; right: 0;
     flex-direction: row; align-items: center; justify-content: center;
     gap: 2rem;
-    margin: 0; padding: 0 1.5rem 1.25rem;
+    margin: 0; padding: 0.375rem 1.5rem 1.25rem;
     background: var(--bg); list-style: none;
+    opacity: 0; visibility: hidden; transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease),
+                visibility 0s linear 0.3s;
+  }
+  body.is-nav-work-open .nav-submenu--work {
+    opacity: 1; visibility: visible; transform: translateY(0);
+    pointer-events: auto;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease),
+                visibility 0s;
   }
   body.is-nav-work-open .nav-submenu--work > li { margin: 0; }
   body.is-nav-work-open .nav-submenu--work .nav-submenu { display: none; }
@@ -185,14 +195,22 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-bar {
     display: flex; flex-wrap: wrap; flex-direction: row;
     justify-content: center; align-items: center;
-    gap: 0.85rem 2rem; padding-top: 0;
+    gap: 1.35rem 2rem; padding-top: 0;
   }
   .work-toolbar .filter-group { display: contents; }
   .work-toolbar .filter-submenu {
     order: 1; flex-basis: 100%;
-    flex-direction: row; flex-wrap: wrap;
-    justify-content: center; gap: 1.75rem;
+    flex-direction: row; flex-wrap: nowrap;
+    justify-content: center; gap: 1rem;
     max-height: none; overflow: visible;
+    margin-bottom: 0.75rem;
+  }
+  .work-toolbar .filter-group.is-open .filter-submenu {
+    animation: submenuIn 0.3s var(--ease) both;
+  }
+  @keyframes submenuIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   .work-toolbar .filter-btn,
   .work-toolbar .filter-btn.filter-sub { font-size: 0.875rem; font-weight: 400; padding: 0; white-space: nowrap; }
@@ -204,25 +222,6 @@ body.is-work-grid .filter-btn.active::before {
   .work-toolbar .filter-btn.active { color: var(--text); }
   .work-toolbar .sort-toggle { display: none; }
 
-  /* Sort lives in a fixed bar pinned to the bottom of the viewport. */
-  body.is-work-grid .sort-bar {
-    display: flex; flex-direction: row; align-items: center; justify-content: center;
-    gap: 1.5rem;
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 98;
-    padding: 0.85rem 1.5rem calc(0.85rem + env(safe-area-inset-bottom));
-    background: var(--bg);
-  }
-  .sort-bar .sort-bar-label {
-    font-size: 0.875rem; font-weight: 400; color: #999;
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .sort-bar .sort-opt {
-    font-size: 0.875rem; font-weight: 400; color: var(--text);
-    padding: 0; white-space: nowrap;
-  }
-  /* Leave room so the last grid row clears the fixed sort bar. */
-  body.is-work-grid .work-grid { padding-bottom: 4.5rem; }
-
   /* Breadcrumb dots on the LEFT of each label. A blue dot marks the active
      leaf; grey dots mark its ancestors in the menu tree (e.g. Work shows a
      grey dot while a Visual sub-filter is selected). */
@@ -231,12 +230,10 @@ body.is-work-grid .filter-btn.active::before {
   body:not(.is-work-grid) .nav-link.active,
   body.is-work-grid .nav-link.active,
   body.is-work-grid .filter-btn.active,
-  body.is-work-grid .sort-opt.active,
   body.is-work-grid .filter-group.is-open > .filter-btn { position: relative; padding-left: 9px; }
   body:not(.is-work-grid) .nav-link.active::after,
   body.is-work-grid .nav-link.active::after,
   body.is-work-grid .filter-btn.active::after,
-  body.is-work-grid .sort-opt.active::after,
   body.is-work-grid .filter-group.is-open > .filter-btn:not(.active)::after {
     content: ''; position: absolute; left: 0; top: 50%;
     transform: translateY(-50%);
@@ -244,7 +241,6 @@ body.is-work-grid .filter-btn.active::before {
   }
   /* Blue = active leaf */
   body:not(.is-work-grid) .nav-link.active::after,
-  body.is-work-grid .sort-opt.active::after,
   body.is-work-grid .filter-btn.active::after { background: var(--accent); }
   /* Grey = ancestor in the active tree */
   body.is-work-grid .nav-link.active::after,
@@ -287,8 +283,6 @@ body.is-work-grid .filter-btn.active::before {
   display: block; margin-top: 1rem; text-align: left;
   padding: 0.25rem 0 0.25rem 0.875rem; font-size: 0.9375rem;
 }
-/* Mobile-only sort bar (fixed at the bottom); hidden on desktop. */
-.sort-bar { display: none; }
 
 /* Filter submenus (Design/Music groups expand below) */
 .filter-group { display: flex; flex-direction: column; }

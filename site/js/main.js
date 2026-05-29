@@ -193,10 +193,8 @@ function initFilters() {
 
 /* ── Sort ── */
 function initSort() {
-  var grid = $('.work-grid');
-  if (!grid) return;
-  var btn = $('.sort-toggle');
-  var opts = $$('.sort-opt');
+  var btn = $('.sort-toggle'), grid = $('.work-grid');
+  if (!btn || !grid) return;
   var byYear = false;
   function applySort() {
     [].slice.call(grid.children).sort(function(a, b) {
@@ -205,16 +203,11 @@ function initSort() {
         : (parseInt(a.dataset.sortOrder) || 0) - (parseInt(b.dataset.sortOrder) || 0);
     }).forEach(function(el) { grid.appendChild(el); });
   }
-  function setMode(yr) {
-    byYear = yr;
-    if (btn) btn.textContent = byYear ? 'Sort: Chronological' : 'Sort: Default';
-    opts.forEach(function(o) { o.classList.toggle('active', (o.dataset.sort === 'year') === byYear); });
+  applySort();
+  btn.addEventListener('click', function() {
+    byYear = !byYear;
+    btn.textContent = byYear ? 'Sort: Chronological' : 'Sort: Default';
     applySort();
-  }
-  setMode(false);
-  if (btn) btn.addEventListener('click', function() { setMode(!byYear); });
-  opts.forEach(function(o) {
-    o.addEventListener('click', function() { setMode(o.dataset.sort === 'year'); });
   });
 }
 
