@@ -70,10 +70,10 @@ cd site && python3 -m http.server 8080
 
 ## Conventions & gotchas (read before editing)
 
-- **`site/generate.mjs` is STALE — never run it.** The site is hand-edited
-  HTML/CSS/JS, not generated. Many other one-off scripts in `scripts/`
-  (`scrape_migrate.py`, `optimize_images.py`, etc.) were for the original
-  Squarespace migration and aren't part of the normal workflow.
+- **The site is hand-edited HTML/CSS/JS, not generated.** `scripts/` now holds
+  only the five build/maintenance scripts listed above; the old one-off
+  Squarespace-migration scripts (`scrape_migrate.py`, the `optimize_*`/archive
+  builders, etc.) have been removed.
 - **Always cache-bust after css/js edits** (`scripts/bump_cache.py`), or changes
   won't show up in the browser.
 - **`.project-gallery` is a 2-up CSS grid, NOT `columns:`.** It must read

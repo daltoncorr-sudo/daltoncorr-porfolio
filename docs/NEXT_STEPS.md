@@ -33,11 +33,10 @@ files directly, then re-stamp the hashes (see below).
 | `scripts/bump_cache.py` | Re-stamps `?v=HASH` on CSS/JS refs from content hashes. **Run after editing css/js.** |
 | `scripts/build_sitemap.py` | Generates `sitemap.xml`. |
 
-> **Note:** `site/generate.mjs` is STALE — do not run it. The site is
-> hand-edited HTML/CSS/JS, not generated. Many other one-off scripts in
-> `scripts/` (`scrape_migrate.py`, `optimize_images.py`, archive builders) were
-> used for the original Squarespace migration and are not part of the normal
-> workflow.
+> **Note:** the site is hand-edited HTML/CSS/JS, not generated. `scripts/` now
+> contains only the five build/maintenance scripts above; the old one-off
+> Squarespace-migration scripts (`scrape_migrate.py`, `optimize_*`, archive
+> builders) have been removed.
 
 ---
 
