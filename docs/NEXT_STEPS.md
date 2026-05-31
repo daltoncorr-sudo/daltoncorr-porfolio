@@ -64,6 +64,43 @@ Node-20 deprecation.
 
 ---
 
+## Punch list — content completeness pass (started 2026-05-31)
+
+From a page-by-page review. **Skip entirely:** weissman, hollyshorts-21,
+dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
+
+### ✅ Done
+- **Little Issues** — poster centered (`poster-hero-wrap` + `project-gallery poster-hero`).
+- **Nice Knives** — poster centered (same pattern).
+- **Survived By** — poster centered (same pattern).
+
+### 🔨 Layout/code — doable without new assets (pending decision)
+- **Let This Feeling Go** — posters "crossed" (wrong order or two near-dup files
+  swapped: `Poster-5-title-copy-2-8c4f31` vs `Poster-5-title-copy-f24903`).
+  Grid also square-crops posters via `object-fit:cover` — likely the real bug.
+  Needs Dalton to confirm correct order / which images.
+
+### 📥 Needs content from Dalton (links or image files)
+- **Nice Knives** — add Score link + short-film link.
+- **Boys Will Be Flowers** — add Score link + short-film link.
+- **No Regrets Remix** — "Listen" section exists but is empty; add music embed.
+- **Leave Me Alone** — add song + video.
+- **Into the Ether** — ⚠️ NO PAGE EXISTS yet (not in projects.json or work/).
+  Needs page built + score + podcast links.
+- **Welcome Home** — add Work-in-Progress shots.
+- **Survived By** — add Work-in-Progress shots.
+- **Let This Feeling Go** — build Work-in-Progress section.
+- **HollyShorts London 2025** — updates (specifics TBD).
+- **HollyShorts Dubai** — refresh (specifics TBD).
+- **HDtracks** — refresh (specifics TBD).
+- **All music pages** — add links to the music / videos (sweep).
+
+> Embed pattern (copy from `on-strings.html`): a `project-section` containing
+> `<div class="project-media"><iframe …></iframe></div>`. WIP/process sections:
+> copy from `dont-let-them-out.html` or `hollyshorts-21.html`.
+
+---
+
 ## Out of scope (per original brief)
 
 Frameworks, npm, React, dark mode, hamburger menus, image hover zoom, footers,
