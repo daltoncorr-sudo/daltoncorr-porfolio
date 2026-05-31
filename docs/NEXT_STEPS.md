@@ -71,8 +71,19 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
 
 ### ✅ Done
 - **Little Issues** — poster centered (`poster-hero-wrap` + `project-gallery poster-hero`).
-- **Nice Knives** — poster centered (same pattern).
+- **Nice Knives** (poster page) — poster centered; page is poster-ONLY by design.
+- **Nice Knives (Film Score)** (`nice-knives-score.html`) — added SoundCloud score
+  embed + YouTube trailer. NOTE: poster + score are two separate pages; keep
+  music/links on the score page, not the poster page.
 - **Survived By** — poster centered (same pattern).
+- **Boys Will Be Flowers** — added film (Vimeo) + score (SoundCloud) side by side.
+
+### 🎬 GLOBAL LAYOUT RULE — film + music side by side
+On every music/score page, video goes LEFT, music RIGHT, side by side
+(stacks on mobile). Use class `media-split` with children `media-video`
+(16:9 wrapper) + `media-audio` (SoundCloud at 300px). CSS lives in
+`style.css` under "Film + score side by side". Applied so far:
+`nice-knives-score.html`, `boys-will-be-flowers.html`.
 
 ### 🔨 Layout/code — doable without new assets (pending decision)
 - **Let This Feeling Go** — posters "crossed" (wrong order or two near-dup files
@@ -81,8 +92,6 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
   Needs Dalton to confirm correct order / which images.
 
 ### 📥 Needs content from Dalton (links or image files)
-- **Nice Knives** — add Score link + short-film link.
-- **Boys Will Be Flowers** — add Score link + short-film link.
 - **No Regrets Remix** — "Listen" section exists but is empty; add music embed.
 - **Leave Me Alone** — add song + video.
 - **Into the Ether** — ⚠️ NO PAGE EXISTS yet (not in projects.json or work/).
