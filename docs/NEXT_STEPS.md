@@ -77,6 +77,11 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
   music/links on the score page, not the poster page.
 - **Survived By** — poster centered (same pattern).
 - **Boys Will Be Flowers** — added film (Vimeo) + score (SoundCloud) side by side.
+- **After The Show** — NEW project added (original-music, 2019). Created
+  `work/after-the-show.html` (SoundCloud EP player + Spotify/Apple links),
+  registered in `projects.json`, cover art pulled from Apple catalog →
+  `images/design/after-the-show/cover.webp`, grid rebuilt. TODO: confirm the
+  "Et Music Pour Tous" press outlet spelling + add its link if there is one.
 
 ### 🎬 GLOBAL LAYOUT RULE — film + music side by side
 On every music/score page, video goes LEFT, music RIGHT, side by side

@@ -695,6 +695,22 @@
     "alt": "I Think Of You"
   },
   {
+    "slug": "after-the-show",
+    "sort": 30,
+    "year": 2019,
+    "filters": [
+      "music",
+      "original-music"
+    ],
+    "title": "After The Show",
+    "role": "Writer, Producer &amp; Performer",
+    "tags": [
+      "Music"
+    ],
+    "image": "../images/design/after-the-show/cover.webp",
+    "alt": "After The Show EP cover"
+  },
+  {
     "slug": "leave-me-alone",
     "sort": 11,
     "year": 2019,
