@@ -77,6 +77,8 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
   music/links on the score page, not the poster page.
 - **Survived By** — poster centered (same pattern).
 - **Boys Will Be Flowers** — added film (Vimeo) + score (SoundCloud) side by side.
+- **No Regrets Remix** — filled empty Listen box: streaming links + clean
+  SoundCloud player (compact, centered).
 - **After The Show** — NEW project added (original-music, 2016; Apple/Spotify
   streaming re-up is dated 2019). Created
   `work/after-the-show.html` (centered compact SoundCloud player; Apple/Spotify/
@@ -99,7 +101,6 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
   Needs Dalton to confirm correct order / which images.
 
 ### 📥 Needs content from Dalton (links or image files)
-- **No Regrets Remix** — "Listen" section exists but is empty; add music embed.
 - **Leave Me Alone** — add song + video.
 - **Into the Ether** — ⚠️ NO PAGE EXISTS yet (not in projects.json or work/).
   Needs page built + score + podcast links.
@@ -114,6 +115,14 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
 > Embed pattern (copy from `on-strings.html`): a `project-section` containing
 > `<div class="project-media"><iframe …></iframe></div>`. WIP/process sections:
 > copy from `dont-let-them-out.html` or `hollyshorts-21.html`.
+>
+> ⚠️ SOUNDCLOUD GOTCHA: the iframe code from SoundCloud's share dialog pastes a
+> MALFORMED id (`…/playlists/soundcloud:playlists:ID`) that collapses a playlist
+> to just its first track. Always get the correct embed from the oEmbed API:
+> `curl "https://soundcloud.com/oembed?format=json&url=<set-or-track-page-url>"`
+> → use the clean `url=https%3A%2F%2Fapi.soundcloud.com%2Fplaylists%2FID` (private
+> sets append `&secret_token=s-XXXX` as a SEPARATE param). Tracks: `…/tracks/ID`.
+> Fixed so far: after-the-show, nice-knives-score, boys-will-be-flowers.
 
 ---
 
