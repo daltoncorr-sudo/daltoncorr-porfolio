@@ -118,8 +118,8 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
   Sweep result 2026-05-31:
   - Original music: baxter, dizzy, future-is-ow, higher, i-think-of-you,
     live-from-prague
-  - Film scores: alchemy, brake-my-heel, cheeky, composition-reel-2022,
-    composition-reel-2025, gazoo
+  - Film scores: alchemy, brake-my-heel, cheeky, gazoo
+  - (composition-reel-2022 + 2025 DONE — YouTube reels added 2026-05-31)
   - DONE/has media: after-the-show, leave-me-alone, no-regrets-remix,
     boys-will-be-flowers, dont-mind-me, kid-nicoleman, nice-knives-score,
     on-strings, paper-rose, tan-paints-tenderloin
