@@ -114,7 +114,15 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
 - **HollyShorts London 2025** — updates (specifics TBD).
 - **HollyShorts Dubai** — refresh (specifics TBD).
 - **HDtracks** — refresh (specifics TBD).
-- **All music pages** — add links to the music / videos (sweep).
+- **Bare music pages** (no player/links yet — need embeds or files from Dalton).
+  Sweep result 2026-05-31:
+  - Original music: baxter, dizzy, future-is-ow, higher, i-think-of-you,
+    live-from-prague
+  - Film scores: alchemy, brake-my-heel, cheeky, composition-reel-2022,
+    composition-reel-2025, gazoo
+  - DONE/has media: after-the-show, leave-me-alone, no-regrets-remix,
+    boys-will-be-flowers, dont-mind-me, kid-nicoleman, nice-knives-score,
+    on-strings, paper-rose, tan-paints-tenderloin
 
 > Embed pattern (copy from `on-strings.html`): a `project-section` containing
 > `<div class="project-media"><iframe …></iframe></div>`. WIP/process sections:
