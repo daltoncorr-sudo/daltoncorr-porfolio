@@ -116,7 +116,7 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
 - **HDtracks** — refresh (specifics TBD).
 - **Bare music pages** (no player/links yet — need embeds or files from Dalton).
   Sweep result 2026-05-31:
-  - Original music: baxter, dizzy, future-is-ow, higher, i-think-of-you,
+  - Original music: baxter, future-is-ow, higher, i-think-of-you,
     live-from-prague
   - Film scores: alchemy, brake-my-heel, cheeky, gazoo
   - (composition-reel-2022 + 2025 DONE — YouTube reels added 2026-05-31)
