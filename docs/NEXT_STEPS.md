@@ -79,6 +79,11 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
 - **Boys Will Be Flowers** — added film (Vimeo) + score (SoundCloud) side by side.
 - **No Regrets Remix** — filled empty Listen box: streaming links + clean
   SoundCloud player (compact, centered).
+- **Leave Me Alone** — self-hosted music video (video only; song skipped per
+  Dalton). Source `Creative/By Year/2023/Leave Me Alone/Leave Me Alone.mp4`
+  (26 MB) compressed via ffmpeg 2-pass → `site/media/leave-me-alone.mp4`
+  (7.5 MB, 1080×720). HTML5 `<video>` + poster still. NOTE: this is the FIRST
+  self-hosted video — new `site/media/` dir + `.project-media video` CSS rule.
 - **After The Show** — NEW project added (original-music, 2016; Apple/Spotify
   streaming re-up is dated 2019). Created
   `work/after-the-show.html` (centered compact SoundCloud player; Apple/Spotify/
@@ -101,7 +106,6 @@ On every music/score page, video goes LEFT, music RIGHT, side by side
   Needs Dalton to confirm correct order / which images.
 
 ### 📥 Needs content from Dalton (links or image files)
-- **Leave Me Alone** — add song + video.
 - **Into the Ether** — ⚠️ NO PAGE EXISTS yet (not in projects.json or work/).
   Needs page built + score + podcast links.
 - **Welcome Home** — add Work-in-Progress shots.
