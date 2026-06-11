@@ -29,6 +29,8 @@ BASE = "https://daltoncorr.com"
 
 # 404 is noindex (no canonical wanted); press is a redirect stub.
 SKIP = {"site/404.html", "site/press.html"}
+# Unlisted client demos — self-contained pages, noindex, no canonical/OG wanted.
+SKIP_DIRS = {"site/experiments"}
 
 DEFAULT_DESC = (
     "Dalton Corr is a multidisciplinary creative working across film, music, "
@@ -119,6 +121,8 @@ def run(check: bool = False) -> int:
     for page in sorted(SITE.rglob("*.html")):
         rel = page.relative_to(SITE).as_posix()
         if f"site/{rel}" in SKIP:
+            continue
+        if any(f"site/{rel}".startswith(d + "/") for d in SKIP_DIRS):
             continue
         txt = page.read_text()
         block = build_block(rel, txt)

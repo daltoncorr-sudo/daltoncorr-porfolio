@@ -39,6 +39,8 @@ TOOLBAR_RE = re.compile(r"  <div class=\"work-toolbar\">.*?</div>\s*</div>", re.
 
 # Pages that have a custom nav/toolbar — leave them alone.
 NAV_SKIP = {"site/404.html"}
+# Unlisted client demos — standalone pages with no site nav at all.
+SKIP_DIRS = {"site/experiments"}
 TOOLBAR_SKIP = {"site/index.html", "site/work/index.html", "site/404.html"}
 
 
@@ -84,6 +86,8 @@ def sync(dry_run: bool = False, check: bool = False) -> int:
     changes = 0
     for page in sorted(SITE.rglob("*.html")):
         rel = page.relative_to(ROOT).as_posix()
+        if any(rel.startswith(d + "/") for d in SKIP_DIRS):
+            continue
         txt = page.read_text()
         orig = txt
 

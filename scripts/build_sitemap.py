@@ -3,7 +3,8 @@
 Generate site/sitemap.xml from every .html file in site/.
 
 Skipped: 404.html (handled separately by GH Pages), files in /blog (per memory:
-  blog is currently hidden behind robots disallow), and press.html (redirect stub).
+  blog is currently hidden behind robots disallow), press.html (redirect stub),
+  and /experiments (unlisted client demos — never advertised in the sitemap).
 
 Run:  python3 scripts/build_sitemap.py
 """
@@ -18,7 +19,7 @@ SITE = ROOT / "site"
 BASE = "https://daltoncorr.com"
 
 SKIP = {"site/404.html", "site/press.html"}
-SKIP_DIRS = {"site/blog"}
+SKIP_DIRS = {"site/blog", "site/experiments"}
 
 
 def url_for(p: Path) -> str:
