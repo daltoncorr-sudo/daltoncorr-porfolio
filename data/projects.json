@@ -1,5 +1,22 @@
 [
   {
+    "slug": "a-promessa",
+    "sort": 2,
+    "year": 2025,
+    "filters": [
+      "music",
+      "film-score"
+    ],
+    "title": "A Promessa",
+    "role": "Composer",
+    "tags": [
+      "Music",
+      "Film Scores"
+    ],
+    "image": "../images/design/a-promessa/cover.webp",
+    "alt": "A Promessa &mdash; SIC TV novela poster"
+  },
+  {
     "slug": "weissman",
     "sort": 0,
     "year": 2025,
