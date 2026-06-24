@@ -44,11 +44,20 @@ SKIP_DIRS = {"site/experiments"}
 TOOLBAR_SKIP = {"site/index.html", "site/work/index.html", "site/404.html"}
 
 
+def _pretty(rel: str) -> str:
+    """Drop .html for clean URLs; index.html collapses to its directory."""
+    if rel.endswith("index.html"):
+        return rel[: -len("index.html")]
+    if rel.endswith(".html"):
+        return rel[: -len(".html")]
+    return rel
+
+
 def relpath(from_file: Path, to_file: Path) -> str:
     """Compute web-relative href from one file to another inside site/."""
     depth = len(from_file.relative_to(SITE).parts) - 1
     prefix = "../" * depth
-    return prefix + to_file.relative_to(SITE).as_posix()
+    return (prefix + _pretty(to_file.relative_to(SITE).as_posix())) or "./"
 
 
 def build_nav(page: Path) -> str:

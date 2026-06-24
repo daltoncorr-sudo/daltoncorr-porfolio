@@ -63,7 +63,7 @@ def render_card(p: dict) -> str:
     tags = "".join(f"<span>{t}</span>" for t in p["tags"])
     filters = " ".join(p["filters"])
     return (
-        f'        <a href="{p["slug"]}.html" class="project-card" '
+        f'        <a href="{p["slug"]}" class="project-card" '
         f'data-sort-order="{p["sort"]}" data-year="{p["year"]}" '
         f'data-filters="{filters}">\n'
         f"          {card_image(p)}\n"

@@ -62,6 +62,8 @@ def url_for(rel: str) -> str:
         return BASE + "/"
     if rel.endswith("/index.html"):
         return f"{BASE}/{rel[:-len('index.html')]}"
+    if rel.endswith(".html"):
+        return f"{BASE}/{rel[:-len('.html')]}"
     return f"{BASE}/{rel}"
 
 
