@@ -78,21 +78,26 @@ sup { font-size: 0.7em; vertical-align: super; }
 }
 .nav-footer { font-size: 1rem; white-space: nowrap; }
 
-/* Blue dot indicator */
-.dot {
+/* Blue dot indicator — anchored to the active link in pure CSS so its position
+   is correct by construction. No JS measurement, so it can't land in the wrong
+   place due to load / resize / zoom / bfcache timing. The old JS-driven #dot is
+   retired (hidden). */
+.dot { display: none; }
+
+.nav-link.active::before {
+  content: '';
   position: absolute;
   left: 2px;
+  top: 50%;
+  margin-top: -3px;
   width: 6px;
   height: 6px;
-  background: var(--accent);
   border-radius: 50%;
+  background: var(--accent);
   pointer-events: none;
-  will-change: top;
 }
-.dot.animated {
-  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* On the work grid, blue is reserved for the filter breadcrumb (flydot). */
+body.is-work-grid .nav-link.active::before { background: #C4C4C4; }
 
 /* Filter dot indicator */
 .filter-btn::before {
@@ -686,7 +691,7 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   /* Filtering uses centered rows below; drop the vertical tree and old dots */
   .nav-submenu { display: none; }
   .nav-links { position: relative; }
-  .dot { display: block; left: 0; }
+  .nav-link.active::before { left: -11px; }
   .nav-dot-active::before, .nav-dot-ancestor::before { content: none; }
 
   /* Tapping "Work" off the work page reveals its submenu as a centered row

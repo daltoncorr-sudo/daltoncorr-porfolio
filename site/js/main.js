@@ -328,146 +328,10 @@ function initMobileWorkMenu() {
 }
 
 /* ── Blue dot ── */
-// On mobile the submenu is visible, so point the dot at the active sub-item
-// (e.g. "Illustration") rather than the top-level "Work". Falls back to the
-// top-level link on desktop, where submenus are display:none (offsetParent null).
-function dotTarget() {
-  var sub = document.querySelector('.nav-sublink.is-active, .nav-subsublink.is-active');
-  if (sub && sub.offsetParent !== null) return sub;
-  return document.querySelector('.nav-link.active');
-}
-// Gap between the dot and the label it marks (matches the CSS breadcrumb offset).
-var DOT_GAP = 11;
+// The active-nav dot lives entirely in CSS (.nav-link.active::before), so there
+// is no JS measurement to mistime — it is correct on load, resize, zoom, and
+// back/forward by construction. isMobileNav stays; the work-grid filter uses it.
 function isMobileNav() { return window.matchMedia('(max-width: 767px)').matches; }
-function isWorkGridPage() { return !!(document.querySelector('.work-grid') && document.querySelector('.filter-bar')); }
-// On mobile the top bar is horizontal and tab switching is page navigation, so
-// the dot tracks the active top-level link (sublinks navigate away).
-function dotTargetMobile() { return document.querySelector('.nav-link.active'); }
-function dotTopFor(dot, current) {
-  var navTop = dot.parentElement.getBoundingClientRect().top;
-  var rect = current.getBoundingClientRect();
-  return rect.top - navTop + rect.height / 2 - 3;
-}
-function dotXFor(dot, current) {
-  var navLeft = dot.parentElement.getBoundingClientRect().left;
-  var rect = current.getBoundingClientRect();
-  return rect.left - navLeft - DOT_GAP;
-}
-function positionDot(animate) {
-  var dot = document.getElementById('dot');
-  if (!dot) return;
-  var mobile = isMobileNav();
-  var current = mobile ? dotTargetMobile() : dotTarget();
-  if (!current) return;
-  // When the dot lands on a real sub-item it marks the active selection, so
-  // keep it accent-colored instead of the grey "filtered" state.
-  if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
-    dot.classList.remove('muted');
-  }
-  if (animate) dot.classList.add('animated');
-  if (mobile) {
-    // Horizontal glide; transform keeps labels from shifting. Grey on the work
-    // grid (blue is the filter flydot), accent on every other page.
-    dot.classList.toggle('muted', isWorkGridPage());
-    dot.style.top = dotTopFor(dot, current) + 'px';
-    dot.style.transform = 'translateX(' + dotXFor(dot, current) + 'px)';
-  } else {
-    dot.style.transform = '';
-    dot.style.top = dotTopFor(dot, current) + 'px';
-  }
-}
-function initDot() {
-  var dot = document.getElementById('dot');
-  if (!dot) return;
-  var mobile = isMobileNav();
-  var current = mobile ? dotTargetMobile() : dotTarget();
-  if (!current) return;
-  if (current.classList.contains('nav-sublink') || current.classList.contains('nav-subsublink')) {
-    dot.classList.remove('muted');
-  }
-  if (mobile) {
-    dot.classList.toggle('muted', isWorkGridPage());
-    var targetX = dotXFor(dot, current);
-    dot.style.top = dotTopFor(dot, current) + 'px';
-    var fromX = sessionStorage.getItem('dotX');
-    if (fromX !== null) {
-      dot.style.transform = 'translateX(' + fromX + 'px)';
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          dot.classList.add('animated');
-          dot.style.transform = 'translateX(' + targetX + 'px)';
-        });
-      });
-    } else {
-      dot.style.transform = 'translateX(' + targetX + 'px)';
-    }
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.nav-link')) sessionStorage.setItem('dotX', String(targetX));
-    });
-  } else {
-    var target = dotTopFor(dot, current);
-    var from = sessionStorage.getItem('dotTop');
-    if (from !== null) {
-      dot.style.top = from + 'px';
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          dot.classList.add('animated');
-          dot.style.top = target + 'px';
-        });
-      });
-    } else {
-      dot.style.top = target + 'px';
-    }
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.nav-link')) sessionStorage.setItem('dotTop', String(target));
-    });
-  }
-}
-
-// Keep the nav dot pinned to the active link no matter what shifts the layout
-// after the first paint: a late full-load reflow, a web-font swap, a window
-// resize or zoom, or crossing the mobile/desktop breakpoint. Before this, the
-// dot was placed once on DOMContentLoaded and never corrected, so any of those
-// left it visibly off. positionDot() recomputes the target from scratch, so
-// re-running it is always safe.
-function initDotResilience() {
-  var dot = document.getElementById('dot');
-  if (!dot) return;
-  // Gentle correction: keep any in-flight glide, just land on the right target.
-  function correct() { positionDot(false); }
-  // Instant snap: used for resize/zoom where a slide would look laggy.
-  function snap() { dot.classList.remove('animated'); positionDot(false); }
-
-  // Fonts (and the full load) can change text metrics after first paint.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(correct);
-  window.addEventListener('load', correct);
-
-  // Resize / zoom / orientation change: snap on the next frame so it feels
-  // responsive, then snap AGAIN once layout has settled. The second pass is
-  // essential — crossing the mobile/desktop breakpoint reflows in stages, and a
-  // single early measurement lands mid-relayout and sticks there.
-  var rafPending = false, settleTimer = null;
-  function onResize() {
-    if (!rafPending) {
-      rafPending = true;
-      requestAnimationFrame(function () { rafPending = false; snap(); });
-    }
-    clearTimeout(settleTimer);
-    settleTimer = setTimeout(snap, 160);
-  }
-  window.addEventListener('resize', onResize);
-  window.addEventListener('orientationchange', onResize);
-
-  // Catch any nav geometry change that isn't a window resize. Skip the first
-  // (synchronous) callback so the intro glide from the previous page survives.
-  if (window.ResizeObserver) {
-    var first = true;
-    new ResizeObserver(function () {
-      if (first) { first = false; return; }
-      snap();
-    }).observe(dot.parentElement);
-  }
-}
 
 /* ── Helpers ── */
 function onceTransition(el, prop, fallback, cb) {
@@ -727,8 +591,6 @@ function syncMobileNavState() {
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', function() {
   syncMobileNavState();
-  initDot();
-  initDotResilience();
   initSlideshow();
   initFilters();
   initBlogFilters();
@@ -739,7 +601,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initStickyCards();
   window.addEventListener('hashchange', function() {
     syncMobileNavState();
-    positionDot(true);
   });
   // Admin reorder (drag-to-reorder + Ctrl+Shift+E) — only loads when ?admin=1 is set,
   // keeping the prod bundle's behavior lean for visitors.
