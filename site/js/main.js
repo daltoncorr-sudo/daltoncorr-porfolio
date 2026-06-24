@@ -424,6 +424,51 @@ function initDot() {
   }
 }
 
+// Keep the nav dot pinned to the active link no matter what shifts the layout
+// after the first paint: a late full-load reflow, a web-font swap, a window
+// resize or zoom, or crossing the mobile/desktop breakpoint. Before this, the
+// dot was placed once on DOMContentLoaded and never corrected, so any of those
+// left it visibly off. positionDot() recomputes the target from scratch, so
+// re-running it is always safe.
+function initDotResilience() {
+  var dot = document.getElementById('dot');
+  if (!dot) return;
+  // Gentle correction: keep any in-flight glide, just land on the right target.
+  function correct() { positionDot(false); }
+  // Instant snap: used for resize/zoom where a slide would look laggy.
+  function snap() { dot.classList.remove('animated'); positionDot(false); }
+
+  // Fonts (and the full load) can change text metrics after first paint.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(correct);
+  window.addEventListener('load', correct);
+
+  // Resize / zoom / orientation change: snap on the next frame so it feels
+  // responsive, then snap AGAIN once layout has settled. The second pass is
+  // essential — crossing the mobile/desktop breakpoint reflows in stages, and a
+  // single early measurement lands mid-relayout and sticks there.
+  var rafPending = false, settleTimer = null;
+  function onResize() {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(function () { rafPending = false; snap(); });
+    }
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(snap, 160);
+  }
+  window.addEventListener('resize', onResize);
+  window.addEventListener('orientationchange', onResize);
+
+  // Catch any nav geometry change that isn't a window resize. Skip the first
+  // (synchronous) callback so the intro glide from the previous page survives.
+  if (window.ResizeObserver) {
+    var first = true;
+    new ResizeObserver(function () {
+      if (first) { first = false; return; }
+      snap();
+    }).observe(dot.parentElement);
+  }
+}
+
 /* ── Helpers ── */
 function onceTransition(el, prop, fallback, cb) {
   var fired = false;
@@ -683,6 +728,7 @@ function syncMobileNavState() {
 document.addEventListener('DOMContentLoaded', function() {
   syncMobileNavState();
   initDot();
+  initDotResilience();
   initSlideshow();
   initFilters();
   initBlogFilters();
