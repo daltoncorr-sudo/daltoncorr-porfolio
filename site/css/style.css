@@ -95,6 +95,13 @@ sup { font-size: 0.7em; vertical-align: super; }
   border-radius: 50%;
   background: var(--accent);
   pointer-events: none;
+  /* Resting transform is translate(0,0) = the CSS-anchored position, so the dot
+     is always correct at rest. JS only sets a starting offset that decays here,
+     producing the cross-page glide without owning the final position. */
+  transform: translate(var(--dot-dx, 0px), var(--dot-dy, 0px));
+}
+.nav-link.active.dot-animating::before {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* On the work grid, blue is reserved for the filter breadcrumb (flydot). */
 body.is-work-grid .nav-link.active::before { background: #C4C4C4; }

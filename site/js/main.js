@@ -328,10 +328,51 @@ function initMobileWorkMenu() {
 }
 
 /* ── Blue dot ── */
-// The active-nav dot lives entirely in CSS (.nav-link.active::before), so there
-// is no JS measurement to mistime — it is correct on load, resize, zoom, and
-// back/forward by construction. isMobileNav stays; the work-grid filter uses it.
+// The active-nav dot RESTS in CSS (.nav-link.active::before at translate(0,0)),
+// so its final position is always correct regardless of timing. isMobileNav
+// stays; the work-grid filter uses it.
 function isMobileNav() { return window.matchMedia('(max-width: 767px)').matches; }
+
+// Cross-page glide via FLIP: animate FROM the previous page's dot position TO the
+// CSS resting spot. JS only sets the starting offset (a CSS var that decays to
+// 0), never the resting position — so a mistimed or skipped measurement can at
+// worst drop the animation, never strand the dot.
+function initNavDotGlide() {
+  var active = document.querySelector('.nav-link.active');
+  if (!active) return;
+  // Reference point that moves with the dot (its left edge + vertical centre).
+  // The constant CSS offset cancels out when we diff old vs new, so this is fine
+  // for both the vertical (desktop) and horizontal (mobile) layouts.
+  function restPos() {
+    var r = active.getBoundingClientRect();
+    return { x: r.left, y: r.top + r.height / 2 };
+  }
+  var now = restPos();
+  var prev = null;
+  try { prev = JSON.parse(sessionStorage.getItem('navDot')); } catch (e) {}
+
+  if (prev) {
+    var dx = prev.x - now.x, dy = prev.y - now.y;
+    if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+      active.style.setProperty('--dot-dx', dx + 'px');
+      active.style.setProperty('--dot-dy', dy + 'px');
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          active.classList.add('dot-animating');
+          active.style.setProperty('--dot-dx', '0px');
+          active.style.setProperty('--dot-dy', '0px');
+        });
+      });
+    }
+  }
+  // Remember where the dot is when leaving via a nav link, so the next page can
+  // glide from here. Measured at click time, when layout is settled.
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.nav-link')) {
+      sessionStorage.setItem('navDot', JSON.stringify(restPos()));
+    }
+  });
+}
 
 /* ── Helpers ── */
 function onceTransition(el, prop, fallback, cb) {
@@ -591,6 +632,7 @@ function syncMobileNavState() {
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', function() {
   syncMobileNavState();
+  initNavDotGlide();
   initSlideshow();
   initFilters();
   initBlogFilters();
