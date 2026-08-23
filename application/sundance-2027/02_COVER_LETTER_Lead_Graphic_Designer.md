@@ -1,7 +1,8 @@
-# Cover Letter — Festival Lead Graphic Designer
+# Cover Letter — Festival Lead Graphic Designer *(reference only — NOT the confirmed role)*
 
-*(Draft. Addressee: Sundance Institute hiring team; if the posting names the Creative Director,
-address it to them. ~1 page when laid out.)*
+*(Req 3786502 is the Environmental Graphic Designer role — use `03_...` as the primary letter.
+This draft is kept in case you also want to apply to the Lead Graphic Designer posting, which
+runs the same Sept 2, 2026 – Jan 26, 2027 term.)*
 
 ---
 

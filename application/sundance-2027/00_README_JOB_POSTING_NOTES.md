@@ -2,26 +2,38 @@
 
 **Target posting:** https://sundance.hrmdirect.com/employment/job-opening.php?req=3786502&req_loc=1429997
 
-## Status of this draft package
+## ✅ ROLE CONFIRMED: Festival Environmental Graphic Designer
 
-The application portal (`sundance.hrmdirect.com`) and `sundance.org` were unreachable from the
-drafting environment (network egress blocked), and req **3786502** is too new to appear in any
-search index. Everything below was reconstructed from Sundance's *current, verified* 2027-cycle
-postings on job mirrors (EntertainmentCareers.net, Indeed, ShowbizJobs). The req is almost
-certainly one of these two live roles — both run **Wednesday, September 2, 2026 → Tuesday,
-January 26, 2027**, full time (40 hrs/week), based within commutable distance of **Boulder, CO /
-Salt Lake City, UT / Los Angeles, CA / New York, NY**:
+Req 3786502 is the **Festival Environmental Graphic Designer** for the 2027 Festival
+(user-confirmed; matches the posting that opened **8/12/2026** on job mirrors).
 
-1. **Festival Lead Graphic Designer** — works closely under the Creative Director; leads visual
-   storytelling strategy and creative across all Festival print + digital assets; campaign
-   narratives, visual language for video, web, social, marketing.
-2. **Festival Environmental Graphic Designer** — design + production of large-scale environmental
-   graphics: building wraps, banners, wayfinding, sense-of-place design; collaborates with
-   printing/fabrication partners.
+**Posting facts (assembled from mirrors — EntertainmentCareers.net #528514, ShowbizJobs — since
+the portal itself is egress-blocked from this environment):**
 
-Cover letters for **both** are drafted in this folder. Before submitting, open the actual posting,
-confirm which role it is, and use the matching letter (or merge). Both letters share the same
-core narrative, so re-targeting takes minutes.
+- **Term:** Wednesday, September 2, 2026 → Tuesday, January 26, 2027 · full time, 40 hrs/week
+- **Pay:** **$22.25/hour** · benefits incl. paid sick leave, employee assistance program,
+  employee wellness initiatives (prior cycles also included Festival passes)
+- **Location:** within commutable distance of Boulder, CO / Salt Lake City, UT /
+  **Los Angeles, CA** / **New York, NY** (Dalton qualifies in two of the four cities)
+- **Reports to:** the Creative Director (recent cycles: **Kristina Mueller** — read her
+  sundance.org interview "Inside the Evolution of the Sundance Film Festival's Visual Style"
+  before any interview)
+- **Overview:** design + production of large-scale environmental graphics; convey the concept
+  and spirit of the Festival through the visual aspects of **wayfinding**
+- **Top priorities (posting language):** "media rich graphic visuals to create a **sense of
+  place** and enhance identity through large-scale designs"; "visually appealing **building
+  wraps, banners**, etc., conveying the ideas, images, and messaging of the Festival"
+- **Qualifications:** strong foundation in **Adobe Creative Suite**; organized, self-managing,
+  deadline-reliable; presents designs and incorporates feedback; problem-solves and works
+  collaboratively; **collaborates with printing partners to ensure quality of deliverables**;
+  knowledge of print production methods, fabrication, and installation valued
+- **Flexibility:** extended hours, evenings, weekends during peak periods; travel to Institute
+  locations, events, and meetings
+
+⏰ **Applications opened 8/12/2026 — Sundance seasonal roles close fast. Submit ASAP.**
+
+**Use `03_COVER_LETTER_Environmental_Graphic_Designer.md` — it is the primary letter.**
+(`02_...Lead_Graphic_Designer.md` is kept only for reference / a second application.)
 
 ## Key context to use in the application
 

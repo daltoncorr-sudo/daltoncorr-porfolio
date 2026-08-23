@@ -29,13 +29,10 @@ hrs/week, including extended hours, evenings, weekends during peak periods, and 
 
 ## Salary / pay expectation
 
-Context: prior-cycle Sundance festival designer roles paid ~$20.32/hr; a Lead role should price
-higher. Suggested wording that keeps you flexible without underselling:
+The posting lists **$22.25/hour** (confirmed from the 8/12/2026 posting on job mirrors). This is
+a fixed-rate seasonal role, so don't negotiate in the application — just accept the posted rate:
 
-> I'm flexible and open to the budgeted range for this role. Given my four years art directing an
-> Oscar-qualifying festival end to end, I'd hope to land at the top of the posted range —
-> ⚠️ [if the posting lists a rate, state a number at/near its top; otherwise: "in the $XX–$XX/hour
-> range depending on scope"].
+> The posted rate of $22.25/hour works for me.
 
 ## "Why do you want to work at Sundance?" (short answer)
 
@@ -47,19 +44,20 @@ higher. Suggested wording that keeps you flexible without underselling:
 > carrying a beloved identity into a new city. I want to put that exact experience to work for
 > the 2027 Festival, on the team that defines what festival design can be.
 
-## "Describe your relevant experience" (short answer)
+## "Describe your relevant experience" (short answer — tuned to the Environmental role)
 
-> Four consecutive years designing the Oscar-qualifying HollyShorts Film Festival (designer 2022;
-> art director 2023–2025): campaign identity, official posters, billboards, step-and-repeats,
-> event signage and photo walls across TCL Chinese Theatres and the Egyptian Theatre, on-screen
-> and motion graphics, badges, awards, social/digital campaigns, merchandise, and the festival
-> website (hollyshorts.com), which I designed and developed. Creative director of the inaugural
-> HollyShorts London (2025); led the HollyShorts Comedy rebrand (2025) including AR activations;
-> illustration and poster work for Kodak's events at Cannes 2023 and 2024. Work named among the
-> world's best festival posters (FestivalsInLA 2023, 2024) and covered by Variety, Deadline,
-> Daily Mail, and TimeOut. Expert in Adobe Creative Suite; experienced with large-format print
-> production, fabrication, and installation, and with accessibility-conscious design for print,
-> digital, and environmental applications.
+> Four consecutive years designing the physical environment of the Oscar-qualifying HollyShorts
+> Film Festival (designer 2022; art director 2023–2025): billboards, step-and-repeats and red
+> carpets, photo walls, banners, and venue signage across TCL Chinese Theatres, the Egyptian
+> Theatre, and Japan House — plus production design of the festival's live Award Show and the
+> Alta Global Media Film Summit. I manage large-format print production end to end, working
+> directly with printing and fabrication partners on quality, color, and installation across
+> multiple venues opening simultaneously. Creative director of the inaugural HollyShorts London
+> (2025) — launching a festival's environmental identity in a new city, as Sundance is doing in
+> Boulder. Also: campaign identity, posters (named among the world's best festival posters by
+> FestivalsInLA in 2023 and 2024, with coverage in Variety, Deadline, Daily Mail, and TimeOut),
+> badges, on-screen/motion graphics, AR activations, and the festival website. Expert in Adobe
+> Creative Suite.
 
 ## References
 

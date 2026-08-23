@@ -1,6 +1,7 @@
-# Cover Letter — Festival Environmental Graphic Designer
+# Cover Letter — Festival Environmental Graphic Designer ✅ PRIMARY
 
-*(Variant draft, if req 3786502 turns out to be the Environmental role. ~1 page when laid out.)*
+*(This is the confirmed role for req 3786502. ~1 page when laid out. Language below mirrors the
+posting's own phrases: "sense of place," "building wraps, banners," "wayfinding," "media rich.")*
 
 ---
 
@@ -23,9 +24,9 @@ belonged to were covered by Variety, Deadline, Daily Mail, and TimeOut, and the 
 anchored them were named among the world's best film festival posters by FestivalsInLA in 2023
 and 2024.
 
-What makes Boulder's first edition special is also what makes it hard: the graphics must teach a
-new city what Sundance feels like, and teach Sundance audiences their way around a new city —
-identity and wayfinding at once. I've done this launch before. In 2025 I was creative director of
+What makes Boulder's first edition special is also what makes it hard: media-rich, large-scale
+graphics must teach a new city what Sundance feels like, and teach Sundance audiences their way
+around a new city — sense of place and wayfinding at once. I've done this launch before. In 2025 I was creative director of
 the inaugural HollyShorts London, building a city-specific visual system inside an established
 parent brand, from screen graphics down to street-level presence. I also led the rebrand of the
 Hollywood Comedy Shorts Film Festival into HollyShorts Comedy, a full design system that ran from

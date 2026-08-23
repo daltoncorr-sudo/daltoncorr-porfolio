@@ -93,11 +93,12 @@ film composer (Sundance Collab, 2019), bringing a filmmaker's perspective to fes
 
 ## SKILLS
 
-Adobe Creative Suite (Photoshop, Illustrator, InDesign, After Effects) · brand systems & style
-guides · environmental graphics, signage & wayfinding · large-format print production,
-fabrication & installation oversight · motion & on-screen graphics · social and digital campaign
-design · web design (hollyshorts.com, daltoncorr.com) · AR activations · art direction of
-multi-venue live events · vendor & sponsor collaboration · working under festival deadlines
+Environmental graphics, signage & wayfinding · large-format print production, fabrication &
+installation oversight (direct vendor/printer collaboration) · Adobe Creative Suite (Photoshop,
+Illustrator, InDesign, After Effects) · brand systems & style guides · art direction of
+multi-venue live events · motion & on-screen graphics · social and digital campaign design ·
+web design (hollyshorts.com, daltoncorr.com) · AR activations · sponsor collaboration ·
+working under festival deadlines
 
 ---
 
