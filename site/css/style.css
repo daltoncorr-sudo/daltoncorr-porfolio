@@ -347,74 +347,171 @@ body.is-work-grid .filter-btn.active::before {
   .weissman-hero-catalog #catalog-3d { height: 500px; }
 }
 
-/* Badge Fan 3D */
-#badge-fan {
+/* ══ Carousel ═══════════════════════════════════════════════
+   Ported from Bencho (MIT, bencho.dev/licence); lives on the
+   HollyShorts 21 badges. Cards on a ring that drift at rest, give
+   under the pointer, and can be swiped round. Three motions on
+   three nested elements, one transform each — see the note in
+   js/carousel.js for why they cannot share a node.
+
+   Bencho's tokens, mapped: --bg is this site's own --bg (the
+   ground the focus ring cuts out of); --font-ui is --font. This
+   site has no rgb-triplet tokens, so --ink-rgb (the --text
+   colour, #111) and --shadow-rgb are defined HERE, on the
+   component's root, and nothing leaks out. */
+#badge-carousel { width: 100%; margin-top: 1.5rem; }
+
+.car {
+  --ink-rgb: 17, 17, 17;
+  --shadow-rgb: 0, 0, 0;
   position: relative;
-  width: 100%;
-  height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 1800px;
   margin: 0 auto;
-  overflow: visible;
+  font-family: var(--font);
   -webkit-user-select: none;
-  user-select: none;
-}
+  user-select: none;}
 
-.badge-card {
+/* ── the frame is only a frame ─────────────────────────────
+   No background, no clip, no mask. This was a box that cut
+   the cards at its edges, and before that a mask that faded
+   them out there, and both were answers to the question of
+   what happens to a card when it runs out of block. The cards
+   are on a ring now and never reach an edge, so the question
+   is gone and so is everything that was answering it.
+
+   Which also means nothing here forces `transform-style:
+   flat` any more — overflow and mask both did, and both were
+   safe only because the perspective sits two levels down on
+   `.car-float`. It no longer has to be. */
+.car-track {
   position: absolute;
-  width: 180px;
-  aspect-ratio: 825 / 1350;
-  transform-style: preserve-3d;
-  transform-origin: 50% 95%;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transform: translateX(var(--bx, 0px)) rotateZ(var(--ba, 0deg)) translateY(0);
-  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), filter 0.25s ease;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12));
-}
-.badge-card.badge-hover,
-.badge-card.badge-flipped {
-  transform: translateX(var(--bx, 0px)) rotateZ(var(--ba, 0deg)) translateY(-10px);
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.18));
-}
+  inset: 0;
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;}
 
-.badge-card-inner {
+.car-track[data-held="true"] {
+  cursor: grabbing;}
+
+.car-track:focus-visible {
+  outline: none;
+  border-radius: 12px;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(var(--ink-rgb), 0.4);}
+
+/* the slot holds WHERE on the ring and the card's own resting
+   ANGLE, written per frame by the component — so it carries no
+   transition of its own, or the easing and the drag would
+   re-interpolate against each other and what you would see is
+   the transition rather than the finger */
+.car-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: center;}
+
+/* ── the drift ──────────────────────────────────────────────
+   Keyframes rather than a loop: a rAF per card would be a
+   permanent loop for motion nobody is watching. This runs on
+   the compositor and pauses itself when the tab hides. The
+   period is set per card and deliberately does not divide into
+   its neighbours' — that is what stops the ring breathing in
+   unison.
+
+   The perspective lives HERE, not on the track: on the track
+   a card at the edge of the ring would tilt toward the middle
+   of the stage rather than toward the finger on it. Each card
+   is its own object being touched and wants its own vanishing
+   point. */
+.car-float {
+  width: 100%;
+  height: 100%;
+  perspective: 760px;
+  animation: car-bob 5s ease-in-out infinite;}
+
+.car-card {
   position: relative;
   width: 100%;
   height: 100%;
+  /* ON THIS PAGE: preserve-3d, so the flip inside can show its
+     back face rather than being flattened onto the card */
   transform-style: preserve-3d;
-  border-radius: 10px;
-  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
-}
+  /* no transition: the tilt is sprung in the component, and a
+     transition on top would be a second opinion about how this
+     card settles */}
 
-.badge-card-face {
+/* ── the flip ───────────────────────────────────────────────
+   Not Bencho's: a badge has a back. Its own element, so the
+   transition owns this transform and the springs on the card
+   above never touch it. */
+.car-flip {
   position: absolute;
   inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
-}
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0, 0, 1);}
+.car-slot.is-flipped .car-flip { transform: rotateY(180deg); }
 
-.badge-card-front {
-  background: #1a1a1a;
-}
-.badge-card-front img {
+.car-face {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;}
+.car-face--front { background: #1a1a1a; }
+.car-face--front img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  border-radius: 10px;
-}
-
-.badge-card-back {
+  pointer-events: none;}
+.car-face--back {
   transform: rotateY(180deg);
   background: #fff;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #e5e5e5;}
+
+/* above the faces in 3D, so it lies on whichever side is up */
+.car-sheen {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  transform: translateZ(1px);}
+
+/* Lanyard clip */
+.car-card::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  background: linear-gradient(180deg, #aaa, #888);
+  border-radius: 2px 2px 0 0;
+  opacity: 0.45;}
+.car-card::after {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(150,150,150,0.35);
+  border-radius: 50%;}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-float { animation: none; }
+  .car-flip { transition: none; }
 }
 
+@keyframes car-bob {
+  0%, 100% {
+    transform: translateY(calc(var(--lift, 4px) * -1)) rotate(calc(var(--sway, 1deg) * -1));
+  }
+  50% {
+    transform: translateY(var(--lift, 4px)) rotate(var(--sway, 1deg));
+  }}
+
+/* The badge's back, carried over from the fan the ring replaced */
 .badge-back-content {
   position: relative;
   width: 100%;
@@ -490,55 +587,15 @@ body.is-work-grid .filter-btn.active::before {
   margin-top: 0.5rem;
 }
 
-/* Lanyard clip */
-.badge-card::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 10px;
-  background: linear-gradient(180deg, #aaa, #888);
-  border-radius: 2px 2px 0 0;
-  z-index: 3;
-  opacity: 0.45;
-}
-.badge-card::after {
-  content: '';
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 10px;
-  height: 10px;
-  border: 2px solid rgba(150,150,150,0.35);
-  border-radius: 50%;
-  z-index: 3;
-}
-
-@media (min-width: 1024px) {
-  #badge-fan { height: 580px; }
-  .badge-card { width: 220px; }
-  .badge-card-inner, .badge-card-face, .badge-card-front img { border-radius: 12px; }
-}
-@media (min-width: 1400px) {
-  #badge-fan { height: 620px; }
-  .badge-card { width: 240px; }
-}
-
 @media (max-width: 767px) {
-  #badge-fan { height: 340px; }
-  .badge-card { width: 110px; }
-  .badge-card-inner, .badge-card-face, .badge-card-front img { border-radius: 6px; }
   .badge-back-hs { width: 80px; height: 36px; }
   .badge-back-type { font-size: 0.4rem; }
   .badge-back-barcode svg { width: 60px; height: 20px; }
   .badge-back-fine { font-size: 0.24rem; }
   .badge-back-content { padding: 1.25rem 0.5rem 0.75rem; }
   .badge-hole { width: 10px; height: 10px; top: 6px; }
-  .badge-card::before { width: 14px; height: 8px; top: -5px; }
-  .badge-card::after { width: 8px; height: 8px; top: -11px; }
+  .car-card::before { width: 14px; height: 8px; top: -5px; }
+  .car-card::after { width: 8px; height: 8px; top: -11px; }
 }
 
 /* Admin reorder */
