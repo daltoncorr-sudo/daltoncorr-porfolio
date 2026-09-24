@@ -30,6 +30,8 @@ import sys
 import argparse
 from pathlib import Path
 
+from stamp_image_sizes import image_size
+
 ROOT = Path(__file__).resolve().parent.parent
 PROJECTS = ROOT / "data" / "projects.json"
 INDEX = ROOT / "site" / "work" / "index.html"
@@ -38,14 +40,31 @@ BEGIN = "<!-- BEGIN: cards -->"
 END = "<!-- END: cards -->"
 
 
-def card_image(p: dict) -> str:
+CARDS = ROOT / "site" / "images" / "cards"
+# Rendered card width: ~22vw in the 3-column grid, ~31vw in 2 columns, ~46vw on phones.
+CARD_SIZES = "(min-width: 1100px) 22vw, (min-width: 768px) 31vw, 46vw"
+
+
+def card_image(p: dict, eager: bool = False) -> str:
     """Render the card-image div for one project."""
     if "card_image_html" in p:
         return p["card_image_html"]
     if "image" in p:
+        load = 'loading="eager"' if eager else 'loading="lazy"'
+        sm, lg = (CARDS / f'{p["slug"]}-{n}.webp' for n in ("sm", "lg"))
+        if sm.exists() and lg.exists():
+            # Pre-cropped 4:5 thumbnails from build_card_thumbs.py
+            (sw, _), (lw, lh) = image_size(sm), image_size(lg)
+            s, l = f'../images/cards/{sm.name}', f'../images/cards/{lg.name}'
+            srcset = f' srcset="{s} {sw}w, {l} {lw}w" sizes="{CARD_SIZES}"' if sw != lw else ""
+            return (
+                f'<div class="card-image">'
+                f'<img src="{l}"{srcset} width="{lw}" height="{lh}" alt="{p.get("alt", "")}" {load} decoding="async">'
+                f"</div>"
+            )
         return (
             f'<div class="card-image">'
-            f'<img src="{p["image"]}" alt="{p.get("alt", "")}" loading="lazy">'
+            f'<img src="{p["image"]}" alt="{p.get("alt", "")}" {load}>'
             f"</div>"
         )
     # Placeholder
@@ -59,14 +78,14 @@ def card_image(p: dict) -> str:
     return '<div class="card-image card-image--placeholder"></div>'
 
 
-def render_card(p: dict) -> str:
+def render_card(p: dict, eager: bool = False) -> str:
     tags = "".join(f"<span>{t}</span>" for t in p["tags"])
     filters = " ".join(p["filters"])
     return (
         f'        <a href="{p["slug"]}" class="project-card" '
         f'data-sort-order="{p["sort"]}" data-year="{p["year"]}" '
         f'data-filters="{filters}">\n'
-        f"          {card_image(p)}\n"
+        f"          {card_image(p, eager)}\n"
         f'          <div class="card-info">\n'
         f'            <h3 class="card-title">{p["title"]}</h3>\n'
         f'            <span class="card-role">{p["role"]}</span>\n'
@@ -79,7 +98,8 @@ def render_card(p: dict) -> str:
 
 def build(check: bool = False) -> int:
     projects = json.loads(PROJECTS.read_text())
-    cards = "\n\n".join(render_card(p) for p in projects)
+    # The first row is on screen at load, so those images skip lazy-loading.
+    cards = "\n\n".join(render_card(p, eager=i < 3) for i, p in enumerate(projects))
     block = f"{BEGIN}\n{cards}\n        {END}"
 
     idx = INDEX.read_text()
