@@ -2,7 +2,7 @@
 """
 Replace manual ?v=NN cache-busting params with content-hashes.
 
-Computes a short hash of site/css/style.css and site/js/main.js, then rewrites
+Computes a short hash of site/css/style.css and each site/js/*.js, then rewrites
 every ?v=... reference in every HTML file to match. Idempotent — running on an
 already-current tree changes nothing.
 
@@ -24,12 +24,12 @@ def short_hash(path: Path, length: int = 8) -> str:
 
 
 def main() -> None:
-    css_hash = short_hash(SITE / "css" / "style.css")
-    js_hash = short_hash(SITE / "js" / "main.js")
-    print(f"CSS hash: {css_hash}   JS hash: {js_hash}")
-
-    css_re = re.compile(r"(style\.css\?v=)[A-Za-z0-9]+")
-    js_re = re.compile(r"(main\.js\?v=)[A-Za-z0-9]+")
+    # style.css plus every script in site/js (main.js, carousel.js,
+    # glass-bubble.js, …), each stamped with its own content hash.
+    assets = [SITE / "css" / "style.css"] + sorted((SITE / "js").glob("*.js"))
+    stamps = [(re.compile(r"(\b" + re.escape(a.name) + r"\?v=)[A-Za-z0-9]+"), short_hash(a))
+              for a in assets]
+    print("   ".join(f"{a.name}: {h}" for a, (_, h) in zip(assets, stamps)))
     updated = 0
 
     for p in SITE.rglob("*.html"):
@@ -37,8 +37,8 @@ def main() -> None:
         orig = txt
         # Use lambdas so the hash (which starts with digits) doesn't get
         # parsed as a backreference like \18.
-        txt = css_re.sub(lambda m: m.group(1) + css_hash, txt)
-        txt = js_re.sub(lambda m: m.group(1) + js_hash, txt)
+        for pattern, h in stamps:
+            txt = pattern.sub(lambda m, h=h: m.group(1) + h, txt)
         if txt != orig:
             p.write_text(txt)
             updated += 1
