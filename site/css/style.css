@@ -144,8 +144,18 @@ body.is-work-grid .filter-btn.active::before {
 .nav-submenu { display: none; }
 
 /* ── Layout ── */
-.page-body { margin-left: var(--nav-width); min-height: 100vh; animation: fadeIn 150ms ease both; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.page-body { margin-left: var(--nav-width); min-height: 100vh; }
+
+/* ── Page-to-page fade ──
+   A quiet crossfade between pages where the browser supports it (Chrome,
+   Edge, Safari 18.2+): the old page stays up until the new one is ready, so
+   there's no blank flash, and the nav holds still. Elsewhere pages simply
+   swap. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: ease; }
+.nav { view-transition-name: site-nav; }
 
 /* ── Home slideshow ── */
 .home { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
@@ -345,6 +355,7 @@ body.is-work-grid .filter-btn.active::before {
 .media-video { position: relative; padding-top: 56.25%; height: 0; }
 .media-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .media-video + .media-video { margin-top: 0.5rem; }
+.media-video.is-4x3 { padding-top: 74.17%; } /* 4:3 films (Gazoo, 720x534) */
 .media-split .media-audio iframe { display: block; width: 100%; height: 300px; border: 0; }
 @media (max-width: 767px) { .project-section .media-split { grid-template-columns: 1fr; } .media-split .media-audio iframe { height: 300px; } }
 
@@ -645,6 +656,34 @@ body.is-work-grid .filter-btn.active::before {
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
 .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.25rem; }
+.lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); padding: 1rem 1.25rem; font-size: 2.25rem; line-height: 1; opacity: 0.4; transition: opacity 150ms var(--ease); }
+.lightbox-prev { left: 0.5rem; }
+.lightbox-next { right: 0.5rem; }
+.lightbox-prev:hover, .lightbox-next:hover { opacity: 1; }
+.lightbox-count { position: absolute; bottom: 1.25rem; left: 0; right: 0; text-align: center; font-size: 0.8125rem; color: var(--text-muted); font-variant-numeric: tabular-nums; pointer-events: none; }
+.lightbox.is-single .lightbox-prev, .lightbox.is-single .lightbox-next, .lightbox.is-single .lightbox-count { display: none; }
+@media (max-width: 767px) { .lightbox-prev, .lightbox-next { display: none; } } /* swipe instead */
+
+/* ── 404 ──
+   "4 0 4" where the 0 is an eye, its pupil the site's blue dot. It glances
+   left and right looking for the page and blinks now and then; 404.html
+   lets it follow the pointer. */
+.notfound { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem var(--page-margin); }
+.nf-mark { display: flex; align-items: center; gap: 0.06em; font-size: clamp(4.5rem, 12vw, 7.5rem); font-weight: 600; line-height: 1; letter-spacing: -0.02em; margin-bottom: 1.75rem; }
+.nf-eye { position: relative; display: inline-block; width: 0.6em; height: 0.74em; border: 0.1em solid currentColor; border-radius: 50%; animation: nfBlink 5.2s infinite; }
+.nf-eye i { position: absolute; left: 50%; top: 50%; width: 0.19em; height: 0.19em; margin: -0.095em 0 0 -0.095em; border-radius: 50%; background: var(--accent); animation: nfLook 5.2s ease-in-out infinite; }
+.nf-eye.is-following i { animation: none; transition: transform 120ms ease-out; }
+@keyframes nfLook {
+  0%, 16%   { transform: translate(0, 0); }
+  24%, 38%  { transform: translate(-0.12em, 0.02em); }
+  46%, 60%  { transform: translate(0.12em, -0.03em); }
+  68%, 100% { transform: translate(0, 0); }
+}
+@keyframes nfBlink { 0%, 84%, 90%, 100% { transform: scaleY(1); } 87% { transform: scaleY(0.08); } }
+.nf-text { font-size: 1.125rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.35rem; }
+.nf-home { font-size: 1.125rem; border-bottom: 1px solid currentColor; }
+.nf-home:hover { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .nf-eye, .nf-eye i { animation: none; } }
 
 /* ── About page ── */
 .about-layout {

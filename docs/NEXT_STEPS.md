@@ -203,6 +203,9 @@ dont-mind-me, red-mask, sunnys-journal, polish-film-festival.
 > → use the clean `url=https%3A%2F%2Fapi.soundcloud.com%2Fplaylists%2FID` (private
 > sets append `&secret_token=s-XXXX` as a SEPARATE param). Tracks: `…/tracks/ID`.
 > Fixed so far: after-the-show, nice-knives-score, boys-will-be-flowers.
+> Private TRACKS (2026-09-24): put the token INSIDE the url param —
+> `url=https%3A%2F%2Fapi.soundcloud.com%2Ftracks%2FID%3Fsecret_token%3Ds-XXXX`. The widget
+> 404s when a track's token is a separate `&secret_token=` param (Baxter, Brake My Heel).
 
 ---
 

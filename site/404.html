@@ -6,9 +6,9 @@
   <title>Not found — Dalton Corr</title>
   <meta name="description" content="The page you were looking for doesn't exist.">
   <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="/css/style.css?v=59643146">
-  <link rel="icon" href="/favicon.ico?v=3" type="image/x-icon">
-  <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=a0819d71">
+  <link rel="icon" href="/favicon.ico?v=4" type="image/x-icon">
+  <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/og-image.png?v=3">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,16 +30,31 @@
   </nav>
 
   <div class="page-body">
-    <main id="main" style="padding:6rem var(--page-margin) 4rem; max-width:520px; margin:0 auto; text-align:center;">
-      <p style="font-size:5rem; font-weight:300; line-height:1; margin-bottom:1rem; opacity:0.25;">404</p>
-      <h1 style="font-size:1.25rem; font-weight:500; margin-bottom:1rem;">This page doesn't exist.</h1>
-      <p style="opacity:0.6; margin-bottom:2rem;">It may have moved, been renamed, or never existed at all.</p>
-      <p>
-        <a href="/work/" class="watch-link">See the work →</a>
-      </p>
+    <main id="main" class="notfound">
+      <div class="nf-mark" aria-hidden="true"><span>4</span><span class="nf-eye"><i></i></span><span>4</span></div>
+      <h1 class="nf-text">sorry, page not found.</h1>
+      <p><a href="/" class="nf-home">go home?</a></p>
     </main>
+    <script>
+    /* The 0 is an eye looking for the missing page. It glances around on its
+       own (CSS), and while you move the mouse it watches you instead. */
+    (function () {
+      var eye = document.querySelector('.nf-eye');
+      if (!eye || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var pupil = eye.querySelector('i'), idle;
+      window.addEventListener('pointermove', function (e) {
+        var r = eye.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+        var d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 160);
+        pupil.style.transform = 'translate(' + (dx / d * r.width * 0.2 * k) + 'px,' + (dy / d * r.height * 0.22 * k) + 'px)';
+        eye.classList.add('is-following');
+        clearTimeout(idle);
+        idle = setTimeout(function () { eye.classList.remove('is-following'); pupil.style.transform = ''; }, 2500);
+      });
+    })();
+    </script>
   </div>
 
-  <script src="/js/main.js?v=540ddb3b" defer></script>
+  <script src="/js/main.js?v=97132e1d" defer></script>
 </body>
 </html>

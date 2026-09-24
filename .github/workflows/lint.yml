@@ -37,6 +37,12 @@ jobs:
       - name: Confirm every Work card has its small thumbnails
         run: python3 scripts/build_card_thumbs.py --check
 
+      - name: Confirm large gallery photos have their 1200px copies
+        run: python3 scripts/build_gallery_sizes.py --check
+
+      - name: Confirm every project page has its own link preview
+        run: python3 scripts/build_og_images.py --check
+
       - name: Image size budget — flag any WebP > 3 MB
         run: |
           large=$(find site/images -name "*.webp" -size +3M)

@@ -56,6 +56,8 @@ cd site && python3 -m http.server 8080
 | `scripts/build_sitemap.py` | Generates `sitemap.xml`. |
 | `scripts/stamp_image_sizes.py` | Writes true `width`/`height` on every `<img>` (so lazy-loading works). **Run after adding images.** `--check` for CI. |
 | `scripts/build_card_thumbs.py` | Makes the small 4:5 Work-grid thumbnails in `site/images/cards/` (needs `cwebp`). Run after changing a card image, then `build_work_index.py`. `--check` for CI. |
+| `scripts/build_gallery_sizes.py` | Makes 1200px copies of big gallery photos and adds `srcset` (needs `cwebp`). Run after adding gallery photos. `--check` for CI. |
+| `scripts/build_og_images.py` | Makes each project's 1200×630 link-preview image in `site/images/og/` and points the page's `og:image` at it (macOS `sips`). Run after changing a card image. `--check` for CI. |
 
 ---
 
@@ -64,7 +66,8 @@ cd site && python3 -m http.server 8080
 1. Edit `site/**.html`, `site/css/style.css`, or `site/js/main.js` **directly**.
 2. If you touched a shared fragment → `python3 scripts/sync_includes.py`.
 3. If you touched `data/projects.json` → `python3 scripts/build_work_index.py` (new/changed card image? run `python3 scripts/build_card_thumbs.py` first).
-   If you added images to a page → `python3 scripts/stamp_image_sizes.py`.
+   If you added images to a page → `python3 scripts/stamp_image_sizes.py`, then `python3 scripts/build_gallery_sizes.py`.
+   New or changed card image → also `python3 scripts/build_og_images.py`.
 4. **Always** run `python3 scripts/bump_cache.py` after css/js changes so browsers pick them up.
 5. Preview: `cd site && python3 -m http.server 8080`.
 6. Commit + push to `main` (GitHub Pages auto-deploys; deploy re-runs `bump_cache.py` + `build_sitemap.py` on the artifact).

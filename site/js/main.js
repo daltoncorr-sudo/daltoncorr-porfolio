@@ -341,23 +341,85 @@ function initGalleryMasonry() {
   });
 }
 
-/* ── Lightbox ── */
+/* ── Lightbox ──
+   Click a gallery photo to see it full size. ← / → (or a swipe) step through
+   every photo on the page, with a small "3 / 19" count; Esc, or a click
+   anywhere but the arrows, closes it. It always opens the full-size
+   original, even where the gallery shows a smaller copy. */
 function initLightbox() {
+  var imgs = $$('.project-gallery img, .project-gallery-grid img');
+  if (!imgs.length) return;
   var lb = document.createElement('div');
-  lb.className = 'lightbox';
-  lb.innerHTML = '<button class="lightbox-close">\u00D7</button><img src="" alt="">';
+  lb.className = 'lightbox' + (imgs.length < 2 ? ' is-single' : '');
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.setAttribute('aria-label', 'Image viewer');
+  lb.innerHTML = '<button class="lightbox-close" aria-label="Close">×</button>' +
+    '<button class="lightbox-prev" aria-label="Previous image">‹</button>' +
+    '<img src="" alt="">' +
+    '<button class="lightbox-next" aria-label="Next image">›</button>' +
+    '<span class="lightbox-count" aria-live="polite"></span>';
   document.body.appendChild(lb);
-  var lbImg = lb.querySelector('img');
-  function close() { lb.classList.remove('open'); }
-  lb.addEventListener('click', close);
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
-  $$('.project-gallery img, .project-gallery-grid img').forEach(function(img) {
-    img.addEventListener('click', function(e) {
-      e.stopPropagation();
-      lbImg.src = img.src;
-      lb.classList.add('open');
-    });
+  var lbImg = lb.querySelector('img'), count = lb.querySelector('.lightbox-count');
+  var cur = 0, opener = null;
+
+  function show(i) {
+    cur = (i + imgs.length) % imgs.length;
+    lbImg.src = imgs[cur].src;
+    lbImg.alt = imgs[cur].alt;
+    count.textContent = (cur + 1) + ' / ' + imgs.length;
+    // warm the neighbours so stepping is instant
+    [cur + 1, cur - 1].forEach(function(n) { new Image().src = imgs[(n + imgs.length) % imgs.length].src; });
+  }
+  function open(i) {
+    opener = document.activeElement;
+    show(i);
+    lb.classList.add('open');
+    lb.querySelector('.lightbox-close').focus();
+  }
+  function close() {
+    if (!lb.classList.contains('open')) return;
+    lb.classList.remove('open');
+    if (opener && opener.focus) opener.focus();
+  }
+
+  imgs.forEach(function(img, i) {
+    img.addEventListener('click', function(e) { e.stopPropagation(); open(i); });
   });
+  lb.addEventListener('click', close);
+  lb.querySelector('.lightbox-prev').addEventListener('click', function(e) { e.stopPropagation(); show(cur - 1); });
+  lb.querySelector('.lightbox-next').addEventListener('click', function(e) { e.stopPropagation(); show(cur + 1); });
+  document.addEventListener('keydown', function(e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); show(cur - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1); }
+  });
+  var tx = null;
+  lb.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', function(e) {
+    if (tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx;
+    tx = null;
+    if (Math.abs(dx) > 40) { e.preventDefault(); show(cur + (dx < 0 ? 1 : -1)); }
+  });
+}
+
+/* ── Instant page opens ──
+   Where the browser supports it (Chrome, Edge), resting on a link to another
+   page of this site starts loading that page in the background, so the click
+   opens it almost instantly. Other browsers skip this. */
+function initSpeculation() {
+  if (!window.HTMLScriptElement || !HTMLScriptElement.supports || !HTMLScriptElement.supports('speculationrules')) return;
+  var s = document.createElement('script');
+  s.type = 'speculationrules';
+  s.textContent = JSON.stringify({
+    prerender: [{
+      where: { and: [{ href_matches: '/*' }, { not: { href_matches: '/experiments/*' } }] },
+      eagerness: 'moderate'
+    }]
+  });
+  document.head.appendChild(s);
 }
 
 /* ── Work toolbar show/hide ── */
@@ -736,6 +798,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initSort();
   initGalleryMasonry();
   initLightbox();
+  initSpeculation();
   initToolbar();
   initMobileWorkMenu();
   initStickyCards();
