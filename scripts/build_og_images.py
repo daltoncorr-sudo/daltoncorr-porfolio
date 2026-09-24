@@ -69,10 +69,13 @@ def main():
         if not page.exists() or not src.is_file():
             continue
         out = OG / f"{slug}{'.png' if has_alpha(src) else '.jpg'}"
-        if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
-            if check:
+        # (--check only asks that the preview exists: a git checkout gives every
+        # file a fresh timestamp, so "older than the artwork" means nothing in CI)
+        if check:
+            if not out.exists():
                 problems.append(f"missing preview: {out.relative_to(SITE)}")
                 continue
+        elif not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
             make(src, out)
             made += 1
         url = f"{BASE}/images/og/{out.name}?v={hashlib.sha256(out.read_bytes()).hexdigest()[:8]}"

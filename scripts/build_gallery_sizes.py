@@ -65,13 +65,15 @@ def main():
                 return tag
             vurl = variant_url(src.group(1))
             vpath = (page.parent / urllib.parse.unquote(vurl)).resolve()
-            if not vpath.exists() or vpath.stat().st_mtime < path.stat().st_mtime:
-                if check:
+            # (--check only asks that the copy exists: a git checkout gives every
+            # file a fresh timestamp, so "older than the original" means nothing in CI)
+            if check:
+                if not vpath.exists():
                     problems.append(f"missing copy: {vpath.relative_to(SITE)}")
-                else:
-                    subprocess.run([cwebp(), "-quiet", "-q", QUALITY, "-metadata", "none",
+            elif not vpath.exists() or vpath.stat().st_mtime < path.stat().st_mtime:
+                subprocess.run([cwebp(), "-quiet", "-q", QUALITY, "-metadata", "none",
                                     "-resize", str(WIDTH), "0", str(path), "-o", str(vpath)], check=True)
-                    made += 1
+                made += 1
             want = f' srcset="{vurl} {WIDTH}w, {src.group(1)} {size[0]}w" sizes="{SIZES}"'
             new = OLD.sub("", tag)
             new = new[:4] + want + new[4:]

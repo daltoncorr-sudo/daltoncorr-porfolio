@@ -665,25 +665,155 @@ body.is-work-grid .filter-btn.active::before {
 @media (max-width: 767px) { .lightbox-prev, .lightbox-next { display: none; } } /* swipe instead */
 
 /* ── 404 ──
-   "4 0 4" where the 0 is an eye, its pupil the site's blue dot. It glances
-   left and right looking for the page and blinks now and then; 404.html
-   lets it follow the pointer. */
+   A "404" drawn on a canvas, with Bencho's glass ball resting on it
+   (404.html + js/glass-bubble.js). */
 .notfound { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem var(--page-margin); }
-.nf-mark { display: flex; align-items: center; gap: 0.06em; font-size: clamp(4.5rem, 12vw, 7.5rem); font-weight: 600; line-height: 1; letter-spacing: -0.02em; margin-bottom: 1.75rem; }
-.nf-eye { position: relative; display: inline-block; width: 0.6em; height: 0.74em; border: 0.1em solid currentColor; border-radius: 50%; animation: nfBlink 5.2s infinite; }
-.nf-eye i { position: absolute; left: 50%; top: 50%; width: 0.19em; height: 0.19em; margin: -0.095em 0 0 -0.095em; border-radius: 50%; background: var(--accent); animation: nfLook 5.2s ease-in-out infinite; }
-.nf-eye.is-following i { animation: none; transition: transform 120ms ease-out; }
-@keyframes nfLook {
-  0%, 16%   { transform: translate(0, 0); }
-  24%, 38%  { transform: translate(-0.12em, 0.02em); }
-  46%, 60%  { transform: translate(0.12em, -0.03em); }
-  68%, 100% { transform: translate(0, 0); }
-}
-@keyframes nfBlink { 0%, 84%, 90%, 100% { transform: scaleY(1); } 87% { transform: scaleY(0.08); } }
+.nf-stage { position: relative; width: min(640px, 100%); margin-bottom: 1.5rem; }
+.nf-art { display: block; }
 .nf-text { font-size: 1.125rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.35rem; }
 .nf-home { font-size: 1.125rem; border-bottom: 1px solid currentColor; }
 .nf-home:hover { color: var(--accent); }
-@media (prefers-reduced-motion: reduce) { .nf-eye, .nf-eye i { animation: none; } }
+
+/* ══ Glass bubble ══════════════════════════════════════════
+   From Bencho (MIT, bencho.dev/licence), with js/glass-bubble.js;
+   it sits on the 404 page. Bencho's own picture rules
+   (.cow, .cow-pic) aren't here: the 404 canvas is the
+   picture, and only the ball blocks touch scrolling. Bencho's
+   --focus token maps to this site's --accent, the system blue a
+   Mac draws its focus rings in.
+
+   A square picture with a ball of glass on it. The refraction
+   is in js/glass-bubble.js — a displacement map drawn per size —
+   and what is here is the light, which is the other half of
+   what makes it read as a solid transparent object rather than
+   as a hole in the photograph. */
+
+/* nothing inside a <defs> renders, and an <svg> with no
+   dimensions is otherwise a 300x150 box in the flow — the same
+   fault .liq-defs had */
+.cow-defs {
+  position: absolute;
+  width: 0;
+  height: 0;}
+
+.cow-bub {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  border-radius: 999px;
+  cursor: grab;
+  /* the ball is dragged, so the browser must not also try to
+     scroll the page with the same finger */
+  touch-action: none;
+  /* the backdrop-filter is written inline: it names a filter id
+     that is unique per instance, which a stylesheet cannot
+     know. Everything that is not the refraction is here. */}
+
+.cow-bub[data-held] { cursor: grabbing; }
+
+/* ── the edge is lit, not drawn ─────────────────────────────
+   A flat ring is the clearest tell that something is a circle
+   with a border rather than a ball with a thickness. Brightest
+   at the top where the light is, a weaker catch at the bottom
+   where light has come through the glass and out again, and a
+   wash inside the whole rim for the thickness between them.
+
+   The same argument .gcard's edge makes, and the same third
+   value: it is the far catch that stops it reading as a
+   highlight painted on. */
+.cow-bub::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* ── ALMOST NO WHITE, and that is the correction ─────────
+     This was a 1px white ring, a 0.95 inset highlight along the
+     top and a 0.45 one along the bottom, and together they drew
+     a white BORDER — the first thing you saw was the ring
+     rather than the picture bending inside it.
+
+     A ball of glass has no border. What it has is a thin catch
+     where the light is and a shadow under it, and everything
+     else it shows is the scene behind it. So: a quarter of the
+     old alpha at the top, a hairline at 0.10 that is there to
+     stop the disc dissolving into the picture rather than to be
+     seen, and the cast shadow doing the rest of the work of
+     separating it. */
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.34),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.14),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1),
+    0 10px 22px rgba(0, 0, 0, 0.32),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  transition: box-shadow 180ms ease;}
+
+/* ── the specular, and it is two stops ──────────────────────
+   A single blurred blob reads as a sticker. What says the
+   surface is HARD is a small hot spot inside the soft cap —
+   the cap is the light source's size, the spot is its
+   reflection, and a glass ball has both. The third gradient is
+   the bounce off the far side. */
+.cow-bub::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* ── one small spot, not a cap ───────────────────────────
+     The soft 55% cap over a third of the ball was the other
+     half of the white: a sticker on the glass. What is left is
+     the reflection of the light source itself — small, hard,
+     up and to the left — and a whisper of the bounce off the
+     far side. A glass ball does have a highlight; it does not
+     have a white wash. */
+  background:
+    radial-gradient(9% 7% at 28% 20%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 78%),
+    radial-gradient(34% 26% at 31% 24%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 72%),
+    radial-gradient(52% 44% at 73% 83%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 74%);
+  pointer-events: none;}
+
+/* held, it sits down into the picture: the cast shadow tightens
+   the way a thing pressed closer to a surface does, and the rim
+   light dims because the ball is no longer catching the room at
+   the same angle. The tilt card's rule, and the same reasoning —
+   a shadow that GROWS on press is what a thing being lifted
+   would do. */
+.cow-bub[data-held]::after {
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.12),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.09),
+    0 5px 12px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.18);}
+
+.cow-bub:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;}
+
+@media (prefers-reduced-motion: reduce) {
+  .cow-bub::after { transition-duration: 1ms; }
+}
+
+/* ── the lens, where backdrop-filter could not carry it ────
+   The canvas sits inside .cow-bub and fills it, so the rim,
+   the specular and the cast shadow above are the same rules on
+   both paths — see draw() in js/glass-bubble.js.
+
+   A canvas is a replaced element and will not draw the ball's
+   ::before, so the specular needs lifting over it; ::after
+   already paints after the children and needs nothing. */
+.cow-glass {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  display: block;
+  pointer-events: none;}
+
+.cow-bub::before { z-index: 1; }
+
 
 /* ── About page ── */
 .about-layout {

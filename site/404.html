@@ -6,9 +6,9 @@
   <title>Not found — Dalton Corr</title>
   <meta name="description" content="The page you were looking for doesn't exist.">
   <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="/css/style.css?v=a0819d71">
-  <link rel="icon" href="/favicon.ico?v=4" type="image/x-icon">
-  <link rel="icon" href="/favicon.svg?v=4" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/style.css?v=ea75e103">
+  <link rel="icon" href="/favicon.ico?v=5" type="image/x-icon">
+  <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/og-image.png?v=3">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -31,27 +31,41 @@
 
   <div class="page-body">
     <main id="main" class="notfound">
-      <div class="nf-mark" aria-hidden="true"><span>4</span><span class="nf-eye"><i></i></span><span>4</span></div>
+      <div class="nf-stage"><canvas class="nf-art" aria-hidden="true"></canvas></div>
       <h1 class="nf-text">sorry, page not found.</h1>
       <p><a href="/" class="nf-home">go home?</a></p>
     </main>
+    <script src="/js/glass-bubble.js?v=e1bfd29d" defer></script>
     <script>
-    /* The 0 is an eye looking for the missing page. It glances around on its
-       own (CSS), and while you move the mouse it watches you instead. */
-    (function () {
-      var eye = document.querySelector('.nf-eye');
-      if (!eye || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var pupil = eye.querySelector('i'), idle;
-      window.addEventListener('pointermove', function (e) {
-        var r = eye.getBoundingClientRect();
-        var dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
-        var d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 160);
-        pupil.style.transform = 'translate(' + (dx / d * r.width * 0.2 * k) + 'px,' + (dy / d * r.height * 0.22 * k) + 'px)';
-        eye.classList.add('is-following');
-        clearTimeout(idle);
-        idle = setTimeout(function () { eye.classList.remove('is-following'); pupil.style.transform = ''; }, 2500);
+    /* A "404" drawn on a canvas, over a faint dot grid so the glass has
+       something to bend wherever it sits, with Bencho's glass ball resting
+       on it (js/glass-bubble.js). Drag it around. */
+    window.addEventListener('DOMContentLoaded', function () {
+      var main = document.querySelector('.notfound'), stage = main.querySelector('.nf-stage');
+      var art = stage.querySelector('.nf-art'), glass = null;
+      function draw() {
+        var w = stage.clientWidth, h = Math.round(w * 0.5), dpr = Math.min(window.devicePixelRatio || 1, 2);
+        art.width = w * dpr; art.height = h * dpr;
+        art.style.width = w + 'px'; art.style.height = h + 'px';
+        var g = art.getContext('2d');
+        g.setTransform(dpr, 0, 0, dpr, 0, 0);
+        g.fillStyle = '#F5F5F5'; g.fillRect(0, 0, w, h);
+        g.fillStyle = 'rgba(17, 17, 17, 0.16)';
+        for (var y = 7; y < h; y += 14) for (var x = 7; x < w; x += 14) { g.beginPath(); g.arc(x, y, 1, 0, 6.2832); g.fill(); }
+        g.fillStyle = '#111'; g.textAlign = 'center'; g.textBaseline = 'middle';
+        g.font = '600 ' + Math.round(h * 0.64) + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+        g.fillText('404', w / 2, h * 0.54);
+      }
+      draw();
+      if (window.GlassBubble) {
+        glass = window.GlassBubble(stage, { picture: function () { return art; }, bounds: main, size: Math.round(stage.clientWidth * 0.34) });
+      }
+      var tick = false;
+      window.addEventListener('resize', function () {
+        if (tick) return; tick = true;
+        requestAnimationFrame(function () { tick = false; draw(); if (glass) glass.refresh(); });
       });
-    })();
+    });
     </script>
   </div>
 
