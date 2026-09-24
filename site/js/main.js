@@ -15,7 +15,7 @@ function initSlideshow() {
   // Slides after the second carry data-src and are fetched one step ahead of
   // the show, so the page downloads ~2 images up front instead of all 60.
   // ready[i]: true = loaded, 'skip' = broken (never shown), unset = pending.
-  var ready = {}, glass = null;
+  var ready = {};
   slides.forEach(function(s, i) {
     s.classList.remove('active');
     var img = s.querySelector('img');
@@ -42,88 +42,38 @@ function initSlideshow() {
         slides[cur].classList.remove('active');
         cur = idx;
         slides[cur].classList.add('active');
-        if (glass) glass.refresh();
       }
       load((idx + 1) % len);
       return;
     }
   }
-  // Each slide stays up for one fill of the grey bar under the hint. The
-  // bar's duration lives in the CSS (.home-progress) and its animationend is
-  // what advances the show, so the bar and the slides can't drift apart.
-  // Click the picture to pause; holding the glass holds the show too, and it
-  // only runs while the tab is visible. Reduced motion starts paused.
-  var bar = $('.home-progress span');
+  // Each slide stays up 3s. Click the picture to pause or resume; the show
+  // only runs while the tab is visible, and reduced motion starts paused.
   var paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var held = false, ended = false;
-  function running() { return !paused && !held && !document.hidden; }
-  // Freeze or resume the countdown where it is. A slide whose time ran out
-  // while the show was held moves on as soon as it resumes.
-  function tick() {
-    if (bar) bar.style.animationPlayState = running() ? 'running' : 'paused';
-    if (ended && running()) advance();
+  var timer = null;
+  function stop() { clearInterval(timer); }
+  function start() {
+    stop();
+    if (!paused && !document.hidden) timer = setInterval(function() { go(cur + 1); }, 3000);
   }
-  // Restart the countdown for the slide now showing.
-  function run() {
-    ended = false;
-    if (!bar) return;
-    bar.classList.remove('is-running');
-    void bar.offsetWidth;
-    bar.classList.add('is-running');
-    tick();
-  }
-  function step(n) {
-    var before = cur;
-    go(n);
-    if (cur !== before) run();
-    return cur !== before;
-  }
-  function advance() {
-    if (!running()) return;
-    if (!step(cur + 1)) setTimeout(advance, 250); // next slide still loading
-  }
-  if (bar) bar.addEventListener('animationend', function() { ended = true; advance(); });
-  else setInterval(function() { if (running()) step(cur + 1); }, 3000);
-
-  function setPaused(p) {
-    paused = p;
-    if (glass) glass.detail(p);
-    tick();
-  }
-  document.addEventListener('visibilitychange', tick);
+  // A manual step restarts the 3s, so the next slide gets its full time.
+  function step(n) { go(n); start(); }
+  document.addEventListener('visibilitychange', start);
 
   slides[0].classList.add('active');
   load(1);
+  start();
 
-  // The glass (js/glass-bubble.js) sits on the picture; holding it holds the show.
-  if (window.GlassBubble) {
-    glass = window.GlassBubble(wrap, {
-      picture: function() { return slides[cur].querySelector('img'); },
-      bounds: wrap.parentNode,
-      onGrab: function() { held = true; tick(); },
-      onRelease: function() { held = false; tick(); }
-    });
-  }
-  setPaused(paused);
-  run();
-
-  wrap.addEventListener('click', function(e) {
-    if (e.target.closest('.cow-bub')) return;
-    setPaused(!paused);
-  });
+  wrap.addEventListener('click', function() { paused = !paused; start(); });
   document.addEventListener('keydown', function(e) {
-    if (e.defaultPrevented) return; // the glass takes the arrows while it has focus
     if (e.key === 'ArrowLeft') step(cur - 1);
     if (e.key === 'ArrowRight') step(cur + 1);
-    if (e.key === ' ' && e.target === document.body) { e.preventDefault(); setPaused(!paused); }
+    if (e.key === ' ' && e.target === document.body) { e.preventDefault(); paused = !paused; start(); }
   });
-  // Swipe between slides, except when the finger is dragging the glass.
-  var tx = null;
-  wrap.addEventListener('touchstart', function(e) {
-    tx = e.target.closest('.cow-bub') ? null : e.changedTouches[0].clientX;
-  }, { passive: true });
+  // Swipe between slides.
+  var tx = 0;
+  wrap.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].clientX; }, { passive: true });
   wrap.addEventListener('touchend', function(e) {
-    if (tx === null) return;
     var dx = e.changedTouches[0].clientX - tx;
     if (Math.abs(dx) > 40) step(cur + (dx < 0 ? 1 : -1));
   });
@@ -320,6 +270,38 @@ function initSort() {
     byYear = !byYear;
     btn.textContent = byYear ? 'Sort: Chronological' : 'Sort: Default';
     applySort();
+  });
+}
+
+/* ── Gallery rows ──
+   The 2-up galleries sat a wide photo next to a tall one, and the row took
+   the tall one's height, leaving a gap under the wide one. Each pair now
+   shares a row whose width is split by the photos' aspect ratios (their
+   width/height attributes, or an inline aspect-ratio crop), so both are the
+   same height, nothing is cropped, and the order still reads 1,2 / 3,4.
+   A lone last photo keeps half the width. Phones stay one per row. */
+function initGalleryRows() {
+  $$('.project-gallery:not(.poster-hero)').forEach(function(g) {
+    var imgs = $$('img', g);
+    // plain image galleries only
+    if (imgs.length < 2 || imgs.length !== g.children.length) return;
+    function ratio(img) {
+      // "4 / 5" when the page crops it, "auto 2400 / 3200" from the attributes
+      var m = /([\d.]+)\s*\/\s*([\d.]+)/.exec(getComputedStyle(img).aspectRatio || '');
+      if (m && +m[2]) return m[1] / m[2];
+      return img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1;
+    }
+    for (var i = 0; i < imgs.length; i += 2) {
+      var row = document.createElement('div');
+      row.className = 'gallery-row' + (imgs[i + 1] ? '' : ' is-single');
+      g.insertBefore(row, imgs[i]);
+      [imgs[i], imgs[i + 1]].forEach(function(img) {
+        if (!img) return;
+        img.style.setProperty('--ar', ratio(img).toFixed(4));
+        row.appendChild(img);
+      });
+    }
+    g.classList.add('has-rows');
   });
 }
 
@@ -716,6 +698,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initFilters();
   initBlogFilters();
   initSort();
+  initGalleryRows();
   initLightbox();
   initToolbar();
   initMobileWorkMenu();

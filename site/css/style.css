@@ -149,19 +149,9 @@ body.is-work-grid .filter-btn.active::before {
 
 /* ── Home slideshow ── */
 .home { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
-/* One quiet line above the picture: how to use it */
-.home-hint { font-size: 0.8125rem; line-height: 1.4; color: var(--text-muted); text-align: center; margin: 0 0 0.5rem; }
-/* How long the picture has left: a small grey bar that fills once per
-   slide. Its 3s IS the slide time: main.js advances the show when the fill
-   ends, so the two can't drift apart. Paused or held, it freezes. */
-.home-progress { width: 96px; height: 3px; border-radius: 3px; background: #E2E2E2; overflow: hidden; margin: 0 0 0.9rem; }
-.home-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: #A3A3A3; }
-.home-progress span.is-running { animation: slideCountdown 3s linear forwards; }
-@keyframes slideCountdown { from { width: 0; } to { width: 100%; } }
 /* A fixed stage: every slide sits centred in the same 75vh box (the height
-   the pictures were already capped at), so the hint above it and the glass
-   on it stay put while the show runs, instead of riding the top edge of
-   whichever picture is up. Pictures render at the sizes they had. */
+   the pictures were already capped at), so the page doesn't reflow
+   between tall and wide pictures. Pictures render at the sizes they had. */
 .slideshow { position: relative; width: 100%; max-width: min(720px, 55vw); height: 75vh; margin: 0 auto; -webkit-user-select: none; user-select: none; }
 .slide { display: none; text-decoration: none; }
 .slide.active { display: block; position: absolute; inset: 0; }
@@ -169,145 +159,6 @@ body.is-work-grid .filter-btn.active::before {
 @media (max-width: 767px) { .slideshow { max-width: 85vw; } }
 @media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(600px, 50vw); } }
 
-/* ══ Glass bubble ══════════════════════════════════════════
-   From Bencho (MIT, bencho.dev/licence), with js/glass-bubble.js;
-   it sits on the home slideshow. Bencho's own picture rules
-   (.cow, .cow-pic) aren't here: the slideshow above is the
-   picture, and only the ball blocks touch scrolling. Bencho's
-   --focus token maps to this site's --accent, the system blue a
-   Mac draws its focus rings in.
-
-   A square picture with a ball of glass on it. The refraction
-   is in js/glass-bubble.js — a displacement map drawn per size —
-   and what is here is the light, which is the other half of
-   what makes it read as a solid transparent object rather than
-   as a hole in the photograph. */
-
-/* nothing inside a <defs> renders, and an <svg> with no
-   dimensions is otherwise a 300x150 box in the flow — the same
-   fault .liq-defs had */
-.cow-defs {
-  position: absolute;
-  width: 0;
-  height: 0;}
-
-.cow-bub {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  border-radius: 999px;
-  cursor: grab;
-  /* the ball is dragged, so the browser must not also try to
-     scroll the page with the same finger */
-  touch-action: none;
-  /* the backdrop-filter is written inline: it names a filter id
-     that is unique per instance, which a stylesheet cannot
-     know. Everything that is not the refraction is here. */}
-
-.cow-bub[data-held] { cursor: grabbing; }
-
-/* ── the edge is lit, not drawn ─────────────────────────────
-   A flat ring is the clearest tell that something is a circle
-   with a border rather than a ball with a thickness. Brightest
-   at the top where the light is, a weaker catch at the bottom
-   where light has come through the glass and out again, and a
-   wash inside the whole rim for the thickness between them.
-
-   The same argument .gcard's edge makes, and the same third
-   value: it is the far catch that stops it reading as a
-   highlight painted on. */
-.cow-bub::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  /* ── ALMOST NO WHITE, and that is the correction ─────────
-     This was a 1px white ring, a 0.95 inset highlight along the
-     top and a 0.45 one along the bottom, and together they drew
-     a white BORDER — the first thing you saw was the ring
-     rather than the picture bending inside it.
-
-     A ball of glass has no border. What it has is a thin catch
-     where the light is and a shadow under it, and everything
-     else it shows is the scene behind it. So: a quarter of the
-     old alpha at the top, a hairline at 0.10 that is there to
-     stop the disc dissolving into the picture rather than to be
-     seen, and the cast shadow doing the rest of the work of
-     separating it. */
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.34),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.14),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1),
-    0 10px 22px rgba(0, 0, 0, 0.32),
-    0 2px 6px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-  transition: box-shadow 180ms ease;}
-
-/* ── the specular, and it is two stops ──────────────────────
-   A single blurred blob reads as a sticker. What says the
-   surface is HARD is a small hot spot inside the soft cap —
-   the cap is the light source's size, the spot is its
-   reflection, and a glass ball has both. The third gradient is
-   the bounce off the far side. */
-.cow-bub::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  /* ── one small spot, not a cap ───────────────────────────
-     The soft 55% cap over a third of the ball was the other
-     half of the white: a sticker on the glass. What is left is
-     the reflection of the light source itself — small, hard,
-     up and to the left — and a whisper of the bounce off the
-     far side. A glass ball does have a highlight; it does not
-     have a white wash. */
-  background:
-    radial-gradient(9% 7% at 28% 20%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 78%),
-    radial-gradient(34% 26% at 31% 24%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 72%),
-    radial-gradient(52% 44% at 73% 83%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 74%);
-  pointer-events: none;}
-
-/* held, it sits down into the picture: the cast shadow tightens
-   the way a thing pressed closer to a surface does, and the rim
-   light dims because the ball is no longer catching the room at
-   the same angle. The tilt card's rule, and the same reasoning —
-   a shadow that GROWS on press is what a thing being lifted
-   would do. */
-.cow-bub[data-held]::after {
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.12),
-    inset 0 0 0 0.5px rgba(255, 255, 255, 0.09),
-    0 5px 12px rgba(0, 0, 0, 0.3),
-    0 1px 4px rgba(0, 0, 0, 0.18);}
-
-.cow-bub:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;}
-
-@media (prefers-reduced-motion: reduce) {
-  .cow-bub::after { transition-duration: 1ms; }
-}
-
-/* ── the lens, where backdrop-filter could not carry it ────
-   The canvas sits inside .cow-bub and fills it, so the rim,
-   the specular and the cast shadow above are the same rules on
-   both paths — see draw() in js/glass-bubble.js.
-
-   A canvas is a replaced element and will not draw the ball's
-   ::before, so the specular needs lifting over it; ::after
-   already paints after the children and needs nothing. */
-.cow-glass {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  display: block;
-  pointer-events: none;}
-
-.cow-bub::before { z-index: 1; }
 
 /* ── Work grid ── */
 .work-toolbar {
@@ -457,6 +308,18 @@ body.is-work-grid .filter-btn.active::before {
 .project-section .project-gallery { padding: 0; margin-top: 0.75rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; align-items: start; }
 .project-section .project-gallery img { width: 100%; display: block; cursor: zoom-in; }
 @media (max-width: 767px) { .project-section .project-gallery { grid-template-columns: 1fr; } }
+/* Gallery rows (main.js initGalleryRows): each pair shares one height. Every
+   photo grows by its own aspect ratio (--ar), so a wide one takes more of the
+   row and a tall one less, and neither leaves a gap under it. */
+.project-gallery.has-rows, .project-section .project-gallery.has-rows { display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; }
+.project-gallery .gallery-row { display: flex; gap: 0.5rem; align-items: flex-start; }
+.project-gallery .gallery-row img, .project-section .project-gallery .gallery-row img { flex: var(--ar, 1) 1 0; min-width: 0; width: 0; height: auto; }
+.project-gallery .gallery-row.is-single img, .project-section .project-gallery .gallery-row.is-single img { flex: 0 0 calc(50% - 0.25rem); }
+@media (max-width: 767px) {
+  .project-gallery .gallery-row { flex-direction: column; }
+  .project-gallery .gallery-row img, .project-section .project-gallery .gallery-row img,
+  .project-gallery .gallery-row.is-single img, .project-section .project-gallery .gallery-row.is-single img { flex: none; width: 100%; }
+}
 /* Poster hero — match heights, tops aligned */
 .poster-hero-wrap { margin: 0 auto; padding: 0; }
 .poster-hero-wrap .poster-hero { columns: unset; display: flex; gap: 0.5rem; justify-content: center; align-items: flex-start; }

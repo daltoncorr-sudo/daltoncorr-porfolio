@@ -25,7 +25,7 @@ def short_hash(path: Path, length: int = 8) -> str:
 
 def main() -> None:
     # style.css plus every script in site/js (main.js, carousel.js,
-    # glass-bubble.js, …), each stamped with its own content hash.
+    # catalog-viewer.js, …), each stamped with its own content hash.
     assets = [SITE / "css" / "style.css"] + sorted((SITE / "js").glob("*.js"))
     stamps = [(re.compile(r"(\b" + re.escape(a.name) + r"\?v=)[A-Za-z0-9]+"), short_hash(a))
               for a in assets]
