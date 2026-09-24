@@ -38,6 +38,10 @@ jobs:
           python3 scripts/bump_cache.py
           python3 scripts/build_sitemap.py
 
+      # The blog is hidden for now: keep its source, but leave it out of the live site.
+      - name: Leave the blog out of the deploy
+        run: rm -rf site/blog
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./site

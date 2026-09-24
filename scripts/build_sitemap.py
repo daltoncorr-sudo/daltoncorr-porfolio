@@ -18,7 +18,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 BASE = "https://daltoncorr.com"
 
-SKIP = {"site/404.html", "site/press.html"}
+SKIP = {"site/404.html", "site/press.html",
+        # redirect stubs for old duplicate project pages
+        "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html"}
 SKIP_DIRS = {"site/blog", "site/experiments"}
 
 

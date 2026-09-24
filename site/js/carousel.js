@@ -466,6 +466,8 @@
     const front = document.createElement('div');
     front.className = 'car-face car-face--front';
     const img = new Image();
+    img.loading = 'lazy';
+    img.decoding = 'async';
     img.src = shot.src;
     img.alt = shot.name + ' badge';
     img.draggable = false;

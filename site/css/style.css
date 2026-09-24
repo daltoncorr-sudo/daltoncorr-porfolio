@@ -162,10 +162,15 @@ body.is-work-grid .filter-btn.active::before {
   display: flex; flex-direction: column; padding: 0 0 0 0.5rem;
   z-index: 99; pointer-events: none;
   opacity: 0;
-  transition: opacity 300ms var(--ease);
+  /* Hidden means inert: while faded out it must not catch clicks or keyboard
+     focus on other pages. visibility flips after the fade-out finishes. */
+  visibility: hidden;
+  transition: opacity 300ms var(--ease), visibility 0s linear 300ms;
 }
 .work-toolbar.visible {
   opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms var(--ease), visibility 0s;
 }
 .work-toolbar > * { pointer-events: auto; }
 .filter-bar { display: flex; flex-direction: column; padding-top: calc(2rem + 0.25rem + 1.5rem + 0.25rem + 0.25rem); position: relative; }
@@ -305,6 +310,15 @@ body.is-work-grid .filter-btn.active::before {
 .poster-hero-wrap .poster-hero img { flex: none; height: 680px; width: auto; max-width: 100%; object-fit: contain; margin-bottom: 0; }
 @media (max-width: 1200px) { .poster-hero-wrap .poster-hero img { height: 520px; } }
 @media (max-width: 767px) { .poster-hero-wrap .poster-hero { flex-direction: column; align-items: center; } .poster-hero-wrap .poster-hero img { height: auto; width: 100%; } }
+/* Several images in one hero (HollyShorts 21: poster + wide art). Each grows
+   by its own aspect ratio (--ar on the <img>), so the row keeps one shared
+   height and shrinks as a whole instead of running under the nav; --ar-sum on
+   the row caps that height at 680px. Single-poster heroes set neither
+   variable, so the max-width is invalid there and they're unchanged. */
+@media (min-width: 768px) {
+  .poster-hero-wrap .poster-hero { max-width: calc(680px * var(--ar-sum) + 0.5rem); margin-left: auto; margin-right: auto; }
+  .poster-hero-wrap .poster-hero img:not(:only-child) { flex: var(--ar) 1 0; min-width: 0; height: auto; }
+}
 
 /* Poster detail crops row */
 .poster-details { display: flex; gap: 0.75rem; margin: 1.5rem auto 0; max-width: 1100px; padding: 0 var(--page-margin); }
@@ -746,6 +760,9 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
     position: sticky; top: 0; z-index: 99;
     padding: 1.5rem 1.5rem 0.875rem;
     background: var(--bg); border-bottom: none;
+    /* A solid bar here, unlike the desktop rail: taps on its background must
+       not fall through to the project scrolled underneath. */
+    pointer-events: auto;
   }
   .nav > div { display: flex; flex: 1; justify-content: center; }
   .nav-links { flex-direction: row; align-items: center; justify-content: center; gap: 2.25rem; }
@@ -795,7 +812,7 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
     width: 100%; height: auto;
     padding: 1px 1.5rem 0.75rem;
     background: var(--bg); border-bottom: none;
-    opacity: 1; z-index: 98;
+    opacity: 1; z-index: 98; pointer-events: auto;
   }
   .work-toolbar .filter-bar {
     display: flex; flex-wrap: wrap; flex-direction: row;

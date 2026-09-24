@@ -31,6 +31,9 @@ jobs:
       - name: Confirm every page has canonical + Open Graph meta
         run: python3 scripts/build_head_meta.py --check
 
+      - name: Confirm every image has width/height (so lazy-loading works)
+        run: python3 scripts/stamp_image_sizes.py --check
+
       - name: Image size budget — flag any WebP > 3 MB
         run: |
           large=$(find site/images -name "*.webp" -size +3M)

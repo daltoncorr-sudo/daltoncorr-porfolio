@@ -194,7 +194,7 @@
     "tags": [
       "Visual"
     ],
-    "card_image_html": "<div class=\"card-image\" style=\"background:#111;display:flex;align-items:center;justify-content:center;padding:1.5rem;\"><img src=\"https://www.creativesforukraine.uk/_next/image?url=%2Flogo-text-right.png&w=256&q=75\" alt=\"Creatives for Ukraine\" loading=\"lazy\" style=\"width:70%;height:auto;object-fit:contain;\"></div>"
+    "placeholder": "Available upon request"
   },
   {
     "slug": "hollyshorts-london-2025",
@@ -235,7 +235,7 @@
   {
     "slug": "hollyshorts-london",
     "sort": 3,
-    "year": 2025,
+    "year": 2024,
     "filters": [
       "visual",
       "art-direction",

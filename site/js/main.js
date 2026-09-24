@@ -12,36 +12,49 @@ function initSlideshow() {
   var slides = $$('.slide', wrap), cur = 0, timer;
   if (slides.length < 2) return;
 
-  // Track loaded state per slide. A slide with no image counts as ready so it
-  // never blocks the rotation; broken images stay unready and get skipped over.
+  // Slides after the second carry data-src and are fetched one step ahead of
+  // the show, so the page downloads ~2 images up front instead of all 60.
+  // ready[i]: true = loaded, 'skip' = broken (never shown), unset = pending.
   var ready = {};
   slides.forEach(function(s, i) {
     s.classList.remove('active');
     var img = s.querySelector('img');
     if (!img) { ready[i] = true; return; }
-    if (img.complete && img.naturalWidth > 0) { ready[i] = true; }
-    else { img.addEventListener('load', function() { ready[i] = true; }); }
+    if (img.complete && img.naturalWidth > 0) { ready[i] = true; return; }
+    img.addEventListener('load', function() { ready[i] = true; });
+    img.addEventListener('error', function() { ready[i] = 'skip'; });
   });
+  function load(i) {
+    var img = slides[i].querySelector('img');
+    if (img && img.dataset.src && !img.getAttribute('src')) img.src = img.dataset.src;
+  }
 
-  // Advance toward n, scanning forward for the next ready slide so an unloaded
-  // or broken image is skipped instead of permanently stalling the show.
+  // Advance toward n. A pending slide is waited for (never skipped past, which
+  // would jump the show back to slide 1); only broken slides are skipped.
   function go(n) {
     var len = slides.length;
     for (var k = 0; k < len; k++) {
-      var idx = (n + k + len) % len;
-      if (ready[idx]) {
-        if (idx === cur) return;
+      var idx = ((n + k) % len + len) % len;
+      if (ready[idx] === 'skip') continue;
+      load(idx);
+      if (!ready[idx]) return;
+      if (idx !== cur) {
         slides[cur].classList.remove('active');
         cur = idx;
         slides[cur].classList.add('active');
-        return;
       }
+      load((idx + 1) % len);
+      return;
     }
   }
-  function start() { stop(); timer = setInterval(function() { go(cur + 1); }, 1500); }
+  // Auto-advance only when motion is welcome and the tab is visible.
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function start() { stop(); if (!still && !document.hidden) timer = setInterval(function() { go(cur + 1); }, 1500); }
   function stop() { clearInterval(timer); }
+  document.addEventListener('visibilitychange', function() { document.hidden ? stop() : start(); });
 
   slides[0].classList.add('active');
+  load(1);
   start();
 
   wrap.addEventListener('mouseenter', stop);
@@ -217,11 +230,19 @@ function initFilters() {
 
   // Mobile nav sublinks are <a href="...#visual"> on this same page, so tapping
   // them only changes the hash without reloading. Mirror that into the grid.
+  // Only real filter names count. Any other hash (the skip link's #main, a
+  // stale or mistyped link) used to hide every card.
+  function hashFilter() {
+    var h = location.hash.replace('#', '');
+    if (!h) return 'all';
+    return bar.querySelector('.filter-btn[data-filter="' + CSS.escape(h) + '"]') ? h : null;
+  }
   window.addEventListener('hashchange', function() {
-    engine.apply(location.hash.replace('#', '') || 'all', true);
+    var f = hashFilter();
+    if (f) engine.apply(f, true);
   });
 
-  engine.apply(location.hash.replace('#', '') || 'all', false);
+  engine.apply(hashFilter() || 'all', false);
 }
 
 /* ── Sort ── */
