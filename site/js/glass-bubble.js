@@ -243,6 +243,7 @@ var count = 0;
    opts.picture function returning the <img> currently showing
    opts.bounds  element the ball must stay inside (the page area)
    opts.onGrab / opts.onRelease   called as the ball is picked up / put down
+   opts.start   {x, y}: where the ball's centre starts, as fractions of the stage
    opts.size, opts.bend (0-100), opts.fringe (0-40): Bencho's knobs
    Returns { refresh(), detail(on) }. */
 function GlassBubble(stage, opts) {
@@ -338,7 +339,8 @@ function GlassBubble(stage, opts) {
   /* where the ball is, in stage pixels, top-left. HERE it starts a
      little right of centre and above it, which lands on the art
      whether the slide is a tall poster or a wide banner. */
-  var at = { x: stage.offsetWidth * 0.68 - d / 2, y: stage.offsetHeight * 0.38 - d / 2 };
+  var start = opts.start || { x: 0.68, y: 0.38 }; // HERE: where its centre starts, as fractions of the stage
+  var at = { x: stage.offsetWidth * start.x - d / 2, y: stage.offsetHeight * start.y - d / 2 };
 
   function bounds() {
     var W = stage.offsetWidth, H = stage.offsetHeight;

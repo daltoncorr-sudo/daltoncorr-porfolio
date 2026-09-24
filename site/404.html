@@ -35,11 +35,10 @@
       <h1 class="nf-text">sorry, page not found.</h1>
       <p><a href="/" class="nf-home">go home?</a></p>
     </main>
-    <script src="/js/glass-bubble.js?v=e1bfd29d" defer></script>
+    <script src="/js/glass-bubble.js?v=aa9b6999" defer></script>
     <script>
-    /* A "404" drawn on a canvas, over a faint dot grid so the glass has
-       something to bend wherever it sits, with Bencho's glass ball resting
-       on it (js/glass-bubble.js). Drag it around. */
+    /* A "404" drawn on a canvas, with Bencho's glass ball resting on it
+       (js/glass-bubble.js). Drag it around. */
     window.addEventListener('DOMContentLoaded', function () {
       var main = document.querySelector('.notfound'), stage = main.querySelector('.nf-stage');
       var art = stage.querySelector('.nf-art'), glass = null;
@@ -50,15 +49,13 @@
         var g = art.getContext('2d');
         g.setTransform(dpr, 0, 0, dpr, 0, 0);
         g.fillStyle = '#F5F5F5'; g.fillRect(0, 0, w, h);
-        g.fillStyle = 'rgba(17, 17, 17, 0.16)';
-        for (var y = 7; y < h; y += 14) for (var x = 7; x < w; x += 14) { g.beginPath(); g.arc(x, y, 1, 0, 6.2832); g.fill(); }
         g.fillStyle = '#111'; g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.font = '600 ' + Math.round(h * 0.64) + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
+        g.font = '600 ' + Math.round(h * 0.4) + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
         g.fillText('404', w / 2, h * 0.54);
       }
       draw();
       if (window.GlassBubble) {
-        glass = window.GlassBubble(stage, { picture: function () { return art; }, bounds: main, size: Math.round(stage.clientWidth * 0.34) });
+        glass = window.GlassBubble(stage, { picture: function () { return art; }, bounds: main, size: Math.round(stage.clientWidth * 0.4), start: { x: 0.56, y: 0.54 } });
       }
       var tick = false;
       window.addEventListener('resize', function () {
