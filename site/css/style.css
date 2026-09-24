@@ -308,18 +308,11 @@ body.is-work-grid .filter-btn.active::before {
 .project-section .project-gallery { padding: 0; margin-top: 0.75rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; align-items: start; }
 .project-section .project-gallery img { width: 100%; display: block; cursor: zoom-in; }
 @media (max-width: 767px) { .project-section .project-gallery { grid-template-columns: 1fr; } }
-/* Gallery rows (main.js initGalleryRows): each pair shares one height. Every
-   photo grows by its own aspect ratio (--ar), so a wide one takes more of the
-   row and a tall one less, and neither leaves a gap under it. */
-.project-gallery.has-rows, .project-section .project-gallery.has-rows { display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; }
-.project-gallery .gallery-row { display: flex; gap: 0.5rem; align-items: flex-start; }
-.project-gallery .gallery-row img, .project-section .project-gallery .gallery-row img { flex: var(--ar, 1) 1 0; min-width: 0; width: 0; height: auto; }
-.project-gallery .gallery-row.is-single img, .project-section .project-gallery .gallery-row.is-single img { flex: 0 0 calc(50% - 0.25rem); }
-@media (max-width: 767px) {
-  .project-gallery .gallery-row { flex-direction: column; }
-  .project-gallery .gallery-row img, .project-section .project-gallery .gallery-row img,
-  .project-gallery .gallery-row.is-single img, .project-section .project-gallery .gallery-row.is-single img { flex: none; width: 100%; }
-}
+/* Gallery masonry (main.js initGalleryMasonry): two equal columns, each photo
+   placed under whichever column is shorter. JS sets each photo's position and
+   width and the gallery's height; phones keep the one-column grid. */
+.project-gallery.is-masonry, .project-section .project-gallery.is-masonry { display: block; position: relative; }
+.project-gallery.is-masonry img { position: absolute; height: auto; }
 /* Poster hero — match heights, tops aligned */
 .poster-hero-wrap { margin: 0 auto; padding: 0; }
 .poster-hero-wrap .poster-hero { columns: unset; display: flex; gap: 0.5rem; justify-content: center; align-items: flex-start; }

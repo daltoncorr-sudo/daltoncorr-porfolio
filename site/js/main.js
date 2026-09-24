@@ -273,35 +273,71 @@ function initSort() {
   });
 }
 
-/* ── Gallery rows ──
+/* ── Gallery masonry ──
    The 2-up galleries sat a wide photo next to a tall one, and the row took
-   the tall one's height, leaving a gap under the wide one. Each pair now
-   shares a row whose width is split by the photos' aspect ratios (their
-   width/height attributes, or an inline aspect-ratio crop), so both are the
-   same height, nothing is cropped, and the order still reads 1,2 / 3,4.
-   A lone last photo keeps half the width. Phones stay one per row. */
-function initGalleryRows() {
-  $$('.project-gallery:not(.poster-hero)').forEach(function(g) {
-    var imgs = $$('img', g);
-    // plain image galleries only
-    if (imgs.length < 2 || imgs.length !== g.children.length) return;
-    function ratio(img) {
-      // "4 / 5" when the page crops it, "auto 2400 / 3200" from the attributes
-      var m = /([\d.]+)\s*\/\s*([\d.]+)/.exec(getComputedStyle(img).aspectRatio || '');
-      if (m && +m[2]) return m[1] / m[2];
-      return img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1;
-    }
-    for (var i = 0; i < imgs.length; i += 2) {
-      var row = document.createElement('div');
-      row.className = 'gallery-row' + (imgs[i + 1] ? '' : ' is-single');
-      g.insertBefore(row, imgs[i]);
-      [imgs[i], imgs[i + 1]].forEach(function(img) {
-        if (!img) return;
-        img.style.setProperty('--ar', ratio(img).toFixed(4));
-        row.appendChild(img);
+   the tall one's height, leaving a gap under the wide one. Now every photo
+   keeps its size (half the width, uncropped) and drops into whichever
+   column is shorter so far, so a tall photo gets two shorter ones stacked
+   beside it instead of a gap. The order still runs left-to-right,
+   top-to-bottom as closely as the shapes allow, and the DOM order (what a
+   screen reader follows) doesn't change. Heights come from each photo's
+   width/height (or an inline aspect-ratio crop), so the layout is set
+   before anything loads. Phones stay one per row. */
+function initGalleryMasonry() {
+  var galleries = $$('.project-gallery:not(.poster-hero)').filter(function(g) {
+    var n = g.querySelectorAll('img').length;
+    return n > 1 && n === g.children.length; // plain image galleries only
+  });
+  if (!galleries.length) return;
+  var phone = window.matchMedia('(max-width: 767px)');
+
+  function ratio(img) {
+    // "4 / 5" when the page crops it; "auto 2400 / 3200" from the attributes
+    var ar = getComputedStyle(img).aspectRatio || '';
+    var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar.replace(/^auto\s*/, ''));
+    var r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+    if (!/^auto/.test(ar) && r) return r;
+    if (img.naturalWidth) return img.naturalWidth / img.naturalHeight;
+    return r || 1;
+  }
+
+  function layout() {
+    galleries.forEach(function(g) {
+      var imgs = $$('img', g);
+      if (phone.matches) {
+        g.classList.remove('is-masonry');
+        g.style.height = '';
+        imgs.forEach(function(img) { img.style.left = img.style.top = img.style.width = ''; });
+        return;
+      }
+      g.classList.add('is-masonry');
+      var cs = getComputedStyle(g);
+      var gap = parseFloat(cs.columnGap) || 8;
+      var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+      var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2;
+      var cols = [0, 0];
+      imgs.forEach(function(img) {
+        var c = cols[0] <= cols[1] ? 0 : 1;
+        img.style.left = (padL + c * (colW + gap)) + 'px';
+        img.style.top = (padT + cols[c]) + 'px';
+        img.style.width = colW + 'px';
+        cols[c] += colW / ratio(img) + gap;
       });
-    }
-    g.classList.add('has-rows');
+      g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+    });
+  }
+
+  var queued = false;
+  function relayout() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function() { queued = false; layout(); });
+  }
+  layout();
+  window.addEventListener('resize', relayout);
+  // A photo whose real shape differs from its attributes corrects itself on load.
+  galleries.forEach(function(g) {
+    $$('img', g).forEach(function(img) { img.addEventListener('load', relayout); });
   });
 }
 
@@ -698,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initFilters();
   initBlogFilters();
   initSort();
-  initGalleryRows();
+  initGalleryMasonry();
   initLightbox();
   initToolbar();
   initMobileWorkMenu();
