@@ -108,6 +108,8 @@ sup { font-size: 0.7em; vertical-align: super; }
      producing the cross-page glide without owning the final position. */
   transform: translate(var(--dot-dx, 0px), var(--dot-dy, 0px));
 }
+/* the name, in his hand, carries no dot: only Work and About do */
+.nav-home.active::before { content: none; }
 .nav-link.active.dot-animating::before {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -163,7 +165,10 @@ body.is-work-grid .filter-btn.active::before {
   @view-transition { navigation: auto; }
 }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; animation-timing-function: ease; }
+/* the menu and the Work filters are carried on their own, so cards moving
+   in a transition pass under them, never over */
 .nav { view-transition-name: site-nav; }
+.work-toolbar { view-transition-name: site-filters; }
 
 /* ── Home slideshow ── */
 .home { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: clamp(1.25rem, 4vh, 2.5rem) 2rem 2rem; }
@@ -238,7 +243,7 @@ html { scrollbar-gutter: stable; }
 html.hl-open { overflow: hidden; }
 /* the picture grows out of the slideshow into the card, and back */
 ::view-transition-group(hl-art) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.2, 0.9, 0.1, 1); }
-html.hl-moving .nav { view-transition-name: none; }
+html.hl-moving .nav, html.hl-moving .work-toolbar { view-transition-name: none; }
 html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(root) { animation-duration: 0.3s; }
 @media (max-width: 767px) {
   .hl-panel { flex-direction: column; gap: 1.5rem; }

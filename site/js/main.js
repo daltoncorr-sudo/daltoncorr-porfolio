@@ -228,7 +228,7 @@ function initSlideshow() {
       var to = document.getElementById('work');
       if (!to) return;
       e.preventDefault();
-      to.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
+      to.scrollIntoView({ behavior: still ? 'instant' : 'smooth', block: 'start' });
     });
   }
   // Swipe between slides.
@@ -633,8 +633,8 @@ function initToolbar() {
     var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     parts.forEach(function(p) {
       var go = function() {
-        if (p[0].classList.contains('home')) window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
-        else p[0].scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+        if (p[0].classList.contains('home')) window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'instant' });
+        else p[0].scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', block: 'start' });
       };
       p[1].addEventListener('click', function(e) {
         if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -715,7 +715,8 @@ function moveNavDot(link) {
   var a = from && from.getBoundingClientRect(), b = link.getBoundingClientRect();
   if (from) from.classList.remove('active', 'dot-animating');
   link.classList.add('active');
-  if (!a || !b.width) return;
+  // the name carries no dot, so nothing glides to it or away from it
+  if (!a || !b.width || from.classList.contains('nav-home') || link.classList.contains('nav-home')) return;
   link.classList.remove('dot-animating');
   link.style.setProperty('--dot-dx', (a.left - b.left) + 'px');
   link.style.setProperty('--dot-dy', (a.top + a.height / 2 - (b.top + b.height / 2)) + 'px');
@@ -742,15 +743,16 @@ function initNavDotGlide() {
   // Reference point that moves with the dot (its left edge + vertical centre).
   // The constant CSS offset cancels out when we diff old vs new, so this is fine
   // for both the vertical (desktop) and horizontal (mobile) layouts.
-  function restPos() {
-    var r = active.getBoundingClientRect();
+  function restPos(link) {
+    var r = link.getBoundingClientRect();
     return { x: r.left, y: r.top + r.height / 2 };
   }
-  var now = restPos();
   var prev = null;
   try { prev = JSON.parse(sessionStorage.getItem('navDot')); } catch (e) {}
 
-  if (prev) {
+  // (the name carries no dot: a page where it's the active link has none to glide)
+  if (prev && !active.classList.contains('nav-home')) {
+    var now = restPos(active);
     var dx = prev.x - now.x, dy = prev.y - now.y;
     if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
       active.style.setProperty('--dot-dx', dx + 'px');
@@ -765,11 +767,15 @@ function initNavDotGlide() {
     }
   }
   // Remember where the dot is when leaving via a nav link, so the next page can
-  // glide from here. Measured at click time, when layout is settled.
+  // glide from here. Measured at click time, when layout is settled, from the
+  // link active then (the home page moves it as you scroll); none from the name.
   document.addEventListener('click', function (e) {
-    if (e.target.closest('.nav-link')) {
-      sessionStorage.setItem('navDot', JSON.stringify(restPos()));
-    }
+    if (!e.target.closest('.nav-link')) return;
+    var cur = document.querySelector('.nav-link.active');
+    try {
+      if (cur && !cur.classList.contains('nav-home')) sessionStorage.setItem('navDot', JSON.stringify(restPos(cur)));
+      else sessionStorage.removeItem('navDot');
+    } catch (err) {}
   });
 }
 

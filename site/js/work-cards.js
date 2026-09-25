@@ -123,7 +123,7 @@
     cards.forEach(function (c, k) {
       c.style.viewTransitionName = 'wc-' + k;
       c.style.transition = 'none';
-      if (raise) { c.style.position = 'relative'; c.style.zIndex = String(500 - k); }
+      if (raise) { c.style.position = 'relative'; c.style.zIndex = String(Math.max(1, 90 - k)); }   // under the menu (100) and the filters (99)
       if (k) css += '::view-transition-group(wc-' + k + '){animation-delay:' + Math.min(k * 16, 200) + 'ms}';
     });
     stagger.textContent = css;
@@ -233,11 +233,20 @@
     }
     setTimeout(function () { detail.classList.remove('wc-veil'); }, delay || 0);
   }
-  // The side column sticks at the top while it fits the window; when the
-  // words make it taller, it scrolls with the page until its foot is in view.
+  // The side column sticks at the top while it all fits the window. When the
+  // words make it taller, it scrolls until the card has gone by and then keeps
+  // Back / Previous / Next and the words (if those fit), or else just scrolls
+  // with the page: stuck part-way, the foot of the card rode along at the top
+  // of the screen like a header.
   function pinSide() {
     if (detail.hidden) return;
-    side.style.top = Math.min(32, window.innerHeight - side.offsetHeight - 32) + 'px';
+    var room = window.innerHeight - 64;              // 32px clear above and below
+    var h = side.offsetHeight;
+    var ctl = side.querySelector('.wc-controls');
+    var below = ctl ? ctl.getBoundingClientRect().top - side.getBoundingClientRect().top : 0;
+    if (h <= room) { side.style.position = ''; side.style.top = '32px'; }
+    else if (ctl && h - below <= room) { side.style.position = ''; side.style.top = (32 - below) + 'px'; }
+    else { side.style.position = 'static'; side.style.top = ''; }
   }
 
   // A project's own stylesheets (the floating badges, say) that this page
@@ -331,8 +340,10 @@
       detail.hidden = false;
       layDeck();
       if (doc) { fill(doc); easeInBody(140); }
-      window.scrollTo(0, 0);
+      // the new address first: the grid's own history entry keeps the scroll it
+      // had, which Back restores (saved after the jump, it was the top of the page)
       if (push) history.pushState({ wc: card.href }, '', card.href);
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }).then(function () {
       done();
       deck.forEach(function (c) { c.style.transition = ''; });
@@ -363,8 +374,8 @@
     layDeck();
     info.replaceChildren();
     body.replaceChildren();
-    window.scrollTo(0, 0);
-    if (push) history.pushState({ wc: card.href }, '', card.href);
+    if (push) history.pushState({ wc: card.href }, '', card.href);   // before the jump: see openFull
+    window.scrollTo({ top: 0, behavior: 'instant' });
     card.style.willChange = 'transform';
     var moves = [glide(card, first, card.getBoundingClientRect(), 560)];
     deck.slice(1, 4).forEach(function (c, k) {
@@ -394,7 +405,7 @@
     body.replaceChildren();
     grid.classList.remove('is-hidden');
     document.title = gridTitle;
-    window.scrollTo(0, s.scroll);
+    window.scrollTo({ top: s.scroll, behavior: 'instant' });
     glide(top, first, top.getBoundingClientRect(), 520).finished.then(function () {
       s.deck.forEach(function (c) { c.style.transition = ''; });
     });
@@ -519,7 +530,7 @@
       body.replaceChildren();
       grid.classList.remove('is-hidden');
       document.title = gridTitle;
-      window.scrollTo(0, s.scroll);
+      window.scrollTo({ top: s.scroll, behavior: 'instant' });
       riseIn(top);
     }).then(function () {
       done();
