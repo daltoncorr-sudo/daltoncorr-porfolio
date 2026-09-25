@@ -79,6 +79,13 @@
   var body = detail.querySelector('.wc-body');
   var stagger = document.createElement('style');
   document.head.appendChild(stagger);
+  // Back / Previous / Next again at the foot of the work
+  var foot = document.createElement('nav');
+  foot.className = 'wc-foot';
+  foot.setAttribute('aria-label', 'Projects');
+  foot.innerHTML = detail.querySelector('.wc-controls').innerHTML;
+  detail.appendChild(foot);
+  var footPrev = foot.querySelector('.wc-prev'), footNext = foot.querySelector('.wc-next'), footBack = foot.querySelector('.wc-back-link');
 
   // Same-document view transition where there is one; otherwise just swap.
   function swap(update) {
@@ -156,9 +163,10 @@
       if (img && layer < 5) img.loading = 'eager';
     });
     arrows.hidden = n < 2;
+    foot.querySelector('.wc-arrows').hidden = n < 2;
     if (n > 1) {
-      nextBtn.setAttribute('href', deck[1].getAttribute('href'));
-      prevBtn.setAttribute('href', deck[n - 1].getAttribute('href'));
+      [nextBtn, footNext].forEach(function (a) { a.setAttribute('href', deck[1].getAttribute('href')); });
+      [prevBtn, footPrev].forEach(function (a) { a.setAttribute('href', deck[n - 1].getAttribute('href')); });
     }
   }
 
@@ -208,9 +216,13 @@
   // Page-specific scripts (the HS21 badge ring, the Weissman 3D catalogue,
   // Vimeo's player API) run as they load, so they're added after the content.
   function loadScripts(doc, base) {
+    var have = [].map.call(document.querySelectorAll('script[src]'), function (s) { return s.src; });
     var srcs = [].slice.call(doc.querySelectorAll('script[src]'))
       .map(function (s) { return new URL(s.getAttribute('src'), base).href; })
-      .filter(function (src) { return !/\/js\/(main|work-cards)\.js/.test(src); });
+      .filter(function (src) { return !/\/js\/(main|work-cards)\.js/.test(src); })
+      // a library from elsewhere (three.js) is loaded once; the page's own
+      // scripts run again, for the content they've just been given
+      .filter(function (src) { return new URL(src).origin === location.origin || have.indexOf(src) < 0; });
     return srcs.reduce(function (p, src) {
       return p.then(function () {
         return new Promise(function (resolve) {
@@ -246,9 +258,13 @@
     getPage(card.href).then(function (doc) {
       return needStyles(doc, card.href).then(function () { return doc; });
     }).then(function (doc) {
+      if (phone.matches && !still) return openLight(card, deck, s, doc, push, byKeyboard);
       // carry everything on screen (it gathers into the deck), plus the top
-      // of the deck
-      var done = carry(deck.filter(function (c, k) { return k < 4 || onScreen(c); }), true);
+      // of the deck. A phone carries just the top three: a dozen cards in
+      // flight at once is more than it can draw smoothly, and the rest simply
+      // fade with the page.
+      var small = window.matchMedia('(max-width: 767px)').matches;
+      var done = carry(deck.filter(function (c, k) { return k < (small ? 3 : 4) || (!small && onScreen(c)); }), true);
       deck.forEach(function (c) { c.style.transition = 'none'; });
       state = s;
       return swap(function () {
@@ -277,13 +293,70 @@
     }).then(function () { busy = false; });
   }
 
+  // ── Phones: no page snapshots, just the one card gliding ──
+  // A view transition photographs the whole page and every card it carries,
+  // which is more than a phone can move smoothly. Here the tapped card glides
+  // from its place in the grid to the top of the deck on its own (a FLIP on
+  // transform, which the compositor does alone) while the rest fade in.
+  var phone = window.matchMedia('(max-width: 767px)');
+  function glide(el, from, to, ms) {
+    return el.animate([
+      { transform: 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px) scale(' + (from.width / to.width) + ')', transformOrigin: '0 0' },
+      { transform: 'none', transformOrigin: '0 0' }
+    ], { duration: ms, easing: EASE });
+  }
+  function openLight(card, deck, s, doc, push, byKeyboard) {
+    var first = card.getBoundingClientRect();
+    state = s;
+    deck.forEach(function (c) { c.style.transition = 'none'; });
+    document.body.classList.add('wc-open');
+    grid.classList.add('is-hidden');
+    deck.slice().reverse().forEach(function (c) { deckEl.appendChild(c); });
+    detail.hidden = false;
+    layDeck();
+    fill(doc);
+    window.scrollTo(0, 0);
+    if (push) history.pushState({ wc: card.href }, '', card.href);
+    var moves = [glide(card, first, card.getBoundingClientRect(), 560)];
+    deck.slice(1, 4).forEach(function (c, k) {
+      moves.push(c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 360, delay: 240 + k * 70, easing: 'ease-out', fill: 'backwards' }));
+    });
+    easeInBody(160);
+    return Promise.all(moves.map(function (a) { return a.finished; })).then(function () {
+      deck.forEach(function (c) { c.style.transition = ''; });
+      if (byKeyboard) backLink.focus({ preventScroll: true });
+      return settle(doc, card.href);
+    });
+  }
+  function closeLight(s) {
+    var top = s.deck[0], first = top.getBoundingClientRect();
+    s.deck.forEach(function (c) {
+      c.style.transition = 'none';
+      c.style.zIndex = '';
+      c.removeAttribute('data-layer');
+      c.removeAttribute('tabindex');
+    });
+    s.order.forEach(function (c) { grid.appendChild(c); });
+    detail.hidden = true;
+    document.body.classList.remove('wc-open');
+    info.replaceChildren();
+    body.replaceChildren();
+    grid.classList.remove('is-hidden');
+    document.title = gridTitle;
+    window.scrollTo(0, s.scroll);
+    glide(top, first, top.getBoundingClientRect(), 520).finished.then(function () {
+      s.deck.forEach(function (c) { c.style.transition = ''; });
+    });
+    riseIn([top]);
+  }
+
   // The shuffle. Next: the top card lifts and slides out to the left with a
   // slight turn, then tucks in behind the deck while the rest step forward.
   // Previous: the card at the back comes round from the left onto the top
   // while the rest step back. The project crossfades.
   var OUT = 'translate(-36%, -14px) rotate(-6deg)';
   var BACK = 'translateY(42px) scale(0.85)';
-  function step(dir) {
+  function step(dir, from) {
     if (!state || busy || state.deck.length < 2) return;
     var deck = state.deck;
     var target = dir > 0 ? deck[1] : deck[deck.length - 1];
@@ -296,10 +369,11 @@
       var out = [];
       if (!still) {
         out.push.apply(out, both([{ opacity: 1 }, { opacity: 0 }], { duration: 180, easing: 'ease-in', fill: 'forwards' }));
-        if (dir > 0) out.push(mover.animate([{ transform: 'none' }, { transform: OUT }], { duration: 320, easing: EASE_IN, fill: 'forwards' }));
+        if (dir > 0) out.push(mover.animate([{ transform: from || 'none' }, { transform: OUT }], { duration: from ? 220 : 320, easing: from ? EASE : EASE_IN, fill: 'forwards' }));
       }
       return Promise.all(out.map(function (a) { return a.finished; })).then(function () {
         if (dir > 0) deck.push(deck.shift()); else deck.unshift(deck.pop());
+        mover.style.transform = '';   // a flick's hold on it lets go
         layDeck(); // the rest step forward or back (their CSS transitions)
         fill(doc);
         window.scrollTo(0, 0);
@@ -327,7 +401,8 @@
     if (!state || direct) return;
     var s = state;
     state = null;
-    var top = s.deck.slice(0, 4);
+    if (phone.matches && !still) { closeLight(s); return; }
+    var top = s.deck.slice(0, window.matchMedia('(max-width: 767px)').matches ? 2 : 4);
     var done = carry(top);
     s.deck.forEach(function (c) { c.style.transition = 'none'; });
     swap(function () {
@@ -378,6 +453,7 @@
       if (i < 0) return;
       var rest = all.slice(i + 1).concat(all.slice(0, i)).map(function (c) {
         var card = document.importNode(c, true);
+        card.setAttribute('href', new URL(c.getAttribute('href'), location.origin + home).href);
         var img = card.querySelector('img');
         if (img) img.loading = 'lazy';
         return card;
@@ -425,6 +501,9 @@
   });
 
   if (grid) {
+    // card links, fixed to where they point from this page: the address
+    // changes when a project opens, and a relative link would follow it
+    [].forEach.call(grid.querySelectorAll('.project-card'), function (c) { c.setAttribute('href', c.href); });
     grid.addEventListener('click', function (e) {
       var card = e.target.closest('.project-card');
       if (!card || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -435,13 +514,69 @@
   }
   // In the deck the cards are the header, not links.
   deckEl.addEventListener('click', function (e) { if (e.target.closest('.project-card')) e.preventDefault(); });
-  function plainClick(e) { return !(e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey); }
-  backLink.addEventListener('click', function (e) {
-    if (direct || !plainClick(e)) return;   // a project page: just go to /work/
-    e.preventDefault();
-    history.back();
+  deckEl.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+  // Flick through the deck: drag (or swipe) the top card left for the next
+  // project, right for the one before. A short quick flick counts as much as
+  // a long drag; anything less and the card settles back.
+  var flick = null;
+  deckEl.addEventListener('pointerdown', function (e) {
+    if (e.button || !state || busy || state.deck.length < 2) return;
+    var card = state.deck[0];
+    if (!card.contains(e.target)) return;
+    flick = { card: card, id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, t: performance.now(), on: false };
   });
-  [[prevBtn, -1], [nextBtn, 1]].forEach(function (b) {
+  deckEl.addEventListener('pointermove', function (e) {
+    if (!flick || e.pointerId !== flick.id) return;
+    var dx = e.clientX - flick.x, dy = e.clientY - flick.y;
+    if (!flick.on) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      if (Math.abs(dy) > Math.abs(dx)) { flick = null; return; }   // a scroll, not a flick
+      flick.on = true;
+      try { deckEl.setPointerCapture(e.pointerId); } catch (err) {}   // already let go: fine, it follows the moves it gets
+      flick.card.style.transition = 'none';
+    }
+    flick.dx = dx;
+    flick.card.style.transform = 'translateX(' + dx.toFixed(1) + 'px) rotate(' + (dx * 0.035).toFixed(2) + 'deg)';
+  });
+  function unflick(e) {
+    if (!flick || (e && e.pointerId !== flick.id)) return;
+    var f = flick;
+    flick = null;
+    if (!f.on) return;
+    var speed = f.dx / Math.max(16, performance.now() - f.t);   // px per ms
+    var go = Math.abs(f.dx) > 90 || Math.abs(speed) > 0.45;
+    if (go && f.dx < 0) { step(1, f.card.style.transform); return; }
+    f.card.style.transition = '';
+    f.card.style.transform = '';          // back into place (its CSS transition)
+    if (go) step(-1);
+  }
+  deckEl.addEventListener('pointerup', unflick);
+  deckEl.addEventListener('pointercancel', unflick);
+  // a trackpad's two-finger swipe over the deck does the same
+  var swipeSum = 0, swipeQuiet = 0;
+  deckEl.addEventListener('wheel', function (e) {
+    if (!state || state.deck.length < 2 || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    var now = performance.now();
+    if (now < swipeQuiet) { swipeQuiet = now + 180; return; }   // the rest of one swipe's momentum
+    swipeSum += e.deltaX;
+    if (Math.abs(swipeSum) > 60) {
+      step(swipeSum > 0 ? 1 : -1);
+      swipeSum = 0;
+      swipeQuiet = now + 180;
+    }
+  }, { passive: false });
+  function plainClick(e) { return !(e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey); }
+  [backLink, footBack].forEach(function (a) {
+    a.setAttribute('href', backLink.getAttribute('href'));
+    a.addEventListener('click', function (e) {
+      if (direct || !plainClick(e)) return;   // a project page: just go to /work/
+      e.preventDefault();
+      history.back();
+    });
+  });
+  [[prevBtn, -1], [nextBtn, 1], [footPrev, -1], [footNext, 1]].forEach(function (b) {
     b[0].addEventListener('click', function (e) {
       if (!plainClick(e) || !state || state.deck.length < 2) return;   // deck not ready: follow the link
       e.preventDefault();

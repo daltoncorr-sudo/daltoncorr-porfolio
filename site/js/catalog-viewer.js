@@ -171,10 +171,19 @@
 
   /* ── ANIMATE ── */
   var clock = new THREE.Clock();
+  // Drawn only while on screen, and let go of entirely once the page it's on
+  // is replaced (a project opened in place on the Work page): a phone has room
+  // for only a few WebGL contexts, and a forgotten one keeps its GPU busy.
+  var seen = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { seen = entries[0].isIntersecting; }).observe(container);
+  }
 
   function animate() {
+    if (!container.isConnected) { dispose(); return; }
     requestAnimationFrame(animate);
     var dt = clock.getDelta();
+    if (!seen) return;
 
     if (!isDragging && !isHovering) {
       autoAngle += AUTO_SPEED * dt;
@@ -190,12 +199,15 @@
   animate();
 
   /* ── CLEANUP ── */
-  window._catalogViewerDispose = function () {
-    renderer.dispose();
+  function dispose() {
+    window.removeEventListener('resize', resize);
     geometry.dispose();
     materials.forEach(function (m) { m.dispose(); if (m.map) m.map.dispose(); });
     groundGeo.dispose();
     groundMat.dispose();
-    container.removeChild(renderer.domElement);
-  };
+    renderer.dispose();
+    if (renderer.forceContextLoss) renderer.forceContextLoss();
+    if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+  }
+  window._catalogViewerDispose = dispose;
 })();

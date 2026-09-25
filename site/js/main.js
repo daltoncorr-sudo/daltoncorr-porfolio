@@ -24,9 +24,12 @@ function initSlideshow() {
     img.addEventListener('load', function() { ready[i] = true; });
     img.addEventListener('error', function() { ready[i] = 'skip'; });
   });
+  // Resolved against the page as it loaded: a project opened in place moves
+  // the address to /work/..., and a relative path would follow it there.
+  var base = document.baseURI;
   function load(i) {
     var img = slides[i].querySelector('img');
-    if (img && img.dataset.src && !img.getAttribute('src')) img.src = img.dataset.src;
+    if (img && img.dataset.src && !img.getAttribute('src')) img.src = new URL(img.dataset.src, base).href;
   }
 
   // Advance toward n. A pending slide is waited for (never skipped past, which
@@ -55,7 +58,9 @@ function initSlideshow() {
   function stop() { clearInterval(timer); }
   function start() {
     stop();
-    if (!paused && !isOpen() && !document.hidden) timer = setInterval(function() { go(cur + 1); }, 3000);
+    if (!paused && !isOpen() && !document.hidden) timer = setInterval(function() {
+      if (!document.body.classList.contains('wc-open')) go(cur + 1);   // a project is open over it
+    }, 3000);
   }
   // A manual step restarts the 3s, so the next slide gets its full time.
   function step(n) { go(n); start(); }
@@ -126,9 +131,13 @@ function initSlideshow() {
   // Same-document view transition where there is one, so the picture grows
   // out of the slideshow into the card; otherwise a plain fade.
   function swap(update) {
-    if (document.startViewTransition && !still) return document.startViewTransition(update).finished.catch(function() {});
-    update();
-    return Promise.resolve();
+    if (!document.startViewTransition || still) { update(); return Promise.resolve(); }
+    // the menu fades with the page here: carried on its own it would ride
+    // sharp over the frosted backdrop and snap under it at the end
+    var root = document.documentElement;
+    root.classList.add('hl-moving');
+    var t = document.startViewTransition(update);
+    return t.finished.catch(function() {}).then(function() { root.classList.remove('hl-moving'); });
   }
   // The slide's picture fills its frame (contained); for the morph it's
   // briefly given exactly the picture's box, so nothing stretches.
@@ -212,7 +221,7 @@ function initSlideshow() {
     if (e.key === 'ArrowRight') step(cur + 1);
     if (e.key === ' ' && e.target === document.body && !isOpen()) { e.preventDefault(); paused = !paused; start(); }
   });
-  // "Scroll for portfolio": a glide down to the cards, and gone once you're on your way.
+  // "Scroll for portfolio": a glide down to the cards.
   var cue = $('.scroll-cue');
   if (cue) {
     cue.addEventListener('click', function(e) {
@@ -221,14 +230,6 @@ function initSlideshow() {
       e.preventDefault();
       to.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
     });
-    var cueTick = false;
-    var cueCheck = function() { cueTick = false; cue.classList.toggle('is-gone', window.scrollY > 40); };
-    window.addEventListener('scroll', function() {
-      if (cueTick) return;
-      cueTick = true;
-      requestAnimationFrame(cueCheck);
-    }, { passive: true });
-    cueCheck();   // a reload can land part-way down
   }
   // Swipe between slides.
   var tx = 0;

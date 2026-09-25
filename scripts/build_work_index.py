@@ -188,11 +188,13 @@ def build(check: bool = False) -> int:
             flags=re.DOTALL,
         )
 
-    # the home page: the same cards, with its links and images one level up,
-    # and nothing loaded eagerly (they're below the fold there)
+    # the home page: the same cards, nothing loaded eagerly (they're below the
+    # fold there), and every link and image from the site's root: once a card
+    # opens, the address becomes /work/<slug>, and a path relative to the home
+    # page would then point into /work/work/...
     home_cards = "\n\n".join(render_card(p) for p in projects)
-    home_cards = re.sub(r'href="([a-z0-9-]+)" class="project-card"', r'href="work/\1" class="project-card"', home_cards)
-    home_cards = home_cards.replace('"../images/', '"images/').replace(", ../images/", ", images/")
+    home_cards = re.sub(r'href="([a-z0-9-]+)" class="project-card"', r'href="/work/\1" class="project-card"', home_cards)
+    home_cards = home_cards.replace('"../images/', '"/images/').replace(", ../images/", ", /images/")
     home = HOME.read_text()
     new_home = re.sub(rf"{re.escape(BEGIN)}.*?{re.escape(END)}", f"{BEGIN}\n{home_cards}\n        {END}", home, flags=re.DOTALL)
     if new_home != home:

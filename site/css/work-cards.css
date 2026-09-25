@@ -39,7 +39,7 @@
 
 /* ── Open: the deck and the words on the left, the work on the right ── */
 .work-grid.is-hidden { display: none; }
-body.wc-open .home { display: none; }   /* the home page's slideshow, while a project is open */
+body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home page's slideshow and About, while a project is open */
 .wc-detail[hidden] { display: none; }
 .wc-detail {
   /* the deck has its own steady width, whatever the grid looked like */
@@ -57,20 +57,32 @@ body.wc-open .home { display: none; }   /* the home page's slideshow, while a pr
    The padding is the room the three peeking cards need. */
 .wc-deck { display: grid; padding-bottom: 42px; }
 .wc-deck > .project-card { grid-area: 1 / 1; position: relative; transform-origin: 50% 100%; cursor: default; }
+/* the top card can be flicked: sideways is the deck's, up and down the page's */
+.wc-deck { touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+.wc-deck > .project-card[data-layer="0"] { cursor: grab; }
+.wc-deck > .project-card[data-layer="0"]:active { cursor: grabbing; }
 /* room for a two-line title, whatever the title, so every card (and the
    deck) is the same height from the first paint; spare room falls below */
 .wc-deck .project-card .card-info { min-height: calc(var(--pad-t) + var(--pad-b) + 2.24 * var(--t) + var(--gap-r) + 1.3 * var(--r) + 2px + 1.3 * 0.8125rem); }
 /* a stack you can feel: the next three step down and back, each a touch
    smaller and a shade deeper; the top card casts the shadow */
-.wc-deck .project-card {
-  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.45s ease, filter 0.45s ease, box-shadow 0.45s ease;
+/* Only transform and opacity move (the compositor's own work, smooth on a
+   phone); each layer's shade is a dark veil whose opacity changes, not a
+   filter that would be redrawn every frame. */
+.wc-deck .project-card { transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.45s ease; }
+.wc-deck .project-card::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: #000; opacity: 0; transition: opacity 0.45s ease;
 }
 .wc-deck .project-card[data-layer="0"] { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 22px 48px rgba(0, 0, 0, 0.11); }
-.wc-deck .project-card[data-layer="1"] { transform: translateY(14px) scale(0.95); filter: brightness(0.975); }
-.wc-deck .project-card[data-layer="2"] { transform: translateY(28px) scale(0.9); filter: brightness(0.95); }
-.wc-deck .project-card[data-layer="3"] { transform: translateY(42px) scale(0.85); filter: brightness(0.925); }
+.wc-deck .project-card[data-layer="1"] { transform: translateY(14px) scale(0.95); }
+.wc-deck .project-card[data-layer="2"] { transform: translateY(28px) scale(0.9); }
+.wc-deck .project-card[data-layer="3"] { transform: translateY(42px) scale(0.85); }
+.wc-deck .project-card[data-layer="1"]::after { opacity: 0.025; }
+.wc-deck .project-card[data-layer="2"]::after { opacity: 0.05; }
+.wc-deck .project-card[data-layer="3"]::after, .wc-deck .project-card[data-layer="4"]::after { opacity: 0.075; }
 /* 4: waiting just behind, unseen (its image loads, ready to come up) */
-.wc-deck .project-card[data-layer="4"] { transform: translateY(42px) scale(0.85); filter: brightness(0.925); opacity: 0; }
+.wc-deck .project-card[data-layer="4"] { transform: translateY(42px) scale(0.85); opacity: 0; }
 /* 5: the rest of the deck, not drawn at all (so its images don't load yet) */
 .wc-deck .project-card[data-layer="5"] { display: none; }
 .wc-deck .project-card:not([data-layer="0"]) { pointer-events: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
@@ -82,6 +94,12 @@ body.wc-open .home { display: none; }   /* the home page's slideshow, while a pr
 .wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
 .wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
 .wc-arrows { display: flex; gap: 1.5rem; }
+/* the same three at the foot of the work, for when you've read to the end */
+.wc-foot {
+  grid-column: 2; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  width: 100%; max-width: 1100px; justify-self: center; white-space: nowrap;
+  margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
 .wc-arrow { display: inline-flex; align-items: center; gap: 0.45em; }
 .wc-chev { width: 0.45em; height: 0.8em; flex: none; transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.1, 1); }
 .wc-prev:hover .wc-chev { transform: translateX(-2px); }
@@ -182,6 +200,7 @@ body { overflow-x: clip; }
 
 /* narrower than a laptop: one column, the deck and its words first */
 @media (max-width: 1099px) {
+  .wc-foot { grid-column: 1; margin-top: 2.5rem; }
   .wc-detail { --wc-card-w: min(62vw, 300px); grid-template-columns: minmax(0, 1fr); gap: 3rem; padding-top: 1.5rem; }
   .wc-side { position: static; width: var(--wc-card-w); margin: 0 auto; }
   .wc-info { margin-top: 1.75rem; }
