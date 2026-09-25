@@ -166,8 +166,10 @@ body.is-work-grid .filter-btn.active::before {
 .slide { display: none; text-decoration: none; }
 /* the first screen ends with the way down to the work */
 .home { position: relative; }
+/* just under the picture's line of text, so it's always on the first screen
+   (a phone's 100vh reaches behind its toolbar) */
 .scroll-cue {
-  position: absolute; left: 50%; bottom: clamp(12px, 2.6vh, 26px); translate: -50% 0;
+  position: relative; margin-top: calc(14px + 1.4em + 22px);
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   font-size: 0.875rem; letter-spacing: -0.01em; color: #6e6e73; text-decoration: none;
   transition: color 0.2s ease, opacity 0.4s ease;

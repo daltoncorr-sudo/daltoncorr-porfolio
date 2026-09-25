@@ -23,7 +23,10 @@
   backface-visibility: hidden;
 }
 /* the whole card lifts a touch; the image stays put inside it */
-.work-grid .project-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03), 0 14px 38px rgba(0, 0, 0, 0.1); }
+/* (mouse and trackpad only: a phone's first tap would spend itself on hover) */
+@media (hover: hover) {
+  .work-grid .project-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03), 0 14px 38px rgba(0, 0, 0, 0.1); }
+}
 .project-card:hover .card-image { transform: none; box-shadow: none; } /* nothing inside the card moves on hover */
 /* the image keeps its 4:5; the words take whatever height is left, so the
    titles in a row line up under their images */
@@ -94,6 +97,7 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
 .wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
 .wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
 .wc-arrows { display: flex; gap: 1.5rem; }
+.wc-body:empty ~ .wc-foot { visibility: hidden; }   /* until the project's work arrives */
 /* the same three at the foot of the work, for when you've read to the end */
 .wc-foot {
   grid-column: 2; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
