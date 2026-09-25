@@ -21,18 +21,21 @@
   /* SHOTS was Bencho's own pictures, which are not licensed
      to travel. Point this at yours.
 
-     ON THIS PAGE: the eight HollyShorts 21 badges. */
-  const IMG_BASE = '../images/design/hollyshorts21/badges/';
-  const SHOTS = [
-    { name: 'All Access',   src: IMG_BASE + 'All%20Access.webp' },
-    { name: 'Day Pass',     src: IMG_BASE + 'Day%20Pass.webp' },
-    { name: 'Film Summit',  src: IMG_BASE + 'Film%20Summit.webp' },
-    { name: 'Filmmaker',    src: IMG_BASE + 'Filmmaker.webp' },
-    { name: 'Press',        src: IMG_BASE + 'Press.webp' },
-    { name: 'Screenwriter', src: IMG_BASE + 'Screenwriter.webp' },
-    { name: 'Sponsor',      src: IMG_BASE + 'Sponsor.webp' },
-    { name: 'Staff',        src: IMG_BASE + 'Staff.webp' }
-  ];
+     ON THIS PAGE: the festival's badges. The HollyShorts 21 set is
+     the default; another year's page names its own on the host:
+       data-base   the folder the badges are in
+       data-shots  their names, "|" between, one file per name
+       data-code   the serial's prefix, data-serial its first number
+       data-fine   the fine print, "|" between lines
+       data-label  what a screen reader calls the ring */
+  const conf = host.dataset;
+  const IMG_BASE = conf.base || '../images/design/hollyshorts21/badges/';
+  const NAMES = conf.shots ? conf.shots.split('|')
+    : ['All Access', 'Day Pass', 'Film Summit', 'Filmmaker', 'Press', 'Screenwriter', 'Sponsor', 'Staff'];
+  const SHOTS = NAMES.map((name) => ({ name, src: IMG_BASE + encodeURIComponent(name) + '.webp' }));
+  const CODE = conf.code || 'HS21';
+  const SERIAL = Number(conf.serial || 2025000);
+  const FINE = (conf.fine || '21st Annual Oscar®-Qualifying HollyShorts Film Festival|TCL Chinese Theatres — Los Angeles||Property of Alta Global Media. Must be worn|and visible at all times. Non-transferable.').split('|').join('<br>');
 
   /* ══ Carousel ═════════════════════════════════════════════
      Cards on a turntable that drift at rest, give under the
@@ -390,9 +393,9 @@
       '<span class="badge-back-type">' + name.toUpperCase() + '</span>' +
       '<div class="badge-back-barcode">' +
         '<svg viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">' + barcode(i) + '</svg>' +
-        '<span>HS21-' + String(2025000 + i * 137) + '</span>' +
+        '<span>' + CODE + '-' + String(SERIAL + i * 137) + '</span>' +
       '</div>' +
-      '<p class="badge-back-fine">21st Annual Oscar®-Qualifying HollyShorts Film Festival<br>TCL Chinese Theatres — Los Angeles<br><br>Property of Alta Global Media. Must be worn<br>and visible at all times. Non-transferable.</p>' +
+      '<p class="badge-back-fine">' + FINE + '</p>' +
     '</div>';
 
   /* ── the frame ─────────────────────────────────────────── */
@@ -402,7 +405,7 @@
   track.className = 'car-track';
   track.dataset.held = 'false';
   track.setAttribute('role', 'group');
-  track.setAttribute('aria-label', 'HollyShorts 21 badges — use the arrow keys to turn, Enter to flip');
+  track.setAttribute('aria-label', (conf.label || 'HollyShorts 21 badges') + ' — use the arrow keys to turn, Enter to flip');
   track.setAttribute('aria-roledescription', 'carousel');
   track.tabIndex = 0;
   car.appendChild(track);

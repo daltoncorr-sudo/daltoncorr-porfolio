@@ -2,7 +2,7 @@
 """
 Replace manual ?v=NN cache-busting params with content-hashes.
 
-Computes a short hash of site/css/style.css and each site/js/*.js, then rewrites
+Computes a short hash of each site/css/*.css and site/js/*.js, then rewrites
 every ?v=... reference in every HTML file to match. Idempotent — running on an
 already-current tree changes nothing.
 
@@ -26,7 +26,7 @@ def short_hash(path: Path, length: int = 8) -> str:
 def main() -> None:
     # style.css plus every script in site/js (main.js, carousel.js,
     # catalog-viewer.js, …), each stamped with its own content hash.
-    assets = [SITE / "css" / "style.css"] + sorted((SITE / "js").glob("*.js"))
+    assets = sorted((SITE / "css").glob("*.css")) + sorted((SITE / "js").glob("*.js"))
     stamps = [(re.compile(r"(\b" + re.escape(a.name) + r"\?v=)[A-Za-z0-9]+"), short_hash(a))
               for a in assets]
     print("   ".join(f"{a.name}: {h}" for a, (_, h) in zip(assets, stamps)))

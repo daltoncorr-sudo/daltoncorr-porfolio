@@ -25,10 +25,12 @@ from stamp_image_sizes import image_size
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 WIDTH, MIN_SOURCE, QUALITY = 1200, 1500, "85"
-# Rendered width of a 2-up gallery photo: 482px once the column is at its
-# 1100px max; half the column minus nav and margins on tablets; one per row
-# on phones.
-SIZES = "(min-width: 1200px) 482px, (min-width: 768px) calc(50vw - 124px), calc(100vw - 40px)"
+# Rendered width of a 2-up gallery photo: half of the project column (up to
+# 1100px) beside the deck on laptops; half the page on tablets; one per row
+# on phones. A photo alone in its gallery is shown whole and large, so it
+# gets the column's full width (and retina screens get the original).
+SIZES = "(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)"
+SIZES_ALONE = "(min-width: 1100px) min(1100px, 70vw), 100vw"
 
 GALLERY = re.compile(r'(<div class="project-gallery">)(.*?)(</div>)', re.S)
 IMG = re.compile(r"<img\b[^>]*>", re.I)
@@ -74,7 +76,7 @@ def main():
                 subprocess.run([cwebp(), "-quiet", "-q", QUALITY, "-metadata", "none",
                                     "-resize", str(WIDTH), "0", str(path), "-o", str(vpath)], check=True)
                 made += 1
-            want = f' srcset="{vurl} {WIDTH}w, {src.group(1)} {size[0]}w" sizes="{SIZES}"'
+            want = f' srcset="{vurl} {WIDTH}w, {src.group(1)} {size[0]}w" sizes="{SIZES_ALONE if alone else SIZES}"'
             new = OLD.sub("", tag)
             new = new[:4] + want + new[4:]
             if new != tag:
@@ -83,7 +85,13 @@ def main():
                     problems.append(f"no srcset: {page.name}: {src.group(1)}")
             return new
 
-        new_text = GALLERY.sub(lambda g: g.group(1) + IMG.sub(fix_img, g.group(2)) + g.group(3), text)
+        def fix_gallery(g):
+            nonlocal alone
+            alone = len(IMG.findall(g.group(2))) == 1
+            return g.group(1) + IMG.sub(fix_img, g.group(2)) + g.group(3)
+
+        alone = False
+        new_text = GALLERY.sub(fix_gallery, text)
         if not check and new_text != text:
             page.write_text(new_text, encoding="utf-8")
 

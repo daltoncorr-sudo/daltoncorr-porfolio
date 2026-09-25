@@ -438,12 +438,14 @@ function initToolbar() {
   var workLink = null;
   $$('.nav-link').forEach(function(l) { if (l.textContent.trim() === 'Work') workLink = l; });
 
-  if (isWorkGrid) toolbar.classList.add('visible');
+  // the filters stay in view on the grid and on a project opened as a deck
+  var pinned = isWorkGrid || !!$('.wc-detail');
+  if (pinned) toolbar.classList.add('visible');
 
   var hideTimer;
   function show() { clearTimeout(hideTimer); toolbar.classList.add('visible'); }
   function scheduleHide() {
-    hideTimer = setTimeout(function() { if (!isWorkGrid) toolbar.classList.remove('visible'); }, 350);
+    hideTimer = setTimeout(function() { if (!pinned) toolbar.classList.remove('visible'); }, 350);
   }
   if (workLink) {
     workLink.addEventListener('mouseenter', show);
@@ -561,7 +563,7 @@ function onceTransition(el, prop, fallback, cb) {
 /* ── Sticky project cards ── */
 function initStickyCards() {
   var meta = $('.project-meta');
-  if (!meta) return;
+  if (!meta || meta.closest('.wc-info')) return; // the deck layout has its own (work-cards.js)
 
   // Wrap project-meta + project-body in a sticky info card
   var body = meta.nextElementSibling;

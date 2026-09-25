@@ -1,0 +1,193 @@
+/* Work: the card grid, and a project opened as a deck (work-cards.js).
+   Loaded on /work/ and on every project page. Quiet, product-page finish:
+   white cards, edge-to-edge images, tight display type, nothing that
+   jiggles. */
+
+/* ── Cards ─────────────────────────────────────────────────── */
+.work-grid { gap: 28px; margin-left: 0; max-width: none; }
+/* smaller cards, more air between them */
+@media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 40px; } }
+@media (min-width: 1100px) { .work-grid { grid-template-columns: repeat(4, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px); padding-right: clamp(0px, 3vw, 4rem); } }
+/* no focus or tap highlights anywhere on these pages */
+*:focus, *:focus-visible { outline: none; }
+* { -webkit-tap-highlight-color: transparent; }
+.project-card {
+  /* type sizes as variables, so the deck can reserve two title lines */
+  --t: clamp(1.05rem, 1.15vw, 1.35rem); --r: clamp(0.875rem, 0.9vw, 1rem);
+  --pad-t: 16px; --pad-x: 18px; --pad-b: 18px; --gap-r: 6px;
+  display: flex; flex-direction: column;
+  background: #fff; border-radius: 22px; overflow: hidden;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02), 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.4s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  /* its own layer, so a lift or a slide never re-rasterises the image */
+  backface-visibility: hidden;
+}
+/* the whole card lifts a touch; the image stays put inside it */
+.work-grid .project-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03), 0 14px 38px rgba(0, 0, 0, 0.1); }
+.project-card:hover .card-image { transform: none; box-shadow: none; } /* nothing inside the card moves on hover */
+/* the image keeps its 4:5; the words take whatever height is left, so the
+   titles in a row line up under their images */
+.project-card .card-image { flex: none; aspect-ratio: 4/5; margin: 0; border-radius: 0; background: #ececee; }
+.project-card .card-info { flex: 1 0 auto; padding: var(--pad-t) var(--pad-x) var(--pad-b); }
+.project-card .card-title {
+  font-size: var(--t); font-weight: 600;
+  line-height: 1.12; letter-spacing: -0.022em; margin: 0;
+}
+.project-card .card-role { display: block; margin-top: var(--gap-r); font-size: var(--r); line-height: 1.3; letter-spacing: -0.01em; color: #6e6e73; }
+.project-card .card-year { display: block; margin-top: 2px; font-size: 0.8125rem; line-height: 1.3; color: #86868b; }
+.card-image img { color: transparent; } /* never show alt text while an image loads */
+
+/* ── Open: the deck and the words on the left, the work on the right ── */
+.work-grid.is-hidden { display: none; }
+.wc-detail[hidden] { display: none; }
+.wc-detail {
+  /* the deck has its own steady width, whatever the grid looked like */
+  --wc-card-w: clamp(260px, 23vw, 400px);
+  display: grid; grid-template-columns: var(--wc-card-w) minmax(0, 1fr); gap: clamp(2.5rem, 4vw, 4.5rem);
+  align-items: start; max-width: none; margin: 0;
+  padding: 2rem var(--page-margin) 6rem;
+}
+/* sticks while it fits the window; work-cards.js lowers `top` when the
+   words make it taller, so it scrolls until its foot is in view */
+.wc-side { position: sticky; top: 2rem; }
+
+/* The deck: every card in the same grid cell, so they all take the tallest
+   one's height with no measuring, and the box never changes size mid-shuffle.
+   The padding is the room the three peeking cards need. */
+.wc-deck { display: grid; padding-bottom: 42px; }
+.wc-deck > .project-card { grid-area: 1 / 1; position: relative; transform-origin: 50% 100%; cursor: default; }
+/* room for a two-line title, whatever the title, so every card (and the
+   deck) is the same height from the first paint; spare room falls below */
+.wc-deck .project-card .card-info { min-height: calc(var(--pad-t) + var(--pad-b) + 2.24 * var(--t) + var(--gap-r) + 1.3 * var(--r) + 2px + 1.3 * 0.8125rem); }
+/* a stack you can feel: the next three step down and back, each a touch
+   smaller and a shade deeper; the top card casts the shadow */
+.wc-deck .project-card {
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.1, 1), opacity 0.45s ease, filter 0.45s ease, box-shadow 0.45s ease;
+}
+.wc-deck .project-card[data-layer="0"] { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 22px 48px rgba(0, 0, 0, 0.11); }
+.wc-deck .project-card[data-layer="1"] { transform: translateY(14px) scale(0.95); filter: brightness(0.975); }
+.wc-deck .project-card[data-layer="2"] { transform: translateY(28px) scale(0.9); filter: brightness(0.95); }
+.wc-deck .project-card[data-layer="3"] { transform: translateY(42px) scale(0.85); filter: brightness(0.925); }
+/* 4: waiting just behind, unseen (its image loads, ready to come up) */
+.wc-deck .project-card[data-layer="4"] { transform: translateY(42px) scale(0.85); filter: brightness(0.925); opacity: 0; }
+/* 5: the rest of the deck, not drawn at all (so its images don't load yet) */
+.wc-deck .project-card[data-layer="5"] { display: none; }
+.wc-deck .project-card:not([data-layer="0"]) { pointer-events: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
+.wc-deck .project-card:hover { transform: none; }
+
+.wc-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; white-space: nowrap; }
+.wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
+.wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
+.wc-arrows { display: flex; gap: 1.25rem; }
+.wc-arrows[hidden] { display: none; }
+
+/* the words live under the deck, left-aligned, in one quiet size */
+.wc-info { margin-top: 2.25rem; text-align: left; }
+.wc-info .project-meta, .wc-info .project-body { text-align: left; padding: 0; max-width: none; margin: 0; }
+/* the card already says the title and role */
+.wc-info .project-meta h1, .wc-info .project-meta .project-details:not(.project-details--meta) {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+/* the venue / date line reads as part of the text, in the same type */
+.wc-info .project-meta .project-details--meta,
+.wc-info .project-body p { font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
+.wc-info .project-meta .project-details--meta { margin: 0 0 1em; }
+.wc-info .project-body p + p { margin-top: 1em; }
+
+/* A project that's all words (private work, some music): the words take the
+   work's place beside the deck, a size up, instead of an empty column.
+   (Its .wc-body is written empty, with no whitespace, so :empty matches.) */
+.wc-detail:has(> .wc-body:empty) { row-gap: 0; }
+.wc-detail:has(> .wc-body:empty) > .wc-side { display: contents; }
+.wc-detail:has(> .wc-body:empty) .wc-deck-box { grid-column: 1; grid-row: 1; }
+.wc-detail:has(> .wc-body:empty) .wc-controls { grid-column: 1; grid-row: 2; }
+.wc-detail:has(> .wc-body:empty) .wc-info { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; max-width: 34em; }
+.wc-detail:has(> .wc-body:empty) .wc-info :is(.project-details--meta, .project-body p) { font-size: 1.25rem; line-height: 1.5; }
+.wc-detail:has(> .wc-body:empty) > .wc-body { display: none; }
+
+/* The work: one centred column, generous rhythm, never cropped. */
+.wc-body { min-width: 0; width: 100%; max-width: 1100px; justify-self: center; text-align: center; }
+.wc-body .section-sub { text-align: center; }
+.wc-body .project-section,
+.wc-body > .project-gallery,
+.wc-body > .poster-hero-wrap { max-width: none; margin: 0 !important; padding: 3.5rem 0 0; }
+/* the work starts level with the top of the deck */
+.wc-body > :first-child { padding-top: 0 !important; }
+.wc-body .project-section:last-child { padding-bottom: 0; }
+.wc-body .section-header { position: static; padding: 0; background: none; }
+.wc-body .project-section h2 { font-size: clamp(1.5rem, 2vw, 1.875rem); font-weight: 600; letter-spacing: -0.022em; line-height: 1.2; text-align: center; margin-bottom: 0.4rem; }
+.wc-body .project-section .section-sub { color: #6e6e73; font-size: 1.0625rem; max-width: 42em; margin-left: auto; margin-right: auto; }
+/* everything after a heading or subtitle starts a clear step below it */
+.wc-body .project-section h2 + *, .wc-body .project-section .section-sub + * { margin-top: 1.75rem; }
+.wc-body .project-section h2 + .section-sub { margin-top: 0.4rem; }
+.wc-body .section-sub + .project-gallery-wide, .wc-body h2 + .project-gallery-wide { margin-top: 1.75rem !important; }
+/* galleries, players, posters: all on the centre line */
+.wc-body .project-section .project-gallery, .wc-body .project-gallery-grid { gap: 16px; margin-left: 0; margin-right: 0; }
+.wc-body .project-gallery-wide { margin-left: auto !important; margin-right: auto !important; }
+.wc-body .project-section .project-gallery-wide img { margin-bottom: 16px; }
+.wc-body .project-media, .wc-body .project-media.media-compact { margin-left: auto; margin-right: auto; }
+.wc-body .media-center { justify-content: center; }
+.wc-body .poster-hero-wrap .poster-hero { justify-content: center; margin-left: auto; margin-right: auto; }
+.wc-body .project-media audio { margin: 0 auto; }
+/* a lone image shows whole and large, never cropped or squeezed into half the width */
+.wc-body .project-gallery:has(> img:only-child) { display: block; }
+.wc-body .project-gallery > img:only-child { width: auto; max-width: 100%; max-height: 88vh; aspect-ratio: auto; object-fit: contain; margin: 0 auto; }
+.wc-body img, .wc-body video, .wc-body .media-video, .wc-body iframe { border-radius: 14px; }
+.wc-body .project-gallery video { display: block; width: 100%; height: auto; }
+/* two pieces of work in a row within one section: a gallery's own gap apart */
+.wc-body .project-section > :is(.project-gallery, .project-gallery-wide, .project-media, .badge-float, #badge-carousel) + :is(.project-gallery, .project-gallery-wide, .project-media, .badge-float, #badge-carousel) { margin-top: 16px; }
+.wc-body .media-video { overflow: hidden; }
+
+/* Arriving on Work from elsewhere on the site (the home page, a project):
+   the page before recedes, the grid fades up behind it, and the cards rise
+   into place a beat apart, row by row, on one long soft curve. */
+@keyframes wc-rise { from { opacity: 0; transform: translateY(28px) scale(0.975); } }
+@keyframes wc-recede { to { opacity: 0; transform: scale(0.965); } }
+@keyframes wc-fade-up { from { opacity: 0; } }
+html.wc-arrive::view-transition-old(root) { animation: wc-recede 0.42s cubic-bezier(0.4, 0, 0.6, 1) both; }
+html.wc-arrive::view-transition-new(root) { animation: wc-fade-up 0.42s ease 0.06s both; }
+html.wc-arrive .work-grid .project-card { animation: wc-rise 0.85s cubic-bezier(0.2, 0.9, 0.1, 1) 0.08s backwards; }
+html.wc-arrive .work-grid .project-card:nth-child(2)  { animation-delay: 0.115s; }
+html.wc-arrive .work-grid .project-card:nth-child(3)  { animation-delay: 0.150s; }
+html.wc-arrive .work-grid .project-card:nth-child(4)  { animation-delay: 0.185s; }
+html.wc-arrive .work-grid .project-card:nth-child(5)  { animation-delay: 0.220s; }
+html.wc-arrive .work-grid .project-card:nth-child(6)  { animation-delay: 0.255s; }
+html.wc-arrive .work-grid .project-card:nth-child(7)  { animation-delay: 0.290s; }
+html.wc-arrive .work-grid .project-card:nth-child(8)  { animation-delay: 0.325s; }
+html.wc-arrive .work-grid .project-card:nth-child(9)  { animation-delay: 0.360s; }
+html.wc-arrive .work-grid .project-card:nth-child(10) { animation-delay: 0.395s; }
+html.wc-arrive .work-grid .project-card:nth-child(11) { animation-delay: 0.430s; }
+html.wc-arrive .work-grid .project-card:nth-child(12) { animation-delay: 0.465s; }
+html.wc-arrive .work-grid .project-card:nth-child(n+13) { animation-delay: 0.5s; }
+
+/* an image that isn't in yet waits on the card's grey, then fades up */
+.project-card .card-image img { transition: opacity 0.5s ease; }
+.project-card .card-image img.wc-wait { opacity: 0; }
+
+/* the page-level transitions: a quick start and a long, soft settle */
+::view-transition-group(*) { animation-duration: 600ms; animation-timing-function: cubic-bezier(0.2, 0.9, 0.1, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 320ms; }
+/* a card sliding out of the deck never adds sideways scrolling */
+body { overflow-x: clip; }
+
+/* narrower than a laptop: one column, the deck and its words first */
+@media (max-width: 1099px) {
+  .wc-detail { --wc-card-w: min(62vw, 300px); grid-template-columns: minmax(0, 1fr); gap: 3rem; padding-top: 1.5rem; }
+  .wc-side { position: static; width: var(--wc-card-w); margin: 0 auto; }
+  .wc-info { margin-top: 1.75rem; }
+  .wc-body .project-section, .wc-body > .project-gallery, .wc-body > .poster-hero-wrap { padding-top: 3rem; }
+}
+@media (max-width: 1099px) {
+  .wc-detail:has(> .wc-body:empty) > .wc-side { display: block; }
+  .wc-detail:has(> .wc-body:empty) .wc-info { margin-top: 1.75rem; }
+  .wc-detail:has(> .wc-body:empty) .wc-info :is(.project-details--meta, .project-body p) { font-size: 1.0625rem; line-height: 1.55; }
+}
+@media (max-width: 767px) {
+  .work-grid { gap: 14px; }
+  .project-card { border-radius: 16px; --t: 1.02rem; --r: 0.85rem; --pad-t: 12px; --pad-x: 12px; --pad-b: 12px; --gap-r: 3px; }
+  .wc-detail { --wc-card-w: min(62vw, 260px); gap: 2.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-card, .wc-deck .project-card, .project-card .card-image img { transition: none; }
+  html.wc-arrive .work-grid .project-card { animation: none; }
+}

@@ -360,6 +360,7 @@ body.is-work-grid .filter-btn.active::before {
 .media-video + .media-video { margin-top: 0.5rem; }
 .media-video.is-4x3 { padding-top: 74.17%; } /* 4:3 films (Gazoo, 720x534) */
 .media-split .media-audio iframe { display: block; width: 100%; height: 300px; border: 0; }
+.project-section .media-split.media-stack { grid-template-columns: 1fr; gap: 1rem; } /* video, then the player beneath it */
 @media (max-width: 767px) { .project-section .media-split { grid-template-columns: 1fr; } .media-split .media-audio iframe { height: 300px; } }
 
 /* Compact (narrow) single audio player — left-aligned under the text */

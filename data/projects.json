@@ -1,5 +1,43 @@
 [
   {
+    "slug": "hollyshorts-22",
+    "sort": 0,
+    "year": 2026,
+    "filters": [
+      "visual",
+      "art-direction",
+      "illustration",
+      "poster"
+    ],
+    "title": "22nd Annual HollyShorts Film Festival",
+    "role": "Art Director",
+    "tags": [
+      "Visual",
+      "Art Direction",
+      "Illustration"
+    ],
+    "image": "../images/design/hollyshorts-22/poster-4x5.webp",
+    "alt": "22nd Annual HollyShorts Film Festival poster"
+  },
+  {
+    "slug": "hollyshorts-comedy-2026",
+    "sort": 0,
+    "year": 2026,
+    "filters": [
+      "visual",
+      "art-direction",
+      "poster"
+    ],
+    "title": "10th Annual HollyShorts Comedy Film Festival",
+    "role": "Art Director",
+    "tags": [
+      "Visual",
+      "Art Direction"
+    ],
+    "image": "../images/design/hollyshorts-comedy-2026/poster.webp",
+    "alt": "10th Annual HollyShorts Comedy Film Festival poster"
+  },
+  {
     "slug": "a-promessa",
     "sort": 2,
     "year": 2025,
@@ -160,7 +198,7 @@
       "Visual",
       "Illustration"
     ],
-    "image": "../images/design/sunnys-journal/thumb.webp",
+    "image": "../images/design/sunnys-journal/final.webp",
     "alt": "Sunny's Journal and Press"
   },
   {
@@ -179,7 +217,7 @@
       "Illustration",
       "Poster"
     ],
-    "image": "../images/design/polish-film-festival/poster-hollywood-thumb.webp",
+    "image": "../images/design/polish-film-festival/poster-hollywood-full.webp",
     "alt": "Polish Film Festival North America"
   },
   {
@@ -444,7 +482,7 @@
       "Visual",
       "Illustration"
     ],
-    "image": "../images/cdn/index/Poster-5-title-copy-f7524e.webp",
+    "image": "../images/cdn/feeling/Poster-5-title-copy-2-8c4f31.webp",
     "alt": "Let This Feeling Go"
   },
   {

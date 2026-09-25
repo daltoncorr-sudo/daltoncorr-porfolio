@@ -1,0 +1,109 @@
+/* Badges, floating (badge-float.js). The stage is a wide strip on laptops
+   and a 4:5 frame on phones; each badge carries its own place and tilt for
+   both as custom properties:
+     --x --y --r    wide: centre (% of the stage) and tilt
+     --px --py --pr phone
+     --w --pw       width, % of the stage
+     --ar           the art's width / height
+   Everything inside a badge is sized to the badge (container units), so it
+   scales as one piece. */
+.badge-float {
+  position: relative; width: 100%; max-width: 1040px; aspect-ratio: 16 / 9; margin: 0 auto;
+  --bg-hole: var(--bg, #f5f5f5);
+  -webkit-user-select: none; user-select: none;
+}
+.bf-badge {
+  position: absolute; margin: 0;
+  width: var(--w, 19%);
+  left: calc(var(--x) - var(--w, 19%) / 2);
+  top: var(--y);
+  /* half the badge's height; vertical % margins measure the stage's WIDTH */
+  margin-top: calc(var(--w, 19%) / var(--ar, 0.647) * -0.5);
+  rotate: var(--r, 0deg);
+  z-index: var(--z, 1);
+  container-type: inline-size;
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+.bf-badge:active, .bf-badge.is-held { cursor: grabbing; }
+.bf-badge:focus-visible { outline: none; }
+.bf-badge > img { display: block; width: 100%; height: auto; border-radius: 3.6cqi; box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.35); }
+
+/* ── the layers ── */
+.bf-float { perspective: 1400px; animation: bf-drift 6.5s ease-in-out infinite alternate; }
+@keyframes bf-drift {
+  from { translate: 0 -1.4cqi; rotate: -0.8deg; }
+  to   { translate: 0 1.8cqi;  rotate: 0.9deg; }
+}
+.bf-tilt {
+  transform-style: preserve-3d; border-radius: 3.6cqi;
+  box-shadow: 0 2.4cqi 6cqi -2cqi rgba(0, 0, 0, 0.32), 0 0.6cqi 1.6cqi rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.35s ease;
+}
+.bf-badge.is-hover .bf-tilt, .bf-badge.is-held .bf-tilt {
+  box-shadow: 0 5cqi 11cqi -3cqi rgba(0, 0, 0, 0.36), 0 1cqi 2.4cqi rgba(0, 0, 0, 0.1);
+}
+.bf-badge.is-held .bf-tilt { scale: 1.04; }
+.bf-flip {
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.2, 0.9, 0.1, 1);
+}
+.bf-badge.is-flipped .bf-flip { transform: rotateY(180deg); }
+.bf-face {
+  border-radius: 3.6cqi; overflow: hidden;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+}
+.bf-face--front { position: relative; }
+.bf-face--front img { display: block; width: 100%; height: auto; pointer-events: none; }
+.bf-face--back { position: absolute; inset: 0; transform: rotateY(180deg); color: #fff; }
+
+/* the punched hole, both sides */
+.bf-hole {
+  position: absolute; left: 50%; top: 2.6cqi; width: 5.2cqi; aspect-ratio: 1; translate: -50% 0;
+  border-radius: 50%; background: var(--bg-hole);
+  box-shadow: inset 0 0.4cqi 0.8cqi rgba(0, 0, 0, 0.35);
+}
+/* the gloss that follows the pointer */
+.bf-sheen {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease;
+  background: radial-gradient(60% 45% at var(--sx, 50%) var(--sy, 30%), rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%);
+  mix-blend-mode: soft-light;
+}
+.bf-badge.is-hover .bf-sheen { opacity: 1; }
+
+/* ── the back: the front's own colours, blurred, and the paperwork ── */
+.bf-back-art {
+  position: absolute; inset: -12%; background-size: cover; background-position: center;
+  filter: blur(7cqi) saturate(1.25) brightness(0.88);
+}
+.bf-face--back::after {   /* a touch of grain and a darker foot for the fine print */
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.28));
+}
+.bf-back-logo, .bf-back-type, .bf-back-code, .bf-back-fine { position: absolute; left: 9cqi; right: 9cqi; z-index: 1; }
+.bf-back-logo { top: 16cqi; width: 62cqi; height: auto; left: 50%; right: auto; translate: -50% 0; }
+.bf-back-type {
+  top: 50%; translate: 0 -50%; text-align: center;
+  font-size: 10.5cqi; font-weight: 800; letter-spacing: -0.02em; line-height: 1; text-transform: uppercase;
+}
+.bf-back-code { bottom: 25cqi; display: flex; flex-direction: column; align-items: center; gap: 1.6cqi; }
+.bf-back-barcode { width: 64cqi; height: 11cqi; color: #fff; }
+.bf-back-code > span { font: 500 3.6cqi/1 ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.12em; opacity: 0.9; }
+.bf-back-fine { bottom: 6cqi; text-align: center; font-size: 3.4cqi; line-height: 1.45; opacity: 0.85; }
+
+/* ── phones: the arrangement as it was photographed, a 4:5 frame ── */
+@media (max-width: 767px) {
+  .badge-float { aspect-ratio: 4 / 5; }
+  .bf-badge {
+    width: var(--pw, 31%);
+    left: calc(var(--px) - var(--pw, 31%) / 2);
+    top: var(--py);
+    margin-top: calc(var(--pw, 31%) / var(--ar, 0.647) * -0.5);
+    rotate: var(--pr, var(--r, 0deg));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf-float { animation: none; }
+  .bf-flip { transition-duration: 0.01s; }
+}
