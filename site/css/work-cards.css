@@ -7,7 +7,13 @@
 .work-grid { gap: 28px; margin-left: 0; max-width: none; }
 /* smaller cards, more air between them */
 @media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 40px; } }
-@media (min-width: 1100px) { .work-grid { grid-template-columns: repeat(3, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px); padding-right: clamp(0px, 3vw, 4rem); } }
+/* laptops and up: four across, each card about a quarter smaller than three
+   across, with its type, padding and corners scaled down to match (the deck
+   keeps its own, larger card) */
+@media (min-width: 1100px) {
+  .work-grid { grid-template-columns: repeat(4, 1fr); gap: clamp(44px, 3.6vw, 72px) clamp(32px, 3vw, 60px); padding-right: clamp(0px, 3vw, 4rem); }
+  .work-grid .project-card { --t: clamp(0.975rem, 1vw, 1.2rem); --r: clamp(0.8125rem, 0.8vw, 0.9375rem); --pad-t: 14px; --pad-x: 15px; --pad-b: 15px; --gap-r: 5px; border-radius: 18px; }
+}
 /* no focus or tap highlights anywhere on these pages */
 *:focus, *:focus-visible { outline: none; }
 * { -webkit-tap-highlight-color: transparent; }
@@ -90,6 +96,25 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
 .wc-deck .project-card[data-layer="5"] { display: none; }
 .wc-deck .project-card:not([data-layer="0"]) { pointer-events: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
 .wc-deck .project-card:hover { transform: none; }
+/* A turn of the deck (work-cards.js step): as the top card is thrown, the
+   one it uncovers rises into its place on a soft spring (it settles a hair
+   past and back, too little to see as a bounce), and each card behind it
+   follows a beat later. */
+.wc-deck.is-turning .project-card { transition: transform 0.56s cubic-bezier(0.3, 1.2, 0.45, 1), opacity 0.36s ease; }
+.wc-deck.is-turning .project-card[data-layer="1"] { transition-delay: 40ms; }
+.wc-deck.is-turning .project-card[data-layer="2"] { transition-delay: 80ms; }
+.wc-deck.is-turning .project-card:is([data-layer="3"], [data-layer="4"]) { transition-delay: 120ms; }
+
+/* The veil the work goes behind while the deck turns: the page's own grey
+   over it, faded in and out, rather than the work itself faded, which would
+   redraw every picture in it on the turn's first frame. */
+.wc-body { position: relative; }
+.wc-body::after {
+  content: ''; position: absolute; inset: -2px; z-index: 50; pointer-events: none;
+  background: var(--bg); opacity: 0; transition: opacity 0.42s ease;
+}
+.wc-detail.wc-veil .wc-body::after { opacity: 1; transition-duration: 0.16s; }
+.wc-detail.wc-veil-now .wc-body::after { transition: none; }
 
 /* Back / Previous / Next sit right under the deck they shuffle, so they're
    in view whenever the deck is */
@@ -169,6 +194,18 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
 /* two pieces of work in a row within one section: a gallery's own gap apart */
 .wc-body .project-section > :is(.project-gallery, .project-gallery-wide, .project-media, .badge-float, #badge-carousel) + :is(.project-gallery, .project-gallery-wide, .project-media, .badge-float, #badge-carousel) { margin-top: 16px; }
 .wc-body .media-video { overflow: hidden; }
+/* Beside the deck, a project's first picture stops at 70% of the window
+   when there's more below it, so the next heading or picture shows at the
+   foot of the screen and it's plain the column scrolls. (A page that's just
+   the one poster keeps it at full size.) */
+@media (min-width: 1100px) {
+  .wc-body > .project-section:first-child:not(:only-child) > .project-gallery > img:only-child,
+  .wc-body > .project-section:first-child:not(:only-child) > .media-center > img:only-child,
+  .wc-body > .project-section:first-child > .project-gallery-wide > img {
+    width: auto; max-width: 100%; max-height: 70vh; margin-left: auto; margin-right: auto;
+  }
+  .wc-body > .project-section:first-child:not(:only-child) > .media-center > img:only-child { max-width: min(100%, 600px); }
+}
 
 /* Arriving on Work from elsewhere on the site (the home page, a project):
    the page before recedes, the grid fades up behind it, and the cards rise
@@ -221,6 +258,6 @@ body { overflow-x: clip; }
   .wc-detail { --wc-card-w: min(62vw, 260px); gap: 2.5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .project-card, .wc-deck .project-card, .project-card .card-image img { transition: none; }
+  .project-card, .wc-deck .project-card, .project-card .card-image img, .wc-body::after { transition: none; }
   html.wc-arrive .work-grid .project-card { animation: none; }
 }

@@ -610,7 +610,7 @@ function initToolbar() {
   if (homeWork) {
     pinned = false;
     var byName = function(name) { return $$('.nav-link').filter(function(l) { return l.textContent.trim() === name; })[0]; };
-    var parts = [[$('.home'), byName('Dalton Corr')], [homeWork, workLink], [$('.home-about'), byName('About')]]
+    var parts = [[$('.home'), $('.nav-home')], [homeWork, workLink], [$('.home-about'), byName('About')]]
       .filter(function(p) { return p[0] && p[1]; });
     var linkOf = function(el) { var p = parts.filter(function(p) { return p[0] === el; })[0]; return p && p[1]; };
     var here = parts[0][0];

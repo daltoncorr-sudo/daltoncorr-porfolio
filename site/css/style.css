@@ -77,6 +77,14 @@ sup { font-size: 0.7em; vertical-align: super; }
   transition: color 150ms var(--ease);
 }
 .nav-footer { font-size: 1rem; white-space: nowrap; }
+/* The name, in Dalton's own hand (images/dalton-corr-name.webp, black on
+   transparent), on one line. It sits in the same box as a text link, so
+   Work, About and the Work filters keep their places; sized by its height,
+   it stops short of the cards the home page scrolls up past it. */
+:root { --brand-h: 16px; }
+@media (max-width: 1199px) { :root { --brand-h: 14px; } }
+.nav-home { display: flex; align-items: center; height: 2.25rem; padding-top: 0; padding-bottom: 0; }
+.nav-name { display: block; width: auto; max-width: none; height: var(--brand-h); }
 
 /* Blue dot indicator — anchored to the active link in pure CSS so its position
    is correct by construction. No JS measurement, so it can't land in the wrong
@@ -177,6 +185,9 @@ body.is-work-grid .filter-btn.active::before {
 .scroll-cue:hover { color: var(--accent); }
 .scroll-cue svg { width: 14px; height: 8px; animation: cue-bob 1.4s ease-in-out infinite alternate; }
 @keyframes cue-bob { from { translate: 0 -1px; } to { translate: 0 4px; } }
+/* desktop: the picture and the way down sit in the middle of the first
+   screen, not up against its top (phones keep theirs at the top) */
+@media (min-width: 768px) { .home { justify-content: center; } }
 .home-work { padding-top: clamp(2rem, 6vh, 4rem); scroll-margin-top: 0; }
 /* the foot of the home page: About, as on its own page */
 .home-about { border-top: 1px solid rgba(0, 0, 0, 0.08); margin: 0 var(--page-margin); }
@@ -1006,7 +1017,8 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
    at equal specificity they win the cascade. Keeping every mobile override
    here, at the very end, guarantees it overrides those base rules. */
 @media (max-width: 767px) {
-  :root { --topbar-h: 63px; }
+  :root { --topbar-h: 63px; --brand-h: 12px; }
+  .nav-home { height: auto; }
 
   /* Just the menus (no border chrome), frozen at the top while scrolling. */
   .nav {
@@ -1178,4 +1190,10 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .press-entry a { line-height: 1.3; }
   .press-entry .press-outlet { display: block; }
   .press-entry .press-desc { display: block; font-size: 0.78rem; line-height: 1.3; }
+}
+/* the smallest phones: the name a size down and the menu a little closer,
+   so all three still fit on one line */
+@media (max-width: 374px) {
+  :root { --brand-h: 10.5px; }
+  .nav-links { gap: 1.5rem; }
 }

@@ -34,8 +34,9 @@ NAV_TPL = (TEMPLATES / "nav.html").read_text()
 TOOLBAR_TPL = (TEMPLATES / "project-toolbar.html").read_text()
 
 NAV_RE = re.compile(r"  <nav class=\"nav\">.*?</nav>", re.DOTALL)
-# Match work-toolbar all the way through BOTH its inner and outer closing divs
-TOOLBAR_RE = re.compile(r"  <div class=\"work-toolbar\">.*?</div>\s*</div>", re.DOTALL)
+# Match work-toolbar through its own closing div: the only "</div>" indented
+# exactly two spaces (the filter groups nest deeper, so their closes don't stop it)
+TOOLBAR_RE = re.compile(r"  <div class=\"work-toolbar\">.*?\n  </div>", re.DOTALL)
 
 # Pages that have a custom nav/toolbar — leave them alone.
 NAV_SKIP = {"site/404.html"}
