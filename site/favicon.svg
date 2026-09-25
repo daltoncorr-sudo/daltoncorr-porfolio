@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!-- Dalton Corr: a hand print, the oldest signature there is, in the
-       site's blue. Palm plus five rounded strokes for the fingers. -->
+       site's blue. Palm plus five rounded strokes for the fingers,
+       spread wide like a stencilled hand. -->
   <g fill="#007AFF" stroke="#007AFF" stroke-linecap="round">
     <path d="M18.5 38.5C18.5 30 24.5 27.5 32 27.5C40 27.5 46 30.5 46 39C46 50 40 58 31.5 58C23.5 58 18.5 50 18.5 38.5Z" stroke="none"/>
-    <line x1="24.5" y1="33" x2="21" y2="11.5" stroke-width="7.4"/>
-    <line x1="31" y1="31" x2="30.5" y2="6.5" stroke-width="7.6"/>
-    <line x1="37.5" y1="32" x2="40" y2="9.5" stroke-width="7.4"/>
-    <line x1="42.5" y1="36" x2="48.5" y2="17" stroke-width="6.8"/>
-    <line x1="21" y1="45" x2="8.5" y2="33" stroke-width="7.2"/>
+    <line x1="24.5" y1="33" x2="16.7" y2="12.7" stroke-width="7.4"/>
+    <line x1="31" y1="31" x2="29.7" y2="6.5" stroke-width="7.6"/>
+    <line x1="37.5" y1="32" x2="43" y2="10" stroke-width="7.4"/>
+    <line x1="42.5" y1="36" x2="53.1" y2="19.1" stroke-width="6.8"/>
+    <line x1="21" y1="45" x2="5.7" y2="36.9" stroke-width="7.2"/>
   </g>
 </svg>

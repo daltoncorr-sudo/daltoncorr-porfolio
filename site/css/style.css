@@ -968,6 +968,35 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 }
 .about-contact-list { width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0.25rem 2rem; }
 .about-contact a { color: var(--text); overflow-wrap: normal; white-space: nowrap; }   /* never "Insta / gram" */
+/* Dalton's hand, traced in pen (images/about-hand.webp: the line on
+   transparent, cut out of the photo of the page). Laptops: under the
+   contact links, the thumb reaching out past the words toward the menu,
+   never onto it. Narrower screens: it peeks in from the right edge beside
+   the contact links, cut off by the edge of the screen. */
+.about-hand { pointer-events: none; -webkit-user-select: none; user-select: none; }
+.about-hand img { display: block; width: 100%; max-width: none; height: auto; }
+@media (min-width: 1100px) {
+  .about-hand {
+    /* the room left of the words, less 24px clear of the menu */
+    --room: calc(var(--page-margin) - 24px + max(0px, (100vw - 1260px - 2 * var(--page-margin)) / 2));
+    margin: 3.5rem 0 0 calc(-1 * min(18%, var(--room)));
+  }
+}
+@media (max-width: 1099px) {
+  .about-layout { position: relative; }
+  /* a window onto the hand, flush with the screen's right edge: about half
+     of it shows (the thumb, the first two fingers and the start of the
+     third) and the rest is cut off here, so the page never gets wider.
+     (The home page's About is inset by the margin, so it reaches past it.) */
+  .about-hand {
+    --hand-w: clamp(210px, 36vw, 350px);
+    position: absolute; right: calc(-1 * var(--edge, 0px));
+    width: calc(0.52 * var(--hand-w)); overflow: hidden;
+    margin-top: -95px;   /* level with the bio's last line */
+  }
+  .about-hand img { width: var(--hand-w); }
+  .home-about .about-hand { --edge: var(--page-margin); }
+}
 .press-section { padding-top: 4rem; }
 @media (min-width: 1100px) { .press-section { padding-top: 16rem; } }
 .press-section h2 { font-weight: 700; margin-bottom: 1.5rem; }
@@ -1220,6 +1249,10 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .about-layout p, .about-layout a, .about-layout h2, .about-layout h3 { overflow-wrap: break-word; }
   .about-bio p { line-height: 1.5; }
   .about-contact-list { flex-direction: column; gap: 0.4rem; }
+  /* the hand starts level with the contact links, stacked short here, so
+     it never crosses a line of the bio; they leave room for a little more
+     of it (three fingers and the thumb) */
+  .about-hand { --hand-w: 230px; width: calc(0.6 * var(--hand-w)); margin-top: -88px; }
   /* Press: outlet on its own line, grey description below it, with clear
      space between entries so each outlet+description pair reads as one group */
   .press-entry { padding: 0; margin-bottom: 0.85rem; }
