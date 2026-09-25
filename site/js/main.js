@@ -49,6 +49,7 @@ function initSlideshow() {
         slides[cur].classList.remove('active');
         cur = idx;
         slides[cur].classList.add('active');
+        placeHint();
         if (isOpen()) fill();
       }
       load((idx + 1) % len);
@@ -81,9 +82,24 @@ function initSlideshow() {
     return { left: (bw - w) / 2, top: (bh - h) / 2, width: w, height: h };
   }
 
-  // One quiet line under the frame, in a place that never moves.
+  // One quiet line under the picture. The frame never moves, nor does
+  // "Scroll for portfolio" below it; a wide picture leaves room above and
+  // below itself in the frame, so the line comes up to meet it instead of
+  // waiting at the frame's foot.
   var hint = $('.slideshow-hint', wrap);
   if (hint && window.matchMedia('(hover: none)').matches) hint.textContent = 'Tap image to view project';
+  function placeHint() {
+    if (!hint) return;
+    var r = shown(slides[cur].querySelector('img'));
+    var room = Math.round(wrap.clientHeight - r.top - r.height);
+    hint.style.transform = room > 1 ? 'translateY(' + -room + 'px)' : '';
+  }
+  var hintTick = false;
+  window.addEventListener('resize', function() {
+    if (hintTick) return;
+    hintTick = true;
+    requestAnimationFrame(function() { hintTick = false; placeHint(); });
+  });
 
   // ── The card: the picture, what it's from, and the way in ──
   var info = {};
@@ -262,6 +278,7 @@ function initSlideshow() {
   }
 
   slides[0].classList.add('active');
+  placeHint();
   // the second picture only once the first is in: on a slow phone they'd
   // otherwise split the connection and the first would take twice as long
   var lead = slides[0].querySelector('img');

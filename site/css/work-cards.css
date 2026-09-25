@@ -5,19 +5,24 @@
 
 /* ── Cards ─────────────────────────────────────────────────── */
 .work-grid { gap: 28px; margin-left: 0; max-width: none; }
-/* smaller cards, more air between them */
-@media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 40px; } }
-/* laptops: three across. The grid keeps its full width (the space right of
-   the filters) but slides left onto the page's own centre line, the one the
-   slideshow and About sit on, never closer than 10px to the filters */
+/* Two across until three can each keep a laptop's size: rather than
+   shrinking, the cards go to two a row. Always on the page's own centre
+   line, the one the slideshow and About sit on. */
+@media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 40px; } }
+/* laptops: the grid keeps its full width (the space right of the filters)
+   but slides left onto that centre line, never closer than 10px to the
+   filters */
 @media (min-width: 1100px) {
   .work-grid {
-    grid-template-columns: repeat(3, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px);
+    gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px);
     padding-right: clamp(0px, 3vw, 4rem);
     --shift: min(calc((var(--nav-width) + var(--page-margin) - clamp(0px, 3vw, 4rem)) / 2), calc(var(--nav-width) * 2 + var(--page-margin) - 290px));
     margin-left: calc(var(--shift) * -1); margin-right: var(--shift);
   }
 }
+/* three across from 1280 (each card about 256px there, 304 at 1440); on a
+   very large screen they stop growing at 480 and the row stays centred */
+@media (min-width: 1280px) { .work-grid { grid-template-columns: repeat(3, minmax(0, 480px)); justify-content: center; } }
 /* no focus ring on a click or a tap, and no tap highlight; the keyboard
    still gets a ring, so it can see where it is */
 *:focus:not(:focus-visible) { outline: none; }
@@ -70,6 +75,12 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
 /* laptops: the deck a little closer to the filters, and the room it gives
    up (and a narrower margin on the right) goes to the work beside it */
 @media (min-width: 1100px) { .wc-detail { padding-left: 1rem; padding-right: 2.5rem; gap: clamp(2rem, 3.2vw, 3.5rem); } }
+/* a very large screen: the work stops at 1100px, and the deck and the work
+   together come in off the filters to sit on the page's centre line, like
+   the grid (50% of this box less half the menu and half of the pair) */
+@media (min-width: 1100px) {
+  .wc-detail { grid-template-columns: var(--wc-card-w) minmax(0, 1100px); padding-left: max(1rem, calc(50% - 858px)); }
+}
 /* sticks while it fits the window; work-cards.js lowers `top` when the
    words make it taller, so it scrolls until its foot is in view */
 .wc-side { position: sticky; top: 2rem; z-index: 2; }   /* above the work, so a card moving out of the deck passes over it */
@@ -256,7 +267,10 @@ body { overflow-x: clip; }
 @media (max-width: 1099px) {
   .wc-foot { grid-column: 1; margin-top: 2.5rem; }
   .wc-detail { --wc-card-w: min(62vw, 300px); grid-template-columns: minmax(0, 1fr); gap: 3rem; padding-top: 1.5rem; }
-  .wc-side { position: static; width: var(--wc-card-w); margin: 0 auto; }
+  /* the deck and its controls at the card's width; the words under them
+     at a reading width, wider than the card, all on the centre line */
+  .wc-side { position: static; width: min(100%, 32rem); margin: 0 auto; }
+  .wc-side > .wc-deck-box, .wc-side > .wc-controls { width: var(--wc-card-w); margin-left: auto; margin-right: auto; }
   .wc-info { margin-top: 1.75rem; }
   .wc-body .project-section, .wc-body > .project-gallery, .wc-body > .poster-hero-wrap { padding-top: 3rem; }
 }

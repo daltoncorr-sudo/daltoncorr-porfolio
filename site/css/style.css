@@ -173,10 +173,10 @@ body.is-work-grid .filter-btn.active::before {
 
 /* ── Home slideshow ── */
 .home { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; padding: clamp(1.25rem, 4vh, 2.5rem) 2rem 2rem; }
-/* A fixed stage: every slide sits centred in the same 75vh box (the height
-   the pictures were already capped at), so the page doesn't reflow
-   between tall and wide pictures. Pictures render at the sizes they had. */
-.slideshow { position: relative; width: 100%; max-width: min(720px, 55vw); height: 70vh; margin: 0 auto; -webkit-user-select: none; user-select: none; }
+/* A fixed stage: every slide sits centred in the same 70vh box, so the page
+   doesn't reflow between tall and wide pictures. */
+.slideshow { position: relative; width: 100%; max-width: min(900px, 65vw); height: 70vh; margin: 0 auto; -webkit-user-select: none; user-select: none; }
+@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(720px, 60vw); } }
 .slide { display: none; text-decoration: none; }
 /* the first screen ends with the way down to the work */
 .home { position: relative; }
@@ -196,17 +196,19 @@ body.is-work-grid .filter-btn.active::before {
 @media (min-width: 768px) { .home { justify-content: center; } }
 .home-work { padding-top: clamp(2rem, 6vh, 4rem); scroll-margin-top: 0; }
 /* the foot of the home page: About, as on its own page */
-.home-about { border-top: 1px solid rgba(0, 0, 0, 0.08); margin: 0 var(--page-margin); }
+.home-about { margin: 0 var(--page-margin); }
 .home-about .about-layout { padding-left: 0; padding-right: 0; }
-/* room for the filters beside the cards, as on /work/ */
-@media (min-width: 768px) { .home-work { margin-left: var(--nav-width); } }
+/* room for the filters beside the cards, as on /work/ (laptops; narrower
+   screens have the filters under the menu instead) */
+@media (min-width: 1100px) { .home-work { margin-left: var(--nav-width); } }
 /* the home page's filter row (phones) waits until the cards */
 body.home-top .work-toolbar { opacity: 0; visibility: hidden; pointer-events: none; }
 /* the page can scroll now: a scrollbar coming and going never shifts it */
 html { scrollbar-gutter: stable; }
 .slide.active { display: block; position: absolute; inset: 0; }
 .slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; }
-/* One quiet line under the frame; it stays put whatever the picture's shape */
+/* One quiet line under the picture: at the frame's foot, lifted by main.js
+   to meet a wide picture that doesn't reach it */
 .slideshow-hint {
   position: absolute; left: 0; right: 0; top: calc(100% + 14px); margin: 0;
   text-align: center; font-size: 0.875rem; letter-spacing: -0.01em; color: #6e6e73;
@@ -256,8 +258,6 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
   .hl-info { width: 86vw; }
   .hl-title { font-size: 1.5rem; }
 }
-@media (max-width: 767px) { .slideshow { max-width: 85vw; } }
-@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(600px, 50vw); } }
 
 
 /* ── Work grid ── */
@@ -308,6 +308,25 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 
 .work-page-body { margin-left: calc(var(--nav-width) * 2); }
 .work-page .work-grid { padding-top: 2rem; }
+/* Tablets and narrow windows: the filters go under Work and About, in the
+   menu's own column, instead of in a second column beside it. The page
+   keeps its width for the work, and the cards sit on the same centre line
+   as the slideshow and About. (Margin, not padding, above them, so the
+   space over the filters never catches a click meant for the menu.) */
+@media (min-width: 768px) and (max-width: 1099px) {
+  :root { --brand-h: 12px; }   /* the name stops short of the cards, which now start closer */
+  .work-toolbar { left: 0.75rem; width: calc(var(--nav-width) - 0.75rem); }
+  .work-toolbar .filter-bar { padding-top: 0; margin-top: 10rem; }   /* the menu's top, name, Work and About, and a gap */
+  .work-page-body { margin-left: var(--nav-width); }
+}
+/* a short window (a phone on its side): the menu and the filters closer
+   together, so an open group of filters still fits above the fold */
+@media (min-width: 768px) and (max-width: 1099px) and (max-height: 540px) {
+  .nav-footer { display: none; }
+  .nav { padding-top: 1rem; }
+  .nav-link:not(.nav-home), .work-toolbar .filter-btn { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+  .work-toolbar .filter-bar { margin-top: 7.75rem; }   /* 1rem + the name's 2.25rem + Work and About at 2rem + a gap */
+}
 
 .work-grid {
   display: grid; grid-template-columns: repeat(2, 1fr);
@@ -915,10 +934,13 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 
 
 /* ── About page ── */
+/* one readable column, Press under the bio; side by side once both columns
+   have the width for it */
 .about-layout {
   max-width: 1100px; margin: 0 auto; padding: 4rem var(--page-margin) 6rem;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  display: grid; grid-template-columns: minmax(0, 36rem); justify-content: center; align-items: start;
 }
+@media (min-width: 1100px) { .about-layout { grid-template-columns: 1fr 1fr; justify-content: normal; gap: 4rem; } }
 .about-layout p, .about-layout a, .about-layout h2, .about-layout h3 {
   font-size: 18px;
   line-height: 1.75;
@@ -944,10 +966,10 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 .about-contact {
   margin: 2rem 0 0; display: flex; justify-content: space-between;
 }
-.about-contact-list { width: 100%; display: flex; justify-content: flex-start; gap: 2rem; }
-.about-contact a { color: var(--text); }
+.about-contact-list { width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0.25rem 2rem; }
+.about-contact a { color: var(--text); overflow-wrap: normal; white-space: nowrap; }   /* never "Insta / gram" */
 .press-section { padding-top: 4rem; }
-@media (min-width: 768px) { .press-section { padding-top: 16rem; } }
+@media (min-width: 1100px) { .press-section { padding-top: 16rem; } }
 .press-section h2 { font-weight: 700; margin-bottom: 1.5rem; }
 .press-group { margin-bottom: 1.5rem; }
 .press-year { font-weight: 700; color: var(--text-muted); margin-top: 2rem; margin-bottom: 0.5rem; }
@@ -1018,10 +1040,6 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
      specific than *, and would otherwise keep moving */
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
-
-/* Bigger slideshow on desktop too (was capped at 720px / 55vw) */
-.slideshow { max-width: min(900px, 65vw); }
-@media (min-width: 768px) and (max-width: 1199px) { .slideshow { max-width: min(720px, 60vw); } }
 
 /* ── Mobile overrides ──
    This block MUST be the last thing in the file. Several base rules
@@ -1172,6 +1190,8 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   /* "Scroll for portfolio" and Work stop with the first cards clear of the
      sticky menu and filter row, not tucked under them */
   .home-work { scroll-margin-top: 1.75rem; }
+  /* About (from the menu) stops with the bio's first line clear of the menu bar */
+  .home-about { scroll-margin-top: var(--topbar-h); }
 
   /* Work grid: two columns with text below each preview, so previews stay
      small and several projects are visible at once */
