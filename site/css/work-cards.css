@@ -7,7 +7,17 @@
 .work-grid { gap: 28px; margin-left: 0; max-width: none; }
 /* smaller cards, more air between them */
 @media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 40px; } }
-@media (min-width: 1100px) { .work-grid { grid-template-columns: repeat(3, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px); padding-right: clamp(0px, 3vw, 4rem); } }
+/* laptops: three across. The grid keeps its full width (the space right of
+   the filters) but slides left onto the page's own centre line, the one the
+   slideshow and About sit on, never closer than 10px to the filters */
+@media (min-width: 1100px) {
+  .work-grid {
+    grid-template-columns: repeat(3, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px);
+    padding-right: clamp(0px, 3vw, 4rem);
+    --shift: min(calc((var(--nav-width) + var(--page-margin) - clamp(0px, 3vw, 4rem)) / 2), calc(var(--nav-width) * 2 + var(--page-margin) - 290px));
+    margin-left: calc(var(--shift) * -1); margin-right: var(--shift);
+  }
+}
 /* no focus ring on a click or a tap, and no tap highlight; the keyboard
    still gets a ring, so it can see where it is */
 *:focus:not(:focus-visible) { outline: none; }
