@@ -418,92 +418,78 @@
     riseIn([top]);
   }
 
-  // The turn, Tinder-style. The top card is thrown off the deck, to the left
-  // for Next and to the right for Previous, tilting the way it goes and fading
-  // once it's clear, and the card it uncovers rises into its place on a soft
-  // spring while the rest of the deck steps up a beat behind it (the css's
-  // .is-turning). For Previous, the card before is first slipped in right
-  // under the top one, where it can't be seen, so it's the one uncovered.
-  // A flick carries its own speed into the throw; buttons and arrow keys
-  // throw from rest. The page's words and work follow (arrive), a moment
-  // later, so the card has the stage to itself first.
+  // A turn of the deck, as with a real deck of cards. Next: the front card
+  // slides out to the left, clear of the others, and is tucked in at the back,
+  // while every card behind it moves up one. Previous is the same in reverse:
+  // the card at the back is drawn out to the left from behind the others and
+  // laid on the front, while they each move back one. The card only changes
+  // sides of the deck (over it, under it) while it's out to the left and
+  // clear of the rest, so that can't be seen. A flick carries its speed into
+  // the first half; buttons and the arrow keys start from rest. The page's
+  // words and work follow (arrive).
+  var LAYERS = ['none', 'translateY(14px) scale(0.95)', 'translateY(28px) scale(0.9)', 'translateY(42px) scale(0.85)', 'translateY(42px) scale(0.85)'];
+  function layerAt(i, n) { return i < 4 ? i : (i === 4 || i === n - 1) ? 4 : 5; }   // as layDeck
   var flights = [];
-  function landFlights() { flights.slice().forEach(function (f) { f.finish(); }); }
-  function tuckPrev() {
-    var deck = state.deck, prev = deck[deck.length - 1];
-    if (prev === deck[1]) return prev;                      // a deck of two: it's there already
-    prev.style.transition = 'none';
-    prev.setAttribute('data-layer', '1');
-    prev.style.zIndex = '199';
-    deck[1].style.zIndex = '198';
-    var img = prev.querySelector('img');
-    if (img) img.loading = 'eager';
-    void prev.offsetWidth;                                  // placed before anything moves
-    prev.style.transition = '';
-    return prev;
-  }
+  function landFlights() { flights.slice().forEach(function (f) { f.land(); }); }
   function step(dir, flung) {
     if (!state || busy || state.deck.length < 2) return;
     landFlights();
-    var deck = state.deck;
-    var leaving = deck[0];
-    var coming = dir > 0 ? deck[1] : (flung && flung.tucked) || (still || document.hidden ? deck[deck.length - 1] : tuckPrev());
+    var deck = state.deck, n = deck.length;
+    var mover = dir > 0 ? deck[0] : deck[n - 1];              // the card that goes from one end of the deck to the other
+    var back = LAYERS[Math.min(layerAt(n - 1, n), 4)];         // where the back of the deck is drawn
     if (dir > 0) deck.push(deck.shift()); else deck.unshift(deck.pop());
+    var coming = deck[0];
     veil();
-    arrive(coming.href, still ? 0 : 220);
+    arrive(coming.href, still ? 0 : dir > 0 ? 220 : 320);
     history.replaceState({ wc: coming.href }, '', coming.href);
-    if (still || document.hidden) {                  // no motion: straight to the new order
-      leaving.style.transform = leaving.style.transition = '';
+    if (still || document.hidden) {                          // no motion: straight to the new order
+      mover.style.transform = mover.style.transition = '';
       layDeck();
       return;
     }
 
     busy = true;
-    var w = leaving.offsetWidth || 300;
-    var side = dir > 0 ? -1 : 1;
-    var from = flung ? flung.transform : 'none';
-    var reach = w * 1.35;
-    // well clear of the deck, a little up, turned the way it's going
-    var out = 'translate(' + Math.round(side * reach) + 'px, ' + Math.round(-w * 0.08) + 'px) rotate(' + side * 15 + 'deg)';
-    // a flick keeps its speed (the curve's opening slope is ~1.7x its average);
-    // from rest the throw takes its time and never snaps
-    var ms = flung ? Math.round(Math.min(460, Math.max(240, 1.7 * Math.max(40, reach - Math.abs(flung.dx || 0)) / Math.max(Math.abs(flung.v), 0.9)))) : 540;
-    leaving.style.transition = 'none';
+    var w = mover.offsetWidth || 300;
+    var aside = 'translate(' + Math.round(-w * 1.1) + 'px, -10px) rotate(-5deg)';   // just clear of the deck, on its left
+    var from = dir > 0 ? (flung ? flung.transform : 'none') : back;
+    var to = dir > 0 ? back : 'none';
+    var outMs = flung ? Math.round(Math.min(300, Math.max(150, 1.6 * Math.max(30, w * 1.1 - Math.abs(flung.dx || 0)) / Math.max(Math.abs(flung.v), 0.8)))) : 300;
+    var inMs = dir > 0 ? 400 : 440;
+    mover.style.transition = 'none';
     deckEl.classList.add('is-turning');
-    layDeck();                                       // the rest move up (css transitions, on the spring)
-    leaving.style.zIndex = '400';                    // over the deck while it goes
-    var fly = leaving.animate([{ transform: from }, { transform: out }],
-      { duration: ms, easing: flung ? 'cubic-bezier(0.2, 0.62, 0.35, 1)' : 'cubic-bezier(0.38, 0, 0.22, 1)', fill: 'forwards' });
-    var fade = leaving.animate([{ opacity: 1 }, { opacity: 1, offset: 0.42 }, { opacity: 0 }],
-      { duration: ms, easing: 'ease-in', fill: 'forwards' });
-    flights.push(fly);
-    // the next turn can start once this card is clear of the deck
-    var free = setTimeout(function () { busy = false; }, Math.round(ms * 0.6));
-    fly.finished.then(land, land);
+    if (dir > 0) layDeck();                                   // the rest move up as the front card leaves
+    mover.style.zIndex = dir > 0 ? '400' : '1';              // Next: over the deck on its way out; Previous: drawn from behind it
+    var rushed = false;
+    var legs = [mover.animate([{ transform: from, opacity: 1 }, { transform: aside, opacity: 1 }],
+      { duration: outMs, easing: flung ? 'cubic-bezier(0.25, 0.6, 0.4, 1)' : 'cubic-bezier(0.45, 0, 0.25, 1)', fill: 'forwards' })];
+    var flight = { land: function () { rushed = true; legs.forEach(function (a) { a.finish(); }); } };
+    flights.push(flight);
+    legs[0].finished.then(function () {
+      // round the side of the deck: behind it now (Next), or laid on top (Previous)
+      if (dir < 0) layDeck();                                 // the rest move back as it comes to the front
+      mover.style.zIndex = dir > 0 ? '1' : '400';
+      legs.push(mover.animate([{ transform: aside, opacity: 1 }, { transform: to, opacity: 1 }],
+        { duration: inMs, easing: dir > 0 ? 'cubic-bezier(0.4, 0, 0.2, 1)' : 'cubic-bezier(0.25, 0.8, 0.25, 1)', fill: 'forwards' }));
+      if (rushed) legs[1].finish();
+      return legs[1].finished;
+    }).then(land, land);
+    // the next turn can start once this card is most of the way home
+    var free = setTimeout(function () { busy = false; }, outMs + Math.round(inMs * 0.6));
     function land() {
-      if (flights.indexOf(fly) < 0) return;
-      flights.splice(flights.indexOf(fly), 1);
+      if (flights.indexOf(flight) < 0) return;
+      flights.splice(flights.indexOf(flight), 1);
       clearTimeout(free);
       busy = false;
-      // round to its new place in the deck with its own transition off, so it
-      // doesn't sail back across the page. Behind the deck (Next) it's unseen
-      // already; second in the deck (Previous), its edge fades back in.
-      var i = state ? state.deck.indexOf(leaving) : -1;
-      var shown = i > 0 && i < 4;
-      if (shown) leaving.style.opacity = '0';
-      fly.cancel();
-      fade.cancel();
-      leaving.style.transform = '';
-      leaving.style.zIndex = i >= 0 ? String(200 - i) : '';
-      if (shown) {
-        void leaving.offsetWidth;
-        leaving.style.transition = 'opacity 0.3s ease';
-        leaving.style.opacity = '';
-      }
-      setTimeout(function () {
-        leaving.style.transition = '';
+      // its place in the deck from the css now, with its own transition off
+      // until it's there (the animation ended exactly on that place)
+      legs.forEach(function (a) { a.cancel(); });
+      var i = state ? state.deck.indexOf(mover) : -1;
+      mover.style.transform = '';
+      mover.style.zIndex = i >= 0 ? String(200 - i) : '';
+      requestAnimationFrame(function () {
+        mover.style.transition = '';
         if (!flights.length) deckEl.classList.remove('is-turning');
-      }, shown ? 320 : 40);
+      });
     }
   }
 
@@ -640,26 +626,18 @@
   deckEl.addEventListener('click', function (e) { if (e.target.closest('.project-card')) e.preventDefault(); });
   deckEl.addEventListener('dragstart', function (e) { e.preventDefault(); });
 
-  // Flick through the deck: drag (or swipe) the top card left for the next
-  // project, right for the one before. The card follows the finger, tilting
-  // as it goes, and the card it would uncover rises under it: to the left,
-  // the next one; to the right, the one before, slipped in beneath it first.
+  // Flick through the deck: drag the front card to the left and let go, and
+  // it goes on round to the back (the next project); pull it to the right
+  // and it gives a little, then the card at the back comes round to the
+  // front (the one before). A short drag springs back.
   var flick = null;
   deckEl.addEventListener('pointerdown', function (e) {
     if (e.button || !state || busy || state.deck.length < 2) return;
     var card = state.deck[0];
     if (!card.contains(e.target)) return;
     landFlights();
-    flick = { card: card, next: state.deck[1], prev: null, under: null, id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, lastX: e.clientX, lastT: performance.now(), v: 0, on: false };
+    flick = { card: card, next: state.deck[1], id: e.pointerId, x: e.clientX, y: e.clientY, dx: 0, lastX: e.clientX, lastT: performance.now(), v: 0, on: false };
   });
-  // the card rising under the dragged one follows the drag, with no transition of its own
-  function lift(f, c) {
-    if (f.under === c) return;
-    if (f.under) { f.under.style.transform = ''; f.under.style.willChange = ''; }
-    f.under = c;
-    c.style.transition = 'none';
-    c.style.willChange = 'transform';
-  }
   deckEl.addEventListener('pointermove', function (e) {
     if (!flick || e.pointerId !== flick.id) return;
     var dx = e.clientX - flick.x, dy = e.clientY - flick.y;
@@ -669,45 +647,41 @@
       flick.on = true;
       try { deckEl.setPointerCapture(e.pointerId); } catch (err) {}  // already let go: fine
       flick.card.style.transition = 'none';
-      flick.card.style.willChange = 'transform';
+      flick.next.style.transition = 'none';
+      flick.card.style.willChange = flick.next.style.willChange = 'transform';
     }
     var now = performance.now(), dt = Math.max(1, now - flick.lastT);
     flick.v = flick.v * 0.6 + ((e.clientX - flick.lastX) / dt) * 0.4;   // px per ms, smoothed
     flick.lastX = e.clientX;
     flick.lastT = now;
     flick.dx = dx;
-    // heading right, the card before goes in under this one; back left, it goes again
-    if (dx > 0 && !flick.prev && state.deck.length > 2) flick.prev = tuckPrev();
-    else if (dx <= 0 && flick.prev) {
-      var pv = flick.prev;
-      flick.prev = null;
-      pv.style.transition = 'none';
-      pv.style.transform = '';
-      layDeck();
-      void pv.offsetWidth;
-      pv.style.transition = '';
-    }
-    lift(flick, dx > 0 && flick.prev ? flick.prev : flick.next);
-    flick.card.style.transform = 'translateX(' + dx.toFixed(1) + 'px) rotate(' + (dx / 20).toFixed(2) + 'deg)';
-    var p = Math.min(1, Math.abs(dx) / (flick.card.offsetWidth * 0.6));
-    flick.under.style.transform = 'translateY(' + (14 * (1 - p)).toFixed(1) + 'px) scale(' + (0.95 + 0.05 * p).toFixed(3) + ')';
+    // to the left it follows the finger, on its way to the back, and the
+    // card behind comes up as it goes; to the right it only gives a little
+    var x = dx < 0 ? dx : dx * 0.3;
+    flick.card.style.transform = 'translateX(' + x.toFixed(1) + 'px) rotate(' + (x / 24).toFixed(2) + 'deg)';
+    var p = dx < 0 ? Math.min(1, -dx / (flick.card.offsetWidth * 0.6)) : 0;
+    flick.next.style.transform = 'translateY(' + (14 * (1 - p)).toFixed(1) + 'px) scale(' + (0.95 + 0.05 * p).toFixed(3) + ')';
   });
   function unflick(e) {
     if (!flick || (e && e.pointerId !== flick.id)) return;
     var f = flick;
     flick = null;
     if (!f.on) return;
-    f.card.style.willChange = '';
+    f.card.style.willChange = f.next.style.willChange = '';
     var far = Math.abs(f.dx) > f.card.offsetWidth * 0.33;
     var quick = Math.abs(f.v) > 0.5 && (f.v < 0) === (f.dx < 0);
-    // the card underneath carries on under the css, from wherever the drag left it
-    if (f.under) { f.under.style.willChange = ''; f.under.style.transition = ''; f.under.style.transform = ''; }
+    // the card behind: on under the css from wherever the drag left it
+    f.next.style.transition = '';
+    f.next.style.transform = '';
     if (far || quick) {
-      step(f.dx < 0 ? 1 : -1, { transform: f.card.style.transform, v: f.v, dx: f.dx, tucked: f.prev });
+      if (f.dx < 0) { step(1, { transform: f.card.style.transform, v: f.v, dx: f.dx }); return; }
+      // to the right: back into the deck (css), as the back card comes round
+      f.card.style.transition = '';
+      f.card.style.transform = '';
+      step(-1);
       return;
     }
-    // not far enough: it springs back, and a card slipped in under it goes again
-    if (f.prev) layDeck();
+    // not far enough: spring back
     f.card.style.transition = 'transform 0.5s cubic-bezier(0.3, 1.25, 0.5, 1)';
     f.card.style.transform = '';
     setTimeout(function () { if (!flick || flick.card !== f.card) f.card.style.transition = ''; }, 520);

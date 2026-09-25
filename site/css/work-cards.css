@@ -65,7 +65,7 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
 }
 /* sticks while it fits the window; work-cards.js lowers `top` when the
    words make it taller, so it scrolls until its foot is in view */
-.wc-side { position: sticky; top: 2rem; }
+.wc-side { position: sticky; top: 2rem; z-index: 2; }   /* above the work, so a card moving out of the deck passes over it */
 
 /* The deck: every card in the same grid cell, so they all take the tallest
    one's height with no measuring, and the box never changes size mid-shuffle.
@@ -116,7 +116,7 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
    redraw every picture in it on the turn's first frame. */
 .wc-body { position: relative; }
 .wc-body::after {
-  content: ''; position: absolute; inset: -2px; z-index: 50; pointer-events: none;
+  content: ''; position: absolute; inset: -2px; z-index: 1; pointer-events: none;
   background: var(--bg); opacity: 0; transition: opacity 0.42s ease;
 }
 .wc-detail.wc-veil .wc-body::after { opacity: 1; transition-duration: 0.16s; }

@@ -41,6 +41,7 @@ cd site && python3 -m http.server 8080
 | `data/projects.json` | Source of truth for the Work grid + nav order. |
 | `scripts/` | Python build/maintenance scripts (see below). |
 | `scripts/templates/` | Shared `nav.html` + `project-toolbar.html` fragments injected into every page. |
+| `archive/` | Pictures and media the site no longer uses, kept out of `site/` so they aren't deployed (paths mirror `site/`). |
 | `docs/NEXT_STEPS.md` | Fuller status/handoff notes. |
 
 ---
