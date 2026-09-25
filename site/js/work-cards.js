@@ -253,6 +253,7 @@
       state = s;
       return swap(function () {
         carry.lower();
+        document.body.classList.add('wc-open');   // on the home page, the slideshow steps aside
         grid.classList.add('is-hidden');
         // in stack order (top card last in the page), so the transition draws
         // the right card on top the whole way, not just once it lands
@@ -337,6 +338,7 @@
       });
       s.order.forEach(function (c) { grid.appendChild(c); });
       detail.hidden = true;
+      document.body.classList.remove('wc-open');
       info.replaceChildren();
       body.replaceChildren();
       grid.classList.remove('is-hidden');

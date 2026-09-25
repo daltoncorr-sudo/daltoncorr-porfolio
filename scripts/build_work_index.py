@@ -37,6 +37,7 @@ from stamp_image_sizes import image_size
 ROOT = Path(__file__).resolve().parent.parent
 PROJECTS = ROOT / "data" / "projects.json"
 INDEX = ROOT / "site" / "work" / "index.html"
+HOME = ROOT / "site" / "index.html"   # the same cards, below the slideshow
 
 BEGIN = "<!-- BEGIN: cards -->"
 END = "<!-- END: cards -->"
@@ -186,6 +187,21 @@ def build(check: bool = False) -> int:
             idx,
             flags=re.DOTALL,
         )
+
+    # the home page: the same cards, with its links and images one level up,
+    # and nothing loaded eagerly (they're below the fold there)
+    home_cards = "\n\n".join(render_card(p) for p in projects)
+    home_cards = re.sub(r'href="([a-z0-9-]+)" class="project-card"', r'href="work/\1" class="project-card"', home_cards)
+    home_cards = home_cards.replace('"../images/', '"images/').replace(", ../images/", ", images/")
+    home = HOME.read_text()
+    new_home = re.sub(rf"{re.escape(BEGIN)}.*?{re.escape(END)}", f"{BEGIN}\n{home_cards}\n        {END}", home, flags=re.DOTALL)
+    if new_home != home:
+        stale += 1
+        if check:
+            print("OUT OF SYNC: index.html cards differ from projects.json")
+        else:
+            HOME.write_text(new_home)
+            print(f"✓ Rebuilt {len(projects)} cards into index.html")
 
     if new_idx == idx:
         return 1 if check and stale else 0

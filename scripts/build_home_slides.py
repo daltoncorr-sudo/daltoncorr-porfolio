@@ -8,8 +8,10 @@ slug (or null for a picture that belongs to no project page). This writes:
   - one small JSON block, #slide-projects, with what the card shows for each
     project: title, role, year and a line from the project page
 
-so the home page opens the card without fetching anything. Run it after
-changing the slideshow, projects.json or a project's first paragraph:
+so the home page opens the card without fetching anything. It also copies the
+About page's content into the foot of the home page (between <!-- BEGIN: about -->
+and <!-- END: about -->), so the page runs slideshow, work, about. Run it after
+changing the slideshow, projects.json, a project's first paragraph or about.html:
 
   python3 scripts/build_home_slides.py          # write site/index.html
   python3 scripts/build_home_slides.py --check  # exit 1 if it's out of date
@@ -20,6 +22,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 HOME = SITE / "index.html"
+ABOUT = SITE / "about.html"
+ABOUT_BEGIN, ABOUT_END = "<!-- BEGIN: about -->", "<!-- END: about -->"
 MAP = ROOT / "data" / "home-slides.json"
 PROJECTS = ROOT / "data" / "projects.json"
 
@@ -75,6 +79,10 @@ def build(check=False):
              + "</script>")
     new = BLOCK.sub("", new)
     new = new.replace('<div class="slideshow">', '<div class="slideshow">' + block, 1)
+    # the About page's content (both pages sit at the site's root, so its links work as they are)
+    about = re.search(r'<main id="main">\s*(.*?)\s*</main>', ABOUT.read_text(), re.S).group(1)
+    new = re.sub(rf"{re.escape(ABOUT_BEGIN)}.*?{re.escape(ABOUT_END)}",
+                 lambda m: f"{ABOUT_BEGIN}\n        {about}\n        {ABOUT_END}", new, flags=re.S)
     if missing:
         print("slides not in data/home-slides.json:", *missing, sep="\n  ")
     if new == home:

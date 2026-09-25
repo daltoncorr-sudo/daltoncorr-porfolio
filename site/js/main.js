@@ -139,14 +139,22 @@ function initSlideshow() {
     img.style.left = r.left + 'px'; img.style.top = r.top + 'px';
     img.style.width = r.width + 'px'; img.style.height = r.height + 'px';
   }
+  var opening = false;
   function open() {
     var img = slides[cur].querySelector('img');
-    if (!projectOf(cur) || !img) return;
+    if (!projectOf(cur) || !img || opening || isOpen()) return;
+    opening = true;
+    stop();   // no slide change while the card is on its way
     if (!box) build();
     fill();
     wasPaused = paused;
     before = document.activeElement;
     var big = box.querySelector('.hl-img');
+    // the card's picture decoded first, so the morph lands on it, not on a blank
+    var ready = big.decode ? big.decode().catch(function() {}) : Promise.resolve();
+    ready.then(function() { opening = false; reveal(img, big); });
+  }
+  function reveal(img, big) {
     hug(img, true);
     img.style.viewTransitionName = 'hl-art';
     swap(function() {
@@ -204,6 +212,24 @@ function initSlideshow() {
     if (e.key === 'ArrowRight') step(cur + 1);
     if (e.key === ' ' && e.target === document.body && !isOpen()) { e.preventDefault(); paused = !paused; start(); }
   });
+  // "Scroll for portfolio": a glide down to the cards, and gone once you're on your way.
+  var cue = $('.scroll-cue');
+  if (cue) {
+    cue.addEventListener('click', function(e) {
+      var to = document.getElementById('work');
+      if (!to) return;
+      e.preventDefault();
+      to.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
+    });
+    var cueTick = false;
+    var cueCheck = function() { cueTick = false; cue.classList.toggle('is-gone', window.scrollY > 40); };
+    window.addEventListener('scroll', function() {
+      if (cueTick) return;
+      cueTick = true;
+      requestAnimationFrame(cueCheck);
+    }, { passive: true });
+    cueCheck();   // a reload can land part-way down
+  }
   // Swipe between slides.
   var tx = 0;
   wrap.addEventListener('touchstart', function(e) { tx = e.changedTouches[0].clientX; }, { passive: true });
@@ -367,6 +393,7 @@ function initFilters() {
   bar.addEventListener('click', function(e) {
     var b = e.target.closest('.filter-btn');
     if (!b) return;
+    if (b.tagName === 'A') e.preventDefault();   // the home page's filters work on its own cards
     engine.apply(b.dataset.filter, true);
   });
 
@@ -572,8 +599,56 @@ function initToolbar() {
   var workLink = null;
   $$('.nav-link').forEach(function(l) { if (l.textContent.trim() === 'Work') workLink = l; });
 
-  // the filters stay in view on the grid and on a project opened as a deck
+  // the filters stay in view on the grid and on a project opened as a deck;
+  // on the home page, once the cards are on screen
   var pinned = isWorkGrid || !!$('.wc-detail');
+  // The home page runs slideshow, work, about: the dot follows you down the
+  // page, the filters show while you're at the work, and the menu glides to
+  // each part instead of loading another page.
+  var homeWork = $('.home-work');
+  if (homeWork) {
+    pinned = false;
+    var byName = function(name) { return $$('.nav-link').filter(function(l) { return l.textContent.trim() === name; })[0]; };
+    var parts = [[$('.home'), byName('Dalton Corr')], [homeWork, workLink], [$('.home-about'), byName('About')]]
+      .filter(function(p) { return p[0] && p[1]; });
+    var linkOf = function(el) { var p = parts.filter(function(p) { return p[0] === el; })[0]; return p && p[1]; };
+    var here = parts[0][0];
+    var mark = function() {
+      var atWork = here === homeWork;
+      pinned = atWork;
+      toolbar.classList.toggle('visible', atWork);
+      document.body.classList.toggle('home-top', !atWork);
+      moveNavDot(linkOf(here));
+    };
+    if ('IntersectionObserver' in window) {
+      // whichever part crosses a line just under the middle of the window
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(en) { if (en.isIntersecting) here = en.target; });
+        mark();
+      }, { rootMargin: '-45% 0px -54% 0px' });
+      parts.forEach(function(p) { io.observe(p[0]); });
+    }
+    mark();
+    var smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    parts.forEach(function(p) {
+      var go = function() {
+        if (p[0].classList.contains('home')) window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+        else p[0].scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+      };
+      p[1].addEventListener('click', function(e) {
+        if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        // a project open in the deck: back to the page first (work-cards.js
+        // does that itself for Work), then on to the part asked for
+        if (document.body.classList.contains('wc-open')) {
+          if (p[1] !== workLink) history.back();
+          setTimeout(go, 700);
+          return;
+        }
+        go();
+      });
+    });
+  }
   if (pinned) toolbar.classList.add('visible');
 
   var hideTimer;
@@ -588,7 +663,7 @@ function initToolbar() {
   toolbar.addEventListener('mouseenter', show);
   toolbar.addEventListener('mouseleave', scheduleHide);
 
-  if (isWorkGrid && workLink) {
+  if (isWorkGrid && workLink && !homeWork) {
     workLink.addEventListener('click', function(e) {
       e.preventDefault();
       var dot = document.getElementById('dot');
@@ -631,6 +706,26 @@ function initMobileWorkMenu() {
 }
 
 /* ── Blue dot ── */
+// Move the dot to another link on the same page (the home page's Dalton Corr /
+// Work as you scroll), gliding from where it was with the same FLIP as above.
+function moveNavDot(link) {
+  var from = document.querySelector('.nav-link.active');
+  if (!link || from === link) return;
+  var a = from && from.getBoundingClientRect(), b = link.getBoundingClientRect();
+  if (from) from.classList.remove('active', 'dot-animating');
+  link.classList.add('active');
+  if (!a || !b.width) return;
+  link.classList.remove('dot-animating');
+  link.style.setProperty('--dot-dx', (a.left - b.left) + 'px');
+  link.style.setProperty('--dot-dy', (a.top + a.height / 2 - (b.top + b.height / 2)) + 'px');
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      link.classList.add('dot-animating');
+      link.style.setProperty('--dot-dx', '0px');
+      link.style.setProperty('--dot-dy', '0px');
+    });
+  });
+}
 // The active-nav dot RESTS in CSS (.nav-link.active::before at translate(0,0)),
 // so its final position is always correct regardless of timing. isMobileNav
 // stays; the work-grid filter uses it.

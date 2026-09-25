@@ -39,6 +39,7 @@
 
 /* ── Open: the deck and the words on the left, the work on the right ── */
 .work-grid.is-hidden { display: none; }
+body.wc-open .home { display: none; }   /* the home page's slideshow, while a project is open */
 .wc-detail[hidden] { display: none; }
 .wc-detail {
   /* the deck has its own steady width, whatever the grid looked like */
@@ -135,6 +136,9 @@
 .wc-body .media-center { justify-content: center; }
 .wc-body .poster-hero-wrap .poster-hero { justify-content: center; margin-left: auto; margin-right: auto; }
 .wc-body .project-media audio { margin: 0 auto; }
+/* album players, one above the other */
+.wc-body .media-embeds { display: grid; gap: 16px; max-width: 660px; margin-left: auto; margin-right: auto; }
+.wc-body .media-embeds iframe { display: block; width: 100%; border: 0; border-radius: 12px; overflow: hidden; }
 /* a lone image shows whole and large, never cropped or squeezed into half the width */
 .wc-body .project-gallery:has(> img:only-child) { display: block; }
 .wc-body .project-gallery > img:only-child { width: auto; max-width: 100%; max-height: 88vh; aspect-ratio: auto; object-fit: contain; margin: 0 auto; }

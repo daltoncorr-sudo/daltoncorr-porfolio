@@ -28,6 +28,9 @@ jobs:
       - name: Confirm work/index.html matches projects.json
         run: python3 scripts/build_work_index.py --check
 
+      - name: Confirm the home page's slides, cards and About are up to date
+        run: python3 scripts/build_home_slides.py --check
+
       - name: Confirm every page has canonical + Open Graph meta
         run: python3 scripts/build_head_meta.py --check
 

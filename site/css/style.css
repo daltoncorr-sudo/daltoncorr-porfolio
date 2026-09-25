@@ -104,7 +104,7 @@ sup { font-size: 0.7em; vertical-align: super; }
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 /* On the work grid, blue is reserved for the filter breadcrumb (flydot). */
-body.is-work-grid .nav-link.active::before { background: #C4C4C4; }
+body.is-work-grid:not(:has(.home-work)) .nav-link.active::before { background: #C4C4C4; }  /* the home page keeps its blue */
 
 /* Filter dot indicator */
 .filter-btn::before {
@@ -162,8 +162,30 @@ body.is-work-grid .filter-btn.active::before {
 /* A fixed stage: every slide sits centred in the same 75vh box (the height
    the pictures were already capped at), so the page doesn't reflow
    between tall and wide pictures. Pictures render at the sizes they had. */
-.slideshow { position: relative; width: 100%; max-width: min(720px, 55vw); height: 75vh; margin: 0 auto; -webkit-user-select: none; user-select: none; }
+.slideshow { position: relative; width: 100%; max-width: min(720px, 55vw); height: 71vh; margin: 0 auto; -webkit-user-select: none; user-select: none; }
 .slide { display: none; text-decoration: none; }
+/* the first screen ends with the way down to the work */
+.home { position: relative; }
+.scroll-cue {
+  position: absolute; left: 50%; bottom: clamp(12px, 2.6vh, 26px); translate: -50% 0;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-size: 0.8125rem; letter-spacing: -0.005em; color: #86868b; text-decoration: none;
+  transition: color 0.2s ease, opacity 0.4s ease;
+}
+.scroll-cue:hover { color: var(--accent); }
+.scroll-cue svg { width: 14px; height: 8px; animation: cue-bob 1.4s ease-in-out infinite alternate; }
+@keyframes cue-bob { from { translate: 0 -1px; } to { translate: 0 4px; } }
+.scroll-cue.is-gone { opacity: 0; pointer-events: none; }
+.home-work { padding-top: clamp(2rem, 6vh, 4rem); scroll-margin-top: 0; }
+/* the foot of the home page: About, as on its own page */
+.home-about { border-top: 1px solid rgba(0, 0, 0, 0.08); margin: 0 var(--page-margin); }
+.home-about .about-layout { padding-left: 0; padding-right: 0; }
+/* room for the filters beside the cards, as on /work/ */
+@media (min-width: 768px) { .home-work { margin-left: var(--nav-width); } }
+/* the home page's filter row (phones) waits until the cards */
+body.home-top .work-toolbar { opacity: 0; visibility: hidden; pointer-events: none; }
+/* the page can scroll now: a scrollbar coming and going never shifts it */
+html { scrollbar-gutter: stable; }
 .slide.active { display: block; position: absolute; inset: 0; }
 .slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; }
 /* One quiet line under the frame; it stays put whatever the picture's shape */
@@ -1118,7 +1140,7 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .home { min-height: calc(100vh - var(--topbar-h)); padding: 1rem 0.75rem; }
   .slideshow { max-width: 92vw; }
   /* the stage: a poster at full column width fits, which is about 2:3 */
-  .slideshow { height: min(80vh, 150vw); }
+  .slideshow { height: min(68vh, 140vw); }
 
   /* Work grid: two columns with text below each preview, so previews stay
      small and several projects are visible at once */
