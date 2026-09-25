@@ -75,10 +75,16 @@
 .wc-deck .project-card:not([data-layer="0"]) { pointer-events: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
 .wc-deck .project-card:hover { transform: none; }
 
+/* Back / Previous / Next sit right under the deck they shuffle, so they're
+   in view whenever the deck is */
 .wc-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; white-space: nowrap; }
 .wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
 .wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
-.wc-arrows { display: flex; gap: 1.25rem; }
+.wc-arrows { display: flex; gap: 1.5rem; }
+.wc-arrow { display: inline-flex; align-items: center; gap: 0.45em; }
+.wc-chev { width: 0.45em; height: 0.8em; flex: none; transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.1, 1); }
+.wc-prev:hover .wc-chev { transform: translateX(-2px); }
+.wc-next:hover .wc-chev { transform: translateX(2px); }
 .wc-arrows[hidden] { display: none; }
 
 /* the words live under the deck, left-aligned, in one quiet size */

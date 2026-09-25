@@ -56,7 +56,14 @@
     var back = el('a', 'wc-back-link', 'Back to projects');
     back.href = home;
     var arrowsEl = el('span', 'wc-arrows');
-    arrowsEl.append(el('a', 'wc-arrow wc-prev', 'Previous'), el('a', 'wc-arrow wc-next', 'Next'));
+    var chev = function (d) {
+      return '<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d="' + d +
+        '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    };
+    var prevEl = el('a', 'wc-arrow wc-prev'), nextEl = el('a', 'wc-arrow wc-next');
+    prevEl.innerHTML = chev('M6.5 1.5 1.5 7l5 5.5') + 'Previous';
+    nextEl.innerHTML = 'Next' + chev('M1.5 1.5 6.5 7l-5 5.5');
+    arrowsEl.append(prevEl, nextEl);
     nav.append(back, arrowsEl);
     sideEl.append(box, nav, el('div', 'wc-info'));
     detail.append(sideEl, el('div', 'wc-body'));

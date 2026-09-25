@@ -45,6 +45,11 @@ END = "<!-- END: cards -->"
 CARDS = ROOT / "site" / "images" / "cards"
 WORK = ROOT / "site" / "work"
 DECK_BEGIN, DECK_END = "<!-- BEGIN: deck -->", "<!-- END: deck -->"
+# thin chevrons beside Previous / Next (work-cards.js builds the same on /work/)
+CHEV_PREV = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d="M6.5 1.5 1.5 7l5 5.5" '
+             'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+CHEV_NEXT = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d="M1.5 1.5 6.5 7l-5 5.5" '
+             'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 # Widest a card is drawn: the deck's top card (up to 23vw / 400px) on desktop,
 # a third of the page on tablets, the deck (62vw) on phones.
 CARD_SIZES = "(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw"
@@ -121,8 +126,8 @@ def render_deck(projects: list, i: int) -> str:
         f"        </div></div>\n"
         f'        <nav class="wc-controls" aria-label="Projects">\n'
         f'          <a class="wc-back-link" href="./">Back to projects</a>\n'
-        f'          <span class="wc-arrows"><a class="wc-arrow wc-prev" href="{prev}" rel="prev">Previous</a>'
-        f'<a class="wc-arrow wc-next" href="{nxt}" rel="next">Next</a></span>\n'
+        f'          <span class="wc-arrows"><a class="wc-arrow wc-prev" href="{prev}" rel="prev">{CHEV_PREV}Previous</a>'
+        f'<a class="wc-arrow wc-next" href="{nxt}" rel="next">Next{CHEV_NEXT}</a></span>\n'
         f"        </nav>\n"
         f"        {DECK_END}"
     )
