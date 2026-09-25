@@ -42,33 +42,167 @@ function initSlideshow() {
         slides[cur].classList.remove('active');
         cur = idx;
         slides[cur].classList.add('active');
+        if (isOpen()) fill();
       }
       load((idx + 1) % len);
       return;
     }
   }
-  // Each slide stays up 3s. Click the picture to pause or resume; the show
-  // only runs while the tab is visible, and reduced motion starts paused.
+  // Each slide stays up 3s. The show only runs while the tab is visible and
+  // no card is open, and reduced motion starts paused.
   var paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var timer = null;
   function stop() { clearInterval(timer); }
   function start() {
     stop();
-    if (!paused && !document.hidden) timer = setInterval(function() { go(cur + 1); }, 3000);
+    if (!paused && !isOpen() && !document.hidden) timer = setInterval(function() { go(cur + 1); }, 3000);
   }
   // A manual step restarts the 3s, so the next slide gets its full time.
   function step(n) { go(n); start(); }
   document.addEventListener('visibilitychange', start);
 
+  // Where the picture actually is: each one is contained in the frame, so a
+  // wide one leaves space above and below it.
+  function shown(img) {
+    var nw = img && (img.naturalWidth || +img.getAttribute('width'));
+    var nh = img && (img.naturalHeight || +img.getAttribute('height'));
+    var bw = wrap.clientWidth, bh = wrap.clientHeight;
+    var k = nw && nh ? Math.min(bw / nw, bh / nh) : 1;
+    var w = nw ? nw * k : bw, h = nh ? nh * k : bh;
+    return { left: (bw - w) / 2, top: (bh - h) / 2, width: w, height: h };
+  }
+
+  // One quiet line under the frame, in a place that never moves.
+  var hint = $('.slideshow-hint', wrap);
+  if (hint && window.matchMedia('(hover: none)').matches) hint.textContent = 'Tap image to view project';
+
+  // ── The card: the picture, what it's from, and the way in ──
+  var info = {};
+  try { info = JSON.parse(($('#slide-projects') || {}).textContent || '{}'); } catch (err) {}
+  function projectOf(i) { var slug = slides[i].dataset.project; return slug && info[slug] ? slug : null; }
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var box = null, before = null, wasPaused = false;
+  // the same thin chevron as Next on the project pages
+  var ARROW = '<svg viewBox="0 0 8 14" aria-hidden="true"><path d="M1.5 1.5 6.5 7l-5 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function isOpen() { return !!box && !box.hidden; }
+  function build() {
+    box = document.createElement('div');
+    box.className = 'hl';
+    box.hidden = true;
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.setAttribute('aria-labelledby', 'hl-title');
+    box.innerHTML = '<div class="hl-scrim"></div>' +
+      '<div class="hl-panel">' +
+        '<img class="hl-img" alt="">' +
+        '<div class="hl-info">' +
+          '<p class="hl-meta"></p>' +
+          '<h2 class="hl-title" id="hl-title"></h2>' +
+          '<p class="hl-line"></p>' +
+          '<div class="hl-actions">' +
+            '<a class="hl-go" href="#">View project' + ARROW + '</a>' +
+            '<button class="hl-close" type="button" aria-label="Close"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2 2 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(box);
+    box.querySelector('.hl-scrim').addEventListener('click', close);
+    box.querySelector('.hl-close').addEventListener('click', close);
+  }
+  function fill() {
+    var slug = projectOf(cur), p = slug && info[slug];
+    var img = slides[cur].querySelector('img');
+    if (!p) { close(); return; }
+    var big = box.querySelector('.hl-img');
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt || p.title;
+    box.querySelector('.hl-meta').textContent = p.role + ' · ' + p.year;
+    box.querySelector('.hl-title').textContent = p.title;
+    box.querySelector('.hl-line').textContent = p.line;
+    var go = box.querySelector('.hl-go');
+    go.href = 'work/' + slug;
+    go.setAttribute('aria-label', 'View project: ' + p.title);
+  }
+  // Same-document view transition where there is one, so the picture grows
+  // out of the slideshow into the card; otherwise a plain fade.
+  function swap(update) {
+    if (document.startViewTransition && !still) return document.startViewTransition(update).finished.catch(function() {});
+    update();
+    return Promise.resolve();
+  }
+  // The slide's picture fills its frame (contained); for the morph it's
+  // briefly given exactly the picture's box, so nothing stretches.
+  function hug(img, on) {
+    if (!on) { img.style.inset = img.style.left = img.style.top = img.style.width = img.style.height = ''; return; }
+    var r = shown(img);
+    img.style.inset = 'auto';
+    img.style.left = r.left + 'px'; img.style.top = r.top + 'px';
+    img.style.width = r.width + 'px'; img.style.height = r.height + 'px';
+  }
+  function open() {
+    var img = slides[cur].querySelector('img');
+    if (!projectOf(cur) || !img) return;
+    if (!box) build();
+    fill();
+    wasPaused = paused;
+    before = document.activeElement;
+    var big = box.querySelector('.hl-img');
+    hug(img, true);
+    img.style.viewTransitionName = 'hl-art';
+    swap(function() {
+      img.style.viewTransitionName = '';
+      big.style.viewTransitionName = 'hl-art';
+      box.hidden = false;
+      document.documentElement.classList.add('hl-open');
+      start();   // the show holds while the card is up
+    }).then(function() {
+      big.style.viewTransitionName = '';
+      hug(img, false);
+    });
+    box.querySelector('.hl-go').focus({ preventScroll: true });
+    // the project page, warmed while they read
+    var link = document.createElement('link');
+    link.rel = 'prefetch'; link.href = 'work/' + projectOf(cur);
+    document.head.appendChild(link);
+  }
+  function close() {
+    if (!isOpen()) return;
+    var img = slides[cur].querySelector('img');
+    var big = box.querySelector('.hl-img');
+    hug(img, true);
+    big.style.viewTransitionName = 'hl-art';
+    swap(function() {
+      big.style.viewTransitionName = '';
+      img.style.viewTransitionName = 'hl-art';
+      box.hidden = true;
+      document.documentElement.classList.remove('hl-open');
+      paused = wasPaused;
+      start();
+    }).then(function() {
+      img.style.viewTransitionName = '';
+      hug(img, false);
+    });
+    if (before && before.focus) before.focus({ preventScroll: true });
+  }
+
   slides[0].classList.add('active');
   load(1);
   start();
 
-  wrap.addEventListener('click', function() { paused = !paused; start(); });
+  // A click on the picture itself opens its card (the frame around a wide
+  // one doesn't count). A picture with no project page behind it pauses.
+  wrap.addEventListener('click', function(e) {
+    var r = shown(slides[cur].querySelector('img')), b = wrap.getBoundingClientRect();
+    var x = e.clientX - b.left, y = e.clientY - b.top;
+    if (x < r.left || x > r.left + r.width || y < r.top || y > r.top + r.height) return;
+    if (projectOf(cur)) open();
+    else { paused = !paused; start(); }
+  });
   document.addEventListener('keydown', function(e) {
+    if (isOpen() && e.key === 'Escape') { e.preventDefault(); close(); return; }
     if (e.key === 'ArrowLeft') step(cur - 1);
     if (e.key === 'ArrowRight') step(cur + 1);
-    if (e.key === ' ' && e.target === document.body) { e.preventDefault(); paused = !paused; start(); }
+    if (e.key === ' ' && e.target === document.body && !isOpen()) { e.preventDefault(); paused = !paused; start(); }
   });
   // Swipe between slides.
   var tx = 0;
