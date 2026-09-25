@@ -199,8 +199,20 @@ function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
    property works, so that is the question asked.
 
    Asked once, at module scope: it is a fact about the engine
-   and cannot change while the page is open. */
+   and cannot change while the page is open.
+
+   HERE, later: newer WebKit ANSWERS YES to the question and still
+   draws nothing through the filter, so on an iPhone the ball came
+   out as plain glass. The answer is only trusted from Blink (Chrome,
+   Edge, Android); every browser on iOS is WebKit whatever its name,
+   and an iPad asks as a Mac with a touchscreen. Everything else,
+   Safari on a Mac included, gets the canvas lens, which bends real
+   pixels everywhere. */
+var UA = navigator.userAgent || '';
+var IOS = /iP(hone|ad|od)/.test(UA) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+var BLINK = !IOS && /Chrome\/|Chromium\/|Edg\//.test(UA);
 var BACKDROP_LENS =
+  BLINK &&
   typeof CSS !== 'undefined' &&
   typeof CSS.supports === 'function' &&
   CSS.supports('backdrop-filter', 'url(#g)');
