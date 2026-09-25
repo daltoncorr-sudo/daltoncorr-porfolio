@@ -245,6 +245,10 @@ html { scrollbar-gutter: stable; }
 /* focused by the script as the card opens, never by the visitor: no ring */
 .hl-go:focus, .hl-close:focus { outline: none; }
 html.hl-open { overflow: hidden; }
+/* the card's picture takes the slide's place: the slide's own steps out
+   while the card is up, so no second copy lingers behind the picture as it
+   lifts, or glows through the frosted backdrop */
+html.hl-open .slide.active img { visibility: hidden; }
 /* the picture grows out of the slideshow into the card, and back */
 ::view-transition-group(hl-art) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.2, 0.9, 0.1, 1); }
 html.hl-moving .nav, html.hl-moving .work-toolbar { view-transition-name: none; }
