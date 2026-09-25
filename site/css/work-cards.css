@@ -18,6 +18,7 @@
    still gets a ring, so it can see where it is */
 *:focus:not(:focus-visible) { outline: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.wc-deck .project-card:focus { outline: none; }   /* only ever focused by the script (closing the deck) */
 * { -webkit-tap-highlight-color: transparent; }
 .project-card {
   /* type sizes as variables, so the deck can reserve two title lines */

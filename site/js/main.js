@@ -167,7 +167,56 @@ function initSlideshow() {
     var ready = big.decode ? big.decode().catch(function() {}) : Promise.resolve();
     ready.then(function() { opening = false; reveal(img, big); });
   }
+  // Phones: no page snapshots (a view transition photographs the whole page,
+  // which stalled the first frame on a phone). The picture glides from the
+  // slideshow into the card on its own (a transform the compositor does
+  // alone), while the backdrop and the words fade in around it.
+  var phone = window.matchMedia('(max-width: 767px)');
+  var EASE = 'cubic-bezier(0.2, 0.9, 0.1, 1)';
+  var moving = [];
+  function onScreen(img) {   // the slide's picture, where it is on the screen
+    var r = shown(img), b = wrap.getBoundingClientRect();
+    return { left: b.left + r.left, top: b.top + r.top, width: r.width, height: r.height };
+  }
+  function flip(from, to) {
+    return 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px) scale(' + (from.width / to.width) + ',' + (from.height / to.height) + ')';
+  }
+  function settle() { moving.forEach(function(a) { a.cancel(); }); moving = []; }
+  function revealLight(img, big) {
+    settle();
+    box.hidden = false;
+    document.documentElement.classList.add('hl-open');
+    start();
+    var from = onScreen(img), to = big.getBoundingClientRect();
+    moving = [
+      big.animate([{ transform: flip(from, to), transformOrigin: '0 0' }, { transform: 'none', transformOrigin: '0 0' }], { duration: 480, easing: EASE }),
+      box.querySelector('.hl-scrim').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease-out' }),
+      box.querySelector('.hl-info').animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 420, delay: 140, easing: EASE, fill: 'backwards' })
+    ];
+  }
+  function closeLight() {
+    settle();
+    var img = slides[cur].querySelector('img'), big = box.querySelector('.hl-img');
+    var from = big.getBoundingClientRect(), to = onScreen(img);
+    moving = [
+      big.animate([{ transform: 'none', transformOrigin: '0 0' }, { transform: flip(to, from), transformOrigin: '0 0' }], { duration: 380, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }),
+      box.querySelector('.hl-scrim').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 340, easing: 'ease-in', fill: 'forwards' }),
+      box.querySelector('.hl-info').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'ease-in', fill: 'forwards' })
+    ];
+    var mine = moving;
+    Promise.all(mine.map(function(a) { return a.finished; })).then(function() {
+      if (moving !== mine) return;           // opened again meanwhile
+      settle();
+      box.hidden = true;
+      document.documentElement.classList.remove('hl-open');
+      paused = wasPaused;
+      start();
+    }, function() {});
+  }
   function reveal(img, big) {
+    if (phone.matches && !still) {
+      revealLight(img, big);
+    } else {
     hug(img, true);
     img.style.viewTransitionName = 'hl-art';
     swap(function() {
@@ -180,6 +229,7 @@ function initSlideshow() {
       big.style.viewTransitionName = '';
       hug(img, false);
     });
+    }
     box.querySelector('.hl-go').focus({ preventScroll: true });
     // the project page, warmed while they read
     var link = document.createElement('link');
@@ -188,6 +238,11 @@ function initSlideshow() {
   }
   function close() {
     if (!isOpen()) return;
+    if (phone.matches && !still) {
+      closeLight();
+      if (before && before.focus) before.focus({ preventScroll: true });
+      return;
+    }
     var img = slides[cur].querySelector('img');
     var big = box.querySelector('.hl-img');
     hug(img, true);
