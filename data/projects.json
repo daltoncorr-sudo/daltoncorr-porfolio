@@ -138,6 +138,23 @@
     "alt": "Don't Mind Me"
   },
   {
+    "slug": "solebury-home-watch",
+    "sort": 2,
+    "year": 2026,
+    "filters": [
+      "visual",
+      "branding"
+    ],
+    "title": "Solebury Home Watch Services",
+    "role": "Brand Development and Web Designer",
+    "tags": [
+      "Visual",
+      "Branding"
+    ],
+    "image": "../images/design/solebury-home-watch/card.webp",
+    "alt": "Solebury Home Watch Services logo, an owl on the roof of a house, in white on blue"
+  },
+  {
     "slug": "red-mask",
     "sort": 2,
     "year": 2025,
