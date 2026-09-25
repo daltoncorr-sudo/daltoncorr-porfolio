@@ -51,12 +51,12 @@ CHEV_PREV = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d
              'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 CHEV_NEXT = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d="M1.5 1.5 6.5 7l-5 5.5" '
              'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-# How wide a card is drawn in the grid: four across on laptops (~18vw), three
-# on tablets, two on phones, so the grid fetches the small copies. The top of
+# How wide a card is drawn in the grid: three across on laptops (~23vw) and
+# tablets, two on phones, so the grid fetches the right copies. The top of
 # a deck is bigger (up to 400px; min(62vw, 260px) on phones): a project page's
 # own card is written with DECK_SIZES, and work-cards.js gives the same to
 # each card as it comes to the top (keep the two in step).
-CARD_SIZES = "(min-width: 1100px) 18vw, (min-width: 768px) 24vw, 46vw"
+CARD_SIZES = "(min-width: 1100px) 23vw, (min-width: 768px) 24vw, 46vw"
 DECK_SIZES = "(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px"
 
 

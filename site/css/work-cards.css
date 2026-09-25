@@ -7,13 +7,7 @@
 .work-grid { gap: 28px; margin-left: 0; max-width: none; }
 /* smaller cards, more air between them */
 @media (min-width: 768px)  { .work-grid { grid-template-columns: repeat(3, 1fr); gap: 48px 40px; } }
-/* laptops and up: four across, each card about a quarter smaller than three
-   across, with its type, padding and corners scaled down to match (the deck
-   keeps its own, larger card) */
-@media (min-width: 1100px) {
-  .work-grid { grid-template-columns: repeat(4, 1fr); gap: clamp(44px, 3.6vw, 72px) clamp(32px, 3vw, 60px); padding-right: clamp(0px, 3vw, 4rem); }
-  .work-grid .project-card { --t: clamp(0.975rem, 1vw, 1.2rem); --r: clamp(0.8125rem, 0.8vw, 0.9375rem); --pad-t: 14px; --pad-x: 15px; --pad-b: 15px; --gap-r: 5px; border-radius: 18px; }
-}
+@media (min-width: 1100px) { .work-grid { grid-template-columns: repeat(3, 1fr); gap: clamp(56px, 4.5vw, 88px) clamp(40px, 3.5vw, 72px); padding-right: clamp(0px, 3vw, 4rem); } }
 /* no focus ring on a click or a tap, and no tap highlight; the keyboard
    still gets a ring, so it can see where it is */
 *:focus:not(:focus-visible) { outline: none; }
