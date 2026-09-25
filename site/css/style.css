@@ -1169,6 +1169,9 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .slideshow { max-width: 92vw; }
   /* the stage: a poster at full column width fits, which is about 2:3 */
   .slideshow { height: min(64vh, 134vw); }
+  /* "Scroll for portfolio" and Work stop with the first cards clear of the
+     sticky menu and filter row, not tucked under them */
+  .home-work { scroll-margin-top: 1.75rem; }
 
   /* Work grid: two columns with text below each preview, so previews stay
      small and several projects are visible at once */
