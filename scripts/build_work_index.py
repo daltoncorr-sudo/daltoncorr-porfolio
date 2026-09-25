@@ -51,9 +51,13 @@ CHEV_PREV = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d
              'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
 CHEV_NEXT = ('<svg class="wc-chev" viewBox="0 0 8 14" aria-hidden="true"><path d="M1.5 1.5 6.5 7l-5 5.5" '
              'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-# Widest a card is drawn: the deck's top card (up to 23vw / 400px) on desktop,
-# a third of the page on tablets, the deck (62vw) on phones.
-CARD_SIZES = "(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw"
+# How wide a card is drawn in the grid: four across on laptops (~18vw), three
+# on tablets, two on phones, so the grid fetches the small copies. The top of
+# a deck is bigger (up to 400px; min(62vw, 260px) on phones): a project page's
+# own card is written with DECK_SIZES, and work-cards.js gives the same to
+# each card as it comes to the top (keep the two in step).
+CARD_SIZES = "(min-width: 1100px) 18vw, (min-width: 768px) 24vw, 46vw"
+DECK_SIZES = "(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px"
 
 
 def card_image(p: dict, eager: bool = False, lead: bool = False) -> str:
@@ -75,7 +79,7 @@ def card_image(p: dict, eager: bool = False, lead: bool = False) -> str:
             lw, lh = image_size(lg)
             l = f"../images/cards/{lg.name}"
             srcset = ", ".join(f"../images/cards/{f.name} {w}w" for w, f in sorted(widths.items()))
-            srcset = f' srcset="{srcset}" sizes="{CARD_SIZES}"' if len(widths) > 1 else ""
+            srcset = f' srcset="{srcset}" sizes="{DECK_SIZES if lead else CARD_SIZES}"' if len(widths) > 1 else ""
             return (
                 f'<div class="card-image">'
                 f'<img src="{l}"{srcset} width="{lw}" height="{lh}" alt="{p.get("alt", "")}" {load} decoding="async">'
@@ -195,6 +199,9 @@ def build(check: bool = False) -> int:
     home_cards = "\n\n".join(render_card(p) for p in projects)
     home_cards = re.sub(r'href="([a-z0-9-]+)" class="project-card"', r'href="/work/\1" class="project-card"', home_cards)
     home_cards = home_cards.replace('"../images/', '"/images/').replace(", ../images/", ", /images/")
+    # ...and their pictures held back (data-src) until the first slide is in:
+    # main.js initHomeCards lets them load then, or as soon as you scroll
+    home_cards = home_cards.replace('<img src="', '<img data-src="').replace('" srcset="', '" data-srcset="')
     home = HOME.read_text()
     new_home = re.sub(rf"{re.escape(BEGIN)}.*?{re.escape(END)}", f"{BEGIN}\n{home_cards}\n        {END}", home, flags=re.DOTALL)
     if new_home != home:

@@ -14,8 +14,10 @@
   .work-grid { grid-template-columns: repeat(4, 1fr); gap: clamp(44px, 3.6vw, 72px) clamp(32px, 3vw, 60px); padding-right: clamp(0px, 3vw, 4rem); }
   .work-grid .project-card { --t: clamp(0.975rem, 1vw, 1.2rem); --r: clamp(0.8125rem, 0.8vw, 0.9375rem); --pad-t: 14px; --pad-x: 15px; --pad-b: 15px; --gap-r: 5px; border-radius: 18px; }
 }
-/* no focus or tap highlights anywhere on these pages */
-*:focus, *:focus-visible { outline: none; }
+/* no focus ring on a click or a tap, and no tap highlight; the keyboard
+   still gets a ring, so it can see where it is */
+*:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 * { -webkit-tap-highlight-color: transparent; }
 .project-card {
   /* type sizes as variables, so the deck can reserve two title lines */

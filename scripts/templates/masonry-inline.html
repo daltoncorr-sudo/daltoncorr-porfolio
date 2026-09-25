@@ -1,0 +1,30 @@
+<!-- BEGIN: masonry -->
+<script>
+  /* The 2-up galleries laid out before the page is first drawn, so nothing
+     jumps when main.js takes them over (it keeps them laid out from then
+     on). The same layout as initGalleryMasonry in main.js: two columns,
+     each photo under the shorter one, heights from width/height. Written
+     in by scripts/sync_includes.py (templates/masonry-inline.html). */
+  (function () {
+    if (!matchMedia('(min-width: 768px)').matches) return;
+    [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+      var imgs = g.querySelectorAll('img');
+      if (imgs.length < 2 || imgs.length !== g.children.length) return;
+      g.classList.add('is-masonry');
+      var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+      var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+      var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+      [].forEach.call(imgs, function (img) {
+        var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+        var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+        var c = cols[0] <= cols[1] ? 0 : 1;
+        img.style.left = (padL + c * (colW + gap)) + 'px';
+        img.style.top = (padT + cols[c]) + 'px';
+        img.style.width = colW + 'px';
+        cols[c] += colW / (r || 1) + gap;
+      });
+      g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+    });
+  })();
+</script>
+<!-- END: masonry -->

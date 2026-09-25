@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>10th Annual HollyShorts Comedy Film Festival — Dalton Corr</title>
-  <link rel="stylesheet" href="../css/style.css?v=3eb1d3f5">
-  <link rel="stylesheet" href="../css/work-cards.css?v=21ddf36e">
+  <link rel="stylesheet" href="../css/style.css?v=31b2463c">
+  <link rel="stylesheet" href="../css/work-cards.css?v=e5872fa2">
   <link rel="stylesheet" href="../css/badge-float.css?v=84e507cd">
   <link rel="icon" href="../favicon.ico?v=5" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=5" type="image/svg+xml">
@@ -82,7 +82,7 @@
         <!-- BEGIN: deck -->
         <div class="wc-deck-box"><div class="wc-deck">
         <a href="hollyshorts-comedy-2026" class="project-card" data-sort-order="0" data-year="2026" data-filters="visual art-direction poster" data-layer="0">
-          <div class="card-image"><img src="../images/cards/hollyshorts-comedy-2026-lg.webp" srcset="../images/cards/hollyshorts-comedy-2026-sm.webp 600w, ../images/cards/hollyshorts-comedy-2026-lg.webp 1000w, ../images/cards/hollyshorts-comedy-2026-xl.webp 1500w" sizes="(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw" width="1000" height="1250" alt="10th Annual HollyShorts Comedy Film Festival poster" loading="eager" fetchpriority="high" decoding="async"></div>
+          <div class="card-image"><img src="../images/cards/hollyshorts-comedy-2026-lg.webp" srcset="../images/cards/hollyshorts-comedy-2026-sm.webp 600w, ../images/cards/hollyshorts-comedy-2026-lg.webp 1000w, ../images/cards/hollyshorts-comedy-2026-xl.webp 1500w" sizes="(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px" width="1000" height="1250" alt="10th Annual HollyShorts Comedy Film Festival poster" loading="eager" fetchpriority="high" decoding="async"></div>
           <div class="card-info">
             <h3 class="card-title">10th Annual HollyShorts Comedy Film Festival</h3>
             <span class="card-role">Art Director</span>
@@ -115,7 +115,7 @@
           <h2>Poster</h2>
           <p class="section-sub">The official poster, and the poster animated</p>
           <div class="project-gallery">
-            <img srcset="../images/design/hollyshorts-comedy-2026/poster-1200.webp 1200w, ../images/design/hollyshorts-comedy-2026/poster.webp 2000w" sizes="(min-width: 1100px) min(1100px, 70vw), 100vw" width="2000" height="2963" src="../images/design/hollyshorts-comedy-2026/poster.webp" alt="10th Annual HollyShorts Comedy Film Festival official poster" loading="lazy">
+            <img srcset="../images/design/hollyshorts-comedy-2026/poster-1200.webp 1200w, ../images/design/hollyshorts-comedy-2026/poster.webp 2000w" sizes="(min-width: 1100px) min(1100px, 70vw, 59vh), min(100vw, 59vh)" width="2000" height="2963" src="../images/design/hollyshorts-comedy-2026/poster.webp" alt="10th Annual HollyShorts Comedy Film Festival official poster">
             <video src="../media/hollyshorts-comedy-10-poster.mp4" width="496" height="744" autoplay muted loop playsinline preload="metadata" aria-label="The poster, animated"></video>
           </div>
         </div>
@@ -144,7 +144,7 @@
           <h2>Campaign</h2>
           <p class="section-sub">Date announcement, official selections, screening schedule, the IMGN film fund competition and opening night</p>
           <div class="project-gallery-wide">
-            <img width="2400" height="1350" src="../images/design/hollyshorts-comedy-2026/date-announcement.webp" alt="Date announcement: May 1 to 3, 2026" loading="lazy">
+            <img srcset="../images/design/hollyshorts-comedy-2026/date-announcement-1200.webp 1200w, ../images/design/hollyshorts-comedy-2026/date-announcement.webp 2400w" sizes="(min-width: 1100px) min(1100px, 70vw), 100vw" width="2400" height="1350" src="../images/design/hollyshorts-comedy-2026/date-announcement.webp" alt="Date announcement: May 1 to 3, 2026" loading="lazy">
           </div>
           <div class="project-gallery">
             <img srcset="../images/design/hollyshorts-comedy-2026/official-selections-1200.webp 1200w, ../images/design/hollyshorts-comedy-2026/official-selections.webp 1600w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="1600" height="2000" src="../images/design/hollyshorts-comedy-2026/official-selections.webp" alt="Official selections announcement" loading="lazy">
@@ -186,10 +186,40 @@
           </div>
         </div>
       </div>
+      <!-- BEGIN: masonry -->
+      <script>
+        /* The 2-up galleries laid out before the page is first drawn, so nothing
+           jumps when main.js takes them over (it keeps them laid out from then
+           on). The same layout as initGalleryMasonry in main.js: two columns,
+           each photo under the shorter one, heights from width/height. Written
+           in by scripts/sync_includes.py (templates/masonry-inline.html). */
+        (function () {
+          if (!matchMedia('(min-width: 768px)').matches) return;
+          [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+            var imgs = g.querySelectorAll('img');
+            if (imgs.length < 2 || imgs.length !== g.children.length) return;
+            g.classList.add('is-masonry');
+            var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+            var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+            var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+            [].forEach.call(imgs, function (img) {
+              var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+              var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+              var c = cols[0] <= cols[1] ? 0 : 1;
+              img.style.left = (padL + c * (colW + gap)) + 'px';
+              img.style.top = (padT + cols[c]) + 'px';
+              img.style.width = colW + 'px';
+              cols[c] += colW / (r || 1) + gap;
+            });
+            g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+          });
+        })();
+      </script>
+      <!-- END: masonry -->
     </main>
   </div>
-  <script src="../js/main.js?v=356db412" defer></script>
-  <script src="../js/work-cards.js?v=c100a12a" defer></script>
+  <script src="../js/main.js?v=29890136" defer></script>
+  <script src="../js/work-cards.js?v=7a0f0834" defer></script>
   <script src="../js/badge-float.js?v=2f8922f3" defer></script>
 </body>
 </html>

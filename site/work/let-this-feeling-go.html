@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Let This Feeling Go — Dalton Corr</title>
-  <link rel="stylesheet" href="../css/style.css?v=3eb1d3f5">
-  <link rel="stylesheet" href="../css/work-cards.css?v=21ddf36e">
+  <link rel="stylesheet" href="../css/style.css?v=31b2463c">
+  <link rel="stylesheet" href="../css/work-cards.css?v=e5872fa2">
   <link rel="icon" href="../favicon.ico?v=5" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=5" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/images/og/let-this-feeling-go.png?v=f0ed25e8">
@@ -16,8 +16,8 @@
   <link rel="canonical" href="https://daltoncorr.com/work/let-this-feeling-go">
   <meta property="og:url" content="https://daltoncorr.com/work/let-this-feeling-go">
   <meta property="og:title" content="Let This Feeling Go — Dalton Corr">
-  <meta name="description" content="Original artwork and poster design for Let This Feeling Go">
-  <meta property="og:description" content="Original artwork and poster design for Let This Feeling Go">
+  <meta name="description" content="Original artwork and poster design for Let This Feeling Go.">
+  <meta property="og:description" content="Original artwork and poster design for Let This Feeling Go.">
   <meta property="og:type" content="website">
 </head>
 <body>
@@ -81,7 +81,7 @@
         <!-- BEGIN: deck -->
         <div class="wc-deck-box"><div class="wc-deck">
         <a href="let-this-feeling-go" class="project-card" data-sort-order="14" data-year="2023" data-filters="visual illustration poster" data-layer="0">
-          <div class="card-image"><img src="../images/cards/let-this-feeling-go-lg.webp" srcset="../images/cards/let-this-feeling-go-sm.webp 600w, ../images/cards/let-this-feeling-go-lg.webp 1000w, ../images/cards/let-this-feeling-go-xl.webp 1500w" sizes="(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw" width="1000" height="1250" alt="Let This Feeling Go" loading="eager" fetchpriority="high" decoding="async"></div>
+          <div class="card-image"><img src="../images/cards/let-this-feeling-go-lg.webp" srcset="../images/cards/let-this-feeling-go-sm.webp 600w, ../images/cards/let-this-feeling-go-lg.webp 1000w, ../images/cards/let-this-feeling-go-xl.webp 1500w" sizes="(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px" width="1000" height="1250" alt="Let This Feeling Go" loading="eager" fetchpriority="high" decoding="async"></div>
           <div class="card-info">
             <h3 class="card-title">Let This Feeling Go</h3>
             <span class="card-role">Poster Designer</span>
@@ -102,22 +102,52 @@
           <p class="project-details project-details--meta">Director Andrew De Zen — Los Angeles, 2023</p>
         </div>
         <div class="project-body">
-          <p>Original artwork and poster design for <em>Let This Feeling Go</em></p>
+          <p>Original artwork and poster design for <em>Let This Feeling Go</em>.</p>
         </div>
         </div>
       </div>
       <div class="wc-body">
         <div class="project-section">
           <div class="project-gallery">
-            <img srcset="../images/cdn/feeling/Poster-5-title-copy-2-8c4f31-1200.webp 1200w, ../images/cdn/feeling/Poster-5-title-copy-2-8c4f31.webp 2400w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2400" height="3732" src="../images/cdn/feeling/Poster-5-title-copy-2-8c4f31.webp" alt="Let This Feeling Go poster design variant" loading="lazy">
+            <img srcset="../images/cdn/feeling/Poster-5-title-copy-2-8c4f31-1200.webp 1200w, ../images/cdn/feeling/Poster-5-title-copy-2-8c4f31.webp 2400w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2400" height="3732" src="../images/cdn/feeling/Poster-5-title-copy-2-8c4f31.webp" alt="Let This Feeling Go poster design variant">
             <img width="1000" height="1481" src="../images/cdn/feeling/Poster-1G-title-copy-b677f9.webp" alt="Let This Feeling Go poster design variant" loading="lazy">
             <img width="750" height="1167" src="../images/cdn/feeling/Poster-5-title-copy-f24903.webp" alt="Let This Feeling Go poster design variant" loading="lazy">
           </div>
         </div>
       </div>
+      <!-- BEGIN: masonry -->
+      <script>
+        /* The 2-up galleries laid out before the page is first drawn, so nothing
+           jumps when main.js takes them over (it keeps them laid out from then
+           on). The same layout as initGalleryMasonry in main.js: two columns,
+           each photo under the shorter one, heights from width/height. Written
+           in by scripts/sync_includes.py (templates/masonry-inline.html). */
+        (function () {
+          if (!matchMedia('(min-width: 768px)').matches) return;
+          [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+            var imgs = g.querySelectorAll('img');
+            if (imgs.length < 2 || imgs.length !== g.children.length) return;
+            g.classList.add('is-masonry');
+            var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+            var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+            var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+            [].forEach.call(imgs, function (img) {
+              var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+              var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+              var c = cols[0] <= cols[1] ? 0 : 1;
+              img.style.left = (padL + c * (colW + gap)) + 'px';
+              img.style.top = (padT + cols[c]) + 'px';
+              img.style.width = colW + 'px';
+              cols[c] += colW / (r || 1) + gap;
+            });
+            g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+          });
+        })();
+      </script>
+      <!-- END: masonry -->
     </main>
   </div>
-  <script src="../js/main.js?v=356db412" defer></script>
-  <script src="../js/work-cards.js?v=c100a12a" defer></script>
+  <script src="../js/main.js?v=29890136" defer></script>
+  <script src="../js/work-cards.js?v=7a0f0834" defer></script>
 </body>
 </html>

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HollyShorts London 2025 — Dalton Corr</title>
-  <link rel="stylesheet" href="../css/style.css?v=3eb1d3f5">
-  <link rel="stylesheet" href="../css/work-cards.css?v=21ddf36e">
+  <link rel="stylesheet" href="../css/style.css?v=31b2463c">
+  <link rel="stylesheet" href="../css/work-cards.css?v=e5872fa2">
   <link rel="icon" href="../favicon.ico?v=5" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=5" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/images/og/hollyshorts-london-2025.png?v=f46f3b42">
@@ -81,7 +81,7 @@
         <!-- BEGIN: deck -->
         <div class="wc-deck-box"><div class="wc-deck">
         <a href="hollyshorts-london-2025" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual art-direction poster" data-layer="0">
-          <div class="card-image"><img src="../images/cards/hollyshorts-london-2025-lg.webp" srcset="../images/cards/hollyshorts-london-2025-sm.webp 600w, ../images/cards/hollyshorts-london-2025-lg.webp 1000w, ../images/cards/hollyshorts-london-2025-xl.webp 1490w" sizes="(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw" width="1000" height="1250" alt="HollyShorts London 2025" loading="eager" fetchpriority="high" decoding="async"></div>
+          <div class="card-image"><img src="../images/cards/hollyshorts-london-2025-lg.webp" srcset="../images/cards/hollyshorts-london-2025-sm.webp 600w, ../images/cards/hollyshorts-london-2025-lg.webp 1000w, ../images/cards/hollyshorts-london-2025-xl.webp 1490w" sizes="(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px" width="1000" height="1250" alt="HollyShorts London 2025" loading="eager" fetchpriority="high" decoding="async"></div>
           <div class="card-info">
             <h3 class="card-title">HollyShorts London 2025</h3>
             <span class="card-role">Art Director</span>
@@ -112,7 +112,7 @@
         <div class="project-section">
           <h2>Poster</h2>
           <div class="project-gallery">
-            <img width="1490" height="2000" src="hs-london-2025/poster.webp" alt="HollyShorts London 2025 poster" loading="lazy">
+            <img width="1490" height="2000" src="hs-london-2025/poster.webp" alt="HollyShorts London 2025 poster">
           </div>
         </div>
 
@@ -151,9 +151,39 @@
           </div>
         </div>
       </div>
+      <!-- BEGIN: masonry -->
+      <script>
+        /* The 2-up galleries laid out before the page is first drawn, so nothing
+           jumps when main.js takes them over (it keeps them laid out from then
+           on). The same layout as initGalleryMasonry in main.js: two columns,
+           each photo under the shorter one, heights from width/height. Written
+           in by scripts/sync_includes.py (templates/masonry-inline.html). */
+        (function () {
+          if (!matchMedia('(min-width: 768px)').matches) return;
+          [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+            var imgs = g.querySelectorAll('img');
+            if (imgs.length < 2 || imgs.length !== g.children.length) return;
+            g.classList.add('is-masonry');
+            var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+            var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+            var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+            [].forEach.call(imgs, function (img) {
+              var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+              var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+              var c = cols[0] <= cols[1] ? 0 : 1;
+              img.style.left = (padL + c * (colW + gap)) + 'px';
+              img.style.top = (padT + cols[c]) + 'px';
+              img.style.width = colW + 'px';
+              cols[c] += colW / (r || 1) + gap;
+            });
+            g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+          });
+        })();
+      </script>
+      <!-- END: masonry -->
     </main>
   </div>
-  <script src="../js/main.js?v=356db412" defer></script>
-  <script src="../js/work-cards.js?v=c100a12a" defer></script>
+  <script src="../js/main.js?v=29890136" defer></script>
+  <script src="../js/work-cards.js?v=7a0f0834" defer></script>
 </body>
 </html>

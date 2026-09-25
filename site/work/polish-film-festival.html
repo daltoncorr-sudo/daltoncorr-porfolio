@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polish Film Festival North America — Dalton Corr</title>
-  <link rel="stylesheet" href="../css/style.css?v=3eb1d3f5">
-  <link rel="stylesheet" href="../css/work-cards.css?v=21ddf36e">
+  <link rel="stylesheet" href="../css/style.css?v=31b2463c">
+  <link rel="stylesheet" href="../css/work-cards.css?v=e5872fa2">
   <link rel="icon" href="../favicon.ico?v=5" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=5" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/images/og/polish-film-festival.jpg?v=e4482c47">
@@ -81,7 +81,7 @@
         <!-- BEGIN: deck -->
         <div class="wc-deck-box"><div class="wc-deck">
         <a href="polish-film-festival" class="project-card" data-sort-order="2" data-year="2025" data-filters="visual illustration poster" data-layer="0">
-          <div class="card-image"><img src="../images/cards/polish-film-festival-lg.webp" srcset="../images/cards/polish-film-festival-sm.webp 600w, ../images/cards/polish-film-festival-lg.webp 1000w, ../images/cards/polish-film-festival-xl.webp 1500w" sizes="(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw" width="1000" height="1250" alt="Polish Film Festival North America" loading="eager" fetchpriority="high" decoding="async"></div>
+          <div class="card-image"><img src="../images/cards/polish-film-festival-lg.webp" srcset="../images/cards/polish-film-festival-sm.webp 600w, ../images/cards/polish-film-festival-lg.webp 1000w, ../images/cards/polish-film-festival-xl.webp 1500w" sizes="(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px" width="1000" height="1250" alt="Polish Film Festival North America" loading="eager" fetchpriority="high" decoding="async"></div>
           <div class="card-info">
             <h3 class="card-title">Polish Film Festival North America</h3>
             <span class="card-role">Illustrator</span>
@@ -110,7 +110,7 @@
         <div class="project-section">
           <h2>Poster</h2>
           <div class="media-center">
-            <img width="1620" height="2400" src="../images/design/polish-film-festival/poster-hollywood-full.webp" alt="Polish Film Festival poster — couple walking across a globe ringed with Hollywood landmarks and Polish folk florals" loading="lazy">
+            <img srcset="../images/design/polish-film-festival/poster-hollywood-full-1200.webp 1200w, ../images/design/polish-film-festival/poster-hollywood-full.webp 1620w" sizes="(min-width: 768px) min(600px, 59vh), 100vw" width="1620" height="2400" src="../images/design/polish-film-festival/poster-hollywood-full.webp" alt="Polish Film Festival poster — couple walking across a globe ringed with Hollywood landmarks and Polish folk florals">
           </div>
         </div>
 
@@ -141,13 +141,43 @@
         <div class="project-section">
           <h2>Alternate Version</h2>
           <div class="media-center">
-            <img width="2400" height="3556" src="../images/design/polish-film-festival/poster-la.webp" alt="Alternate Los Angeles edition of the Polish Film Festival poster" loading="lazy">
+            <img srcset="../images/design/polish-film-festival/poster-la-1200.webp 1200w, ../images/design/polish-film-festival/poster-la.webp 2400w" sizes="(min-width: 768px) min(600px, 59vh), 100vw" width="2400" height="3556" src="../images/design/polish-film-festival/poster-la.webp" alt="Alternate Los Angeles edition of the Polish Film Festival poster" loading="lazy">
           </div>
         </div>
       </div>
+      <!-- BEGIN: masonry -->
+      <script>
+        /* The 2-up galleries laid out before the page is first drawn, so nothing
+           jumps when main.js takes them over (it keeps them laid out from then
+           on). The same layout as initGalleryMasonry in main.js: two columns,
+           each photo under the shorter one, heights from width/height. Written
+           in by scripts/sync_includes.py (templates/masonry-inline.html). */
+        (function () {
+          if (!matchMedia('(min-width: 768px)').matches) return;
+          [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+            var imgs = g.querySelectorAll('img');
+            if (imgs.length < 2 || imgs.length !== g.children.length) return;
+            g.classList.add('is-masonry');
+            var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+            var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+            var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+            [].forEach.call(imgs, function (img) {
+              var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+              var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+              var c = cols[0] <= cols[1] ? 0 : 1;
+              img.style.left = (padL + c * (colW + gap)) + 'px';
+              img.style.top = (padT + cols[c]) + 'px';
+              img.style.width = colW + 'px';
+              cols[c] += colW / (r || 1) + gap;
+            });
+            g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+          });
+        })();
+      </script>
+      <!-- END: masonry -->
     </main>
   </div>
-  <script src="../js/main.js?v=356db412" defer></script>
-  <script src="../js/work-cards.js?v=c100a12a" defer></script>
+  <script src="../js/main.js?v=29890136" defer></script>
+  <script src="../js/work-cards.js?v=7a0f0834" defer></script>
 </body>
 </html>

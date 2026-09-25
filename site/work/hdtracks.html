@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HDtracks — Dalton Corr</title>
-  <link rel="stylesheet" href="../css/style.css?v=3eb1d3f5">
-  <link rel="stylesheet" href="../css/work-cards.css?v=21ddf36e">
+  <link rel="stylesheet" href="../css/style.css?v=31b2463c">
+  <link rel="stylesheet" href="../css/work-cards.css?v=e5872fa2">
   <link rel="icon" href="../favicon.ico?v=5" type="image/x-icon">
   <link rel="icon" href="../favicon.svg?v=5" type="image/svg+xml">
   <meta property="og:image" content="https://daltoncorr.com/images/og/hdtracks.jpg?v=4236d4b6">
@@ -81,7 +81,7 @@
         <!-- BEGIN: deck -->
         <div class="wc-deck-box"><div class="wc-deck">
         <a href="hdtracks" class="project-card" data-sort-order="7" data-year="2019" data-filters="visual branding" data-layer="0">
-          <div class="card-image"><img src="../images/cards/hdtracks-lg.webp" srcset="../images/cards/hdtracks-sm.webp 600w, ../images/cards/hdtracks-lg.webp 1000w, ../images/cards/hdtracks-xl.webp 1500w" sizes="(min-width: 1100px) 24vw, (min-width: 768px) 31vw, 62vw" width="1000" height="1250" alt="HDtracks" loading="eager" fetchpriority="high" decoding="async"></div>
+          <div class="card-image"><img src="../images/cards/hdtracks-lg.webp" srcset="../images/cards/hdtracks-sm.webp 600w, ../images/cards/hdtracks-lg.webp 1000w, ../images/cards/hdtracks-xl.webp 1500w" sizes="(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px" width="1000" height="1250" alt="HDtracks" loading="eager" fetchpriority="high" decoding="async"></div>
           <div class="card-info">
             <h3 class="card-title">HDtracks</h3>
             <span class="card-role">Director of Marketing, Lead Designer</span>
@@ -109,7 +109,7 @@
       </div>
       <div class="wc-body">
   <div class="project-gallery">
-          <img srcset="../images/cdn/hdtracks/HDtrackswide-88945d-1200.webp 1200w, ../images/cdn/hdtracks/HDtrackswide-88945d.webp 2400w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2400" height="900" src="../images/cdn/hdtracks/HDtrackswide-88945d.webp" alt="HDtracks" loading="lazy">
+          <img srcset="../images/cdn/hdtracks/HDtrackswide-88945d-1200.webp 1200w, ../images/cdn/hdtracks/HDtrackswide-88945d.webp 2400w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2400" height="900" src="../images/cdn/hdtracks/HDtrackswide-88945d.webp" alt="HDtracks">
           <img srcset="../images/cdn/hdtracks/HDtracks-SplashPage-Mock-Up-7144ee-1200.webp 1200w, ../images/cdn/hdtracks/HDtracks-SplashPage-Mock-Up-7144ee.webp 2250w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2250" height="11188" src="../images/cdn/hdtracks/HDtracks-SplashPage-Mock-Up-7144ee.webp" alt="HDtracks" loading="lazy">
           <img srcset="../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-12.58.46-PM-9451e1-1200.webp 1200w, ../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-12.58.46-PM-9451e1.webp 2400w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="2400" height="1500" src="../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-12.58.46-PM-9451e1.webp" alt="HDtracks" loading="lazy">
           <img srcset="../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-1.04.37-PM-f6b0c6-1200.webp 1200w, ../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-1.04.37-PM-f6b0c6.webp 1500w" sizes="(min-width: 1100px) min(542px, 35vw), (min-width: 768px) 45vw, calc(100vw - 40px)" width="1500" height="938" src="../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-1.04.37-PM-f6b0c6.webp" alt="HDtracks" loading="lazy">
@@ -123,9 +123,39 @@
           <img width="750" height="1237" src="../images/cdn/hdtracks/Screen-Shot-2021-05-10-at-1.17.14-PM-b58e33.webp" alt="HDtracks" loading="lazy">
         </div>
       </div>
+      <!-- BEGIN: masonry -->
+      <script>
+        /* The 2-up galleries laid out before the page is first drawn, so nothing
+           jumps when main.js takes them over (it keeps them laid out from then
+           on). The same layout as initGalleryMasonry in main.js: two columns,
+           each photo under the shorter one, heights from width/height. Written
+           in by scripts/sync_includes.py (templates/masonry-inline.html). */
+        (function () {
+          if (!matchMedia('(min-width: 768px)').matches) return;
+          [].forEach.call(document.querySelectorAll('.wc-body .project-gallery:not(.poster-hero)'), function (g) {
+            var imgs = g.querySelectorAll('img');
+            if (imgs.length < 2 || imgs.length !== g.children.length) return;
+            g.classList.add('is-masonry');
+            var cs = getComputedStyle(g), gap = parseFloat(cs.columnGap) || 8;
+            var padL = parseFloat(cs.paddingLeft), padT = parseFloat(cs.paddingTop);
+            var colW = (g.clientWidth - padL - parseFloat(cs.paddingRight) - gap) / 2, cols = [0, 0];
+            [].forEach.call(imgs, function (img) {
+              var ar = (getComputedStyle(img).aspectRatio || '').replace(/^auto\s*/, '');
+              var m = /([\d.]+)\s*(?:\/\s*([\d.]+))?/.exec(ar), r = m ? (m[2] ? m[1] / m[2] : +m[1]) : 0;
+              var c = cols[0] <= cols[1] ? 0 : 1;
+              img.style.left = (padL + c * (colW + gap)) + 'px';
+              img.style.top = (padT + cols[c]) + 'px';
+              img.style.width = colW + 'px';
+              cols[c] += colW / (r || 1) + gap;
+            });
+            g.style.height = (padT + Math.max(cols[0], cols[1]) - gap + parseFloat(cs.paddingBottom)) + 'px';
+          });
+        })();
+      </script>
+      <!-- END: masonry -->
     </main>
   </div>
-  <script src="../js/main.js?v=356db412" defer></script>
-  <script src="../js/work-cards.js?v=c100a12a" defer></script>
+  <script src="../js/main.js?v=29890136" defer></script>
+  <script src="../js/work-cards.js?v=7a0f0834" defer></script>
 </body>
 </html>

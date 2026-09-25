@@ -32,6 +32,7 @@ TEMPLATES = ROOT / "scripts" / "templates"
 
 NAV_TPL = (TEMPLATES / "nav.html").read_text()
 TOOLBAR_TPL = (TEMPLATES / "project-toolbar.html").read_text()
+MASONRY_TPL = (TEMPLATES / "masonry-inline.html").read_text().rstrip("\n")
 
 NAV_RE = re.compile(r"  <nav class=\"nav\">.*?</nav>", re.DOTALL)
 # Match work-toolbar through its own closing div: the only "</div>" indented
@@ -43,6 +44,25 @@ NAV_SKIP = {"site/404.html"}
 # Unlisted client demos — standalone pages with no site nav at all.
 SKIP_DIRS = {"site/experiments"}
 TOOLBAR_SKIP = {"site/index.html", "site/work/index.html", "site/404.html"}
+# Project pages with a 2-up gallery get the inline layout (templates/
+# masonry-inline.html) just before </main>, so the gallery is laid out before
+# the first paint instead of jumping into place when main.js runs.
+MASONRY_RE = re.compile(r"\n[ \t]*<!-- BEGIN: masonry -->.*?<!-- END: masonry -->", re.DOTALL)
+GALLERY_RE = re.compile(r'<div class="project-gallery">(.*?)</div>', re.DOTALL)
+MASONRY_SKIP = {"site/work/skyfire-artists.html"}   # Dalton: leave the Skyfire page alone
+
+
+def with_masonry(txt: str) -> str:
+    """The page with the inline gallery layout in place (or taken out)."""
+    txt = MASONRY_RE.sub("", txt)
+    if not any(len(re.findall(r"<img\b", g)) > 1 for g in GALLERY_RE.findall(txt)):
+        return txt
+    m = re.search(r"\n([ \t]*)</main>", txt)
+    if not m:
+        return txt
+    indent = m.group(1) + "  "
+    block = indent + MASONRY_TPL.replace("\n", "\n" + indent)
+    return txt[:m.start()] + "\n" + block + txt[m.start():]
 
 
 def _pretty(rel: str) -> str:
@@ -111,6 +131,8 @@ def sync(dry_run: bool = False, check: bool = False) -> int:
             new_tb = build_toolbar(page)
             txt, n = TOOLBAR_RE.subn(new_tb, txt, count=1)
             # If no toolbar exists yet on a project page, that's fine — leave alone.
+            if rel not in MASONRY_SKIP:
+                txt = with_masonry(txt)
 
         if txt != orig:
             changes += 1

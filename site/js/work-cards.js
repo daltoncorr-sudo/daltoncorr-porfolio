@@ -34,6 +34,9 @@
   var gridTitle = document.title;
   var home = new URL('./', location.href).pathname;   // /work/
   var state = null;   // { deck: [cards, top first], order, scroll }
+  // a card near the top of the deck is drawn bigger than in the grid: its
+  // image is asked for at the deck's size (build_work_index.py DECK_SIZES)
+  var DECK_SIZES = '(min-width: 1100px) 400px, (min-width: 768px) 300px, 260px';
   var busy = false;
 
   function el(tag, cls, text) {
@@ -200,6 +203,8 @@
       c.tabIndex = -1;
       var img = c.querySelector('img');
       if (img && layer < 5) img.loading = 'eager';
+      // the top two, and the last (Previous brings it up), sharp at deck size
+      if (img && img.srcset && (i < 2 || i === n - 1) && img.sizes !== DECK_SIZES) img.sizes = DECK_SIZES;
     });
     arrows.hidden = n < 2;
     foot.querySelector('.wc-arrows').hidden = n < 2;
@@ -303,6 +308,7 @@
 
   function openProject(card, push, byKeyboard) {
     if (state || busy) return;
+    if (window.DC && window.DC.wakeCards) window.DC.wakeCards();   // the home page's card pictures, if still held back
     document.documentElement.classList.remove('wc-arrive');
     var cards = inReadingOrder(visibleCards());
     var i = cards.indexOf(card);

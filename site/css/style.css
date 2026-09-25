@@ -21,7 +21,8 @@
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+html { -webkit-font-smoothing: antialiased; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body { font-family: var(--font); font-size: 18px; line-height: 1.75; color: var(--text); background: var(--bg); min-height: 100vh; }
 img { display: block; max-width: 100%; height: auto; }
 ul, ol { list-style: none; }
@@ -239,7 +240,7 @@ html { scrollbar-gutter: stable; }
 }
 .hl-close:hover { color: var(--accent); }
 .hl-close svg { width: 13px; height: 13px; }
-.hl-go:focus, .hl-close:focus { outline: none; }
+.hl-go:focus:not(:focus-visible), .hl-close:focus:not(:focus-visible) { outline: none; }
 html.hl-open { overflow: hidden; }
 /* the picture grows out of the slideshow into the card, and back */
 ::view-transition-group(hl-art) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.2, 0.9, 0.1, 1); }
@@ -321,7 +322,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
   pointer-events: none;
 }
 .project-card.card-entering {
-  animation: cardIn 0.3s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation: cardIn 0.34s cubic-bezier(0.3, 1.2, 0.45, 1) both;
 }
 @keyframes cardIn {
   from { transform: scale(0.85); opacity: 0; }
@@ -1008,7 +1009,9 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms; transition-duration: 0.01ms; scroll-behavior: auto; }
+  /* !important: a component's own animation (the chevron's bob, say) is more
+     specific than *, and would otherwise keep moving */
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
 /* Bigger slideshow on desktop too (was capped at 720px / 55vw) */

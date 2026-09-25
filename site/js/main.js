@@ -12,8 +12,8 @@ function initSlideshow() {
   var slides = $$('.slide', wrap), cur = 0;
   if (slides.length < 2) return;
 
-  // Slides after the second carry data-src and are fetched one step ahead of
-  // the show, so the page downloads ~2 images up front instead of all 60.
+  // Slides after the first carry data-src and are fetched one step ahead of
+  // the show, so the page downloads one image up front instead of all 60.
   // ready[i]: true = loaded, 'skip' = broken (never shown), unset = pending.
   var ready = {};
   slides.forEach(function(s, i) {
@@ -21,7 +21,11 @@ function initSlideshow() {
     var img = s.querySelector('img');
     if (!img) { ready[i] = true; return; }
     if (img.complete && img.naturalWidth > 0) { ready[i] = true; return; }
-    img.addEventListener('load', function() { ready[i] = true; });
+    // ready once decoded too, so switching to it never shows a blank frame
+    img.addEventListener('load', function() {
+      if (img.decode) img.decode().then(function() { ready[i] = true; }, function() { ready[i] = true; });
+      else ready[i] = true;
+    });
     img.addEventListener('error', function() { ready[i] = 'skip'; });
   });
   // Resolved against the page as it loaded: a project opened in place moves
@@ -203,7 +207,14 @@ function initSlideshow() {
   }
 
   slides[0].classList.add('active');
-  load(1);
+  // the second picture only once the first is in: on a slow phone they'd
+  // otherwise split the connection and the first would take twice as long
+  var lead = slides[0].querySelector('img');
+  if (lead && !(lead.complete && lead.naturalWidth)) {
+    var next = function() { load(1); };
+    lead.addEventListener('load', next, { once: true });
+    lead.addEventListener('error', next, { once: true });
+  } else load(1);
   start();
 
   // A click on the picture itself opens its card (the frame around a wide
@@ -238,6 +249,40 @@ function initSlideshow() {
     var dx = e.changedTouches[0].clientX - tx;
     if (Math.abs(dx) > 40) step(cur + (dx < 0 ? 1 : -1));
   });
+}
+
+/* ── Home: the cards' pictures wait for the first slide ──
+   The home page's cards start below the first screen, but a phone fetches a
+   dozen of them at once, and the first poster then shares the connection with
+   them all. Their pictures (data-src, from build_work_index.py) come in once
+   that poster has landed, or as soon as the page is scrolled or a card opens,
+   and fade up as they arrive (work-cards.css .wc-wait). */
+function initHomeCards() {
+  var imgs = $$('.home-work img[data-src]');
+  if (!imgs.length) return;
+  var woken = false;
+  function wake() {
+    if (woken) return;
+    woken = true;
+    window.removeEventListener('scroll', wake);
+    imgs.forEach(function(img) {
+      img.classList.add('wc-wait');
+      var done = function() { img.classList.remove('wc-wait'); };
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+      if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+      img.removeAttribute('data-srcset');
+    });
+  }
+  window.DC.wakeCards = wake;
+  var lead = $('.slideshow .slide img');
+  if (window.scrollY > 0 || !lead || (lead.complete && lead.naturalWidth)) { wake(); return; }
+  window.addEventListener('scroll', wake, { passive: true });
+  lead.addEventListener('load', wake, { once: true });
+  lead.addEventListener('error', wake, { once: true });
+  setTimeout(wake, 4000);
 }
 
 /* ── Shared card-filter engine ──
@@ -294,21 +339,26 @@ function createCardFilter(opts) {
       toHide.forEach(function(c) { c.classList.remove('card-exiting'); c.classList.add('card-hidden'); });
       toShow.forEach(function(c) { c.classList.remove('card-hidden'); });
 
-      // FLIP: read new positions synchronously, then set inverse transform.
+      // FLIP: read every new position first (one layout), then put each card
+      // straight back where it was. Its own transition is off for that jump:
+      // the card's hover lift (work-cards.css) would otherwise ease it there,
+      // and the glide that follows would have nothing to glide from.
       var moversWithDelta = [];
-      toMove.forEach(function(item) {
-        var old = oldRects[item.i];
-        if (!old) return;
-        var now = item.el.getBoundingClientRect();
+      var nows = toMove.map(function(item) { return oldRects[item.i] ? item.el.getBoundingClientRect() : null; });
+      toMove.forEach(function(item, k) {
+        var old = oldRects[item.i], now = nows[k];
+        if (!old || !now) return;
         var dx = old.left - now.left, dy = old.top - now.top;
         if (dx * dx + dy * dy < 1) return;
+        item.el.style.transition = 'none';
         item.el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
         moversWithDelta.push(item.el);
       });
+      if (moversWithDelta.length) void moversWithDelta[0].offsetWidth;   // held there for this frame
 
       // Single rAF: add transition class + clear transform to animate
       requestAnimationFrame(function() {
-        moversWithDelta.forEach(function(el) { el.classList.add('card-moving'); el.style.transform = ''; });
+        moversWithDelta.forEach(function(el) { el.style.transition = ''; el.classList.add('card-moving'); el.style.transform = ''; });
 
         // Stagger entries, cap total stagger at 200ms
         var stagger = toShow.length > 1 ? Math.min(30, 200 / (toShow.length - 1)) : 0;
@@ -526,15 +576,24 @@ function initLightbox() {
     '<span class="lightbox-count" aria-live="polite"></span>';
   document.body.appendChild(lb);
   var lbImg = lb.querySelector('img'), count = lb.querySelector('.lightbox-count');
+  // Full size on a big screen; on a phone the 1200px copy (from the photo's
+  // srcset) is already sharper than the screen, at a third of the weight.
+  var small = window.matchMedia('(max-width: 767px)');
+  function full(img) {
+    if (!small.matches || !img.srcset) return img.src;
+    var pick = img.srcset.split(',').map(function(c) { var p = c.trim().split(/\s+/); return { url: p[0], w: parseInt(p[1]) || 0 }; })
+      .filter(function(c) { return c.w >= 1000; }).sort(function(a, b) { return a.w - b.w; })[0];
+    return pick ? new URL(pick.url, img.baseURI).href : img.src;
+  }
   var cur = 0, opener = null;
 
   function show(i) {
     cur = (i + imgs.length) % imgs.length;
-    lbImg.src = imgs[cur].src;
+    lbImg.src = full(imgs[cur]);
     lbImg.alt = imgs[cur].alt;
     count.textContent = (cur + 1) + ' / ' + imgs.length;
     // warm the neighbours so stepping is instant
-    [cur + 1, cur - 1].forEach(function(n) { new Image().src = imgs[(n + imgs.length) % imgs.length].src; });
+    [cur + 1, cur - 1].forEach(function(n) { new Image().src = full(imgs[(n + imgs.length) % imgs.length]); });
   }
   function open(img) {
     imgs = $$(SEL);
@@ -585,7 +644,9 @@ function initSpeculation() {
   s.type = 'speculationrules';
   s.textContent = JSON.stringify({
     prerender: [{
-      where: { and: [{ href_matches: '/*' }, { not: { href_matches: '/experiments/*' } }] },
+      // not the project cards or the deck's own Back / Previous / Next: those
+      // open in place (work-cards.js), so a prerendered page would be thrown away
+      where: { and: [{ href_matches: '/*' }, { not: { href_matches: '/experiments/*' } }, { not: { selector_matches: '.project-card, .wc-controls a, .wc-foot a' } }] },
       eagerness: 'moderate'
     }]
   });
@@ -1042,6 +1103,7 @@ document.addEventListener('DOMContentLoaded', function() {
   syncMobileNavState();
   initNavDotGlide();
   initSlideshow();
+  initHomeCards();
   initFilters();
   initBlogFilters();
   initSort();
