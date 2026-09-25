@@ -268,11 +268,11 @@ body.is-work-grid .filter-btn.active::before {
   padding: 2rem var(--page-margin) 0;
   max-width: var(--max-text); margin: 0 auto;
 }
-.project-meta { text-align: left; padding: 2rem var(--page-margin) 0; }
+.project-meta { text-align: center; padding: 2rem var(--page-margin) 0; }
 .project-meta h1 { font-size: 1.5rem; font-weight: 600; line-height: 1.4; letter-spacing: 0; text-transform: none; color: var(--text); margin-bottom: 0.25rem; }
 .project-details { font-size: 1rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text); margin-bottom: 0.5rem; line-height: 1.75; }
-.project-details--meta { color: var(--text); font-size: 1rem; margin-top: 0; margin-bottom: 2rem; }
-.project-body { text-align: left; padding: 0.5rem 0 0; color: var(--text); }
+.project-details--meta { color: var(--text); font-size: 1.125rem; line-height: 1.75; margin-top: 0; margin-bottom: 2rem; } /* same type as the body text */
+.project-body { text-align: center; padding: 0.5rem 0 0; color: var(--text); }
 .project-body p { font-size: 1.125rem; font-weight: 400; color: var(--text); line-height: 1.75; }
 .project-body p + p { margin-top: 0.35rem; }
 
@@ -317,6 +317,9 @@ body.is-work-grid .filter-btn.active::before {
 .project-section .section-sub { font-size: 1rem; font-weight: 400; text-transform: none; text-align: center; color: var(--text); margin-top: 0; margin-bottom: 0; line-height: 1.4; }
 .project-section .project-gallery { padding: 0; margin-top: 0.75rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; align-items: start; }
 .project-section .project-gallery img { width: 100%; display: block; cursor: zoom-in; }
+/* a lone image sits on the centre line, whole, not in the left half of a 2-up grid */
+.project-gallery:has(> img:only-child) { display: block; }
+.project-gallery > img:only-child { width: 100%; max-width: 720px; max-height: 88vh; object-fit: contain; margin: 0 auto; }
 @media (max-width: 767px) { .project-section .project-gallery { grid-template-columns: 1fr; } }
 /* Gallery masonry (main.js initGalleryMasonry): two equal columns, each photo
    placed under whichever column is shorter. JS sets each photo's position and
@@ -1083,6 +1086,7 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .project-meta { padding: 1.5rem var(--page-margin) 0; }
   .project-meta h1 { font-size: 1.35rem; line-height: 1.25; }
   .project-meta .project-details { font-size: 0.85rem; }
+  .project-meta .project-details--meta { font-size: 0.95rem; line-height: 1.55; }
   .project-body { padding: 0 var(--page-margin); }
   .project-body p { font-size: 0.95rem; line-height: 1.55; }
   .project-section { padding: 1.5rem var(--page-margin) 0; }

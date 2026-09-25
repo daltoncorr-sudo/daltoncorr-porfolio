@@ -283,12 +283,15 @@ function initSort() {
    screen reader follows) doesn't change. Heights come from each photo's
    width/height (or an inline aspect-ratio crop), so the layout is set
    before anything loads. Phones stay one per row. */
-function initGalleryMasonry() {
-  var galleries = $$('.project-gallery:not(.poster-hero)').filter(function(g) {
+var masonry = [];   // every gallery laid out so far (the Work page can add more later)
+function initGalleryMasonry(root) {
+  var first = !masonry.length;
+  var galleries = $$('.project-gallery:not(.poster-hero)', root).filter(function(g) {
     var n = g.querySelectorAll('img').length;
     return n > 1 && n === g.children.length; // plain image galleries only
   });
   if (!galleries.length) return;
+  masonry = masonry.filter(function(g) { return g.isConnected; }).concat(galleries);
   var phone = window.matchMedia('(max-width: 767px)');
 
   function ratio(img) {
@@ -302,7 +305,7 @@ function initGalleryMasonry() {
   }
 
   function layout() {
-    galleries.forEach(function(g) {
+    masonry.forEach(function(g) {
       var imgs = $$('img', g);
       if (phone.matches) {
         g.classList.remove('is-masonry');
@@ -334,7 +337,7 @@ function initGalleryMasonry() {
     requestAnimationFrame(function() { queued = false; layout(); });
   }
   layout();
-  window.addEventListener('resize', relayout);
+  if (first) window.addEventListener('resize', relayout);
   // A photo whose real shape differs from its attributes corrects itself on load.
   galleries.forEach(function(g) {
     $$('img', g).forEach(function(img) { img.addEventListener('load', relayout); });
@@ -347,10 +350,10 @@ function initGalleryMasonry() {
    anywhere but the arrows, closes it. It always opens the full-size
    original, even where the gallery shows a smaller copy. */
 function initLightbox() {
-  var imgs = $$('.project-gallery img, .project-gallery-grid img');
-  if (!imgs.length) return;
+  var SEL = '.project-gallery img, .project-gallery-grid img';
+  var imgs = [];   // the page's photos, read fresh each time it opens
   var lb = document.createElement('div');
-  lb.className = 'lightbox' + (imgs.length < 2 ? ' is-single' : '');
+  lb.className = 'lightbox';
   lb.setAttribute('role', 'dialog');
   lb.setAttribute('aria-modal', 'true');
   lb.setAttribute('aria-label', 'Image viewer');
@@ -371,9 +374,11 @@ function initLightbox() {
     // warm the neighbours so stepping is instant
     [cur + 1, cur - 1].forEach(function(n) { new Image().src = imgs[(n + imgs.length) % imgs.length].src; });
   }
-  function open(i) {
+  function open(img) {
+    imgs = $$(SEL);
+    lb.classList.toggle('is-single', imgs.length < 2);
     opener = document.activeElement;
-    show(i);
+    show(imgs.indexOf(img));
     lb.classList.add('open');
     lb.querySelector('.lightbox-close').focus();
   }
@@ -383,8 +388,11 @@ function initLightbox() {
     if (opener && opener.focus) opener.focus();
   }
 
-  imgs.forEach(function(img, i) {
-    img.addEventListener('click', function(e) { e.stopPropagation(); open(i); });
+  document.addEventListener('click', function(e) {
+    var img = e.target.closest && e.target.closest(SEL);
+    if (!img || lb.contains(img)) return;
+    e.stopPropagation();
+    open(img);
   });
   lb.addEventListener('click', close);
   lb.querySelector('.lightbox-prev').addEventListener('click', function(e) { e.stopPropagation(); show(cur - 1); });
@@ -789,6 +797,9 @@ function syncMobileNavState() {
 }
 
 /* ── Init ── */
+// Hooks for content added after load (the Work-page card experiment).
+window.DC = { galleries: initGalleryMasonry };
+
 document.addEventListener('DOMContentLoaded', function() {
   syncMobileNavState();
   initNavDotGlide();
