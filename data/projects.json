@@ -199,7 +199,8 @@
     "tags": [
       "Visual"
     ],
-    "placeholder": "PRIVATE"
+    "placeholder": "PRIVATE",
+    "hidden": true
   },
   {
     "slug": "sunnys-journal",
@@ -238,6 +239,25 @@
     "alt": "Polish Film Festival North America"
   },
   {
+    "slug": "dont-let-them-out",
+    "sort": 2,
+    "year": 2025,
+    "filters": [
+      "visual",
+      "illustration",
+      "poster"
+    ],
+    "title": "Don't Let Them Out",
+    "role": "Poster Designer",
+    "tags": [
+      "Visual",
+      "Illustration",
+      "Poster"
+    ],
+    "image": "../images/design/dont-let-them-out/final-a.webp",
+    "alt": "Don't Let Them Out"
+  },
+  {
     "slug": "creatives-for-ukraine",
     "sort": 2,
     "year": 2026,
@@ -249,7 +269,8 @@
     "tags": [
       "Visual"
     ],
-    "placeholder": "Available upon request"
+    "placeholder": "Available upon request",
+    "hidden": true
   },
   {
     "slug": "hollyshorts-london-2025",
@@ -324,25 +345,6 @@
     ],
     "image": "../images/cdn/index/HS20-Official-Poster-1-4ee4d4.webp",
     "alt": "20th Annual HollyShorts Film Festival"
-  },
-  {
-    "slug": "dont-let-them-out",
-    "sort": 4,
-    "year": 2025,
-    "filters": [
-      "visual",
-      "illustration",
-      "poster"
-    ],
-    "title": "Don't Let Them Out",
-    "role": "Poster Designer",
-    "tags": [
-      "Visual",
-      "Illustration",
-      "Poster"
-    ],
-    "image": "../images/design/dont-let-them-out/final-a.webp",
-    "alt": "Don't Let Them Out"
   },
   {
     "slug": "cannes-2024",

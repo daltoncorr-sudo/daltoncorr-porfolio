@@ -23,6 +23,10 @@ run this script. The card rendering follows three variants:
 
   Custom card (rare — full HTML for the card-image div):
     { ..., "card_image_html": "<div class=\\"card-image\\" style=\\"...\\">...</div>" }
+
+  Hidden (no card on the grid or the home page, skipped by Previous / Next;
+  the page itself stays up at its URL):
+    { ..., "hidden": true }
 """
 from __future__ import annotations
 
@@ -167,7 +171,10 @@ def build_decks(projects: list, check: bool) -> int:
 def build(check: bool = False) -> int:
     # the grid's default order (the page's "Sort: Default"): by "sort", ties
     # keeping their order in the file
-    projects = sorted(json.loads(PROJECTS.read_text()), key=lambda p: int(p.get("sort") or 0))
+    # A project with "hidden": true keeps its page but gets no card, and the
+    # decks' Previous / Next skip it.
+    projects = sorted((p for p in json.loads(PROJECTS.read_text()) if not p.get("hidden")),
+                      key=lambda p: int(p.get("sort") or 0))
     stale = build_decks(projects, check)
     # The first row is on screen at load, so those images skip lazy-loading.
     cards = "\n\n".join(render_card(p, eager=i < 4) for i, p in enumerate(projects))
