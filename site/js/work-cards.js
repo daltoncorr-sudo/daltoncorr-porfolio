@@ -148,8 +148,10 @@
         return r.text();
       }).then(function (html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
-        ready[url] = doc;
-        return doc;
+        // a page only counts as here once its own stylesheets are too, so
+        // no way in (a click on a card fetched on hover or pointer-down, a
+        // turn of the deck) ever shows it before its styles
+        return needStyles(doc, url).then(function () { ready[url] = doc; return doc; });
       });
       pages[url].catch(function () { delete pages[url]; });
     }
@@ -254,8 +256,10 @@
     else { side.style.position = 'static'; side.style.top = ''; }
   }
 
-  // A project's own stylesheets (the floating badges, say) that this page
-  // doesn't have yet: added, and waited for (briefly), before it's shown.
+  // A project's own stylesheets that this page doesn't have yet: added,
+  // and waited for before it's shown (only a stylesheet that neither loads
+  // nor fails in 6s is given up on). The floating badges' styles live in
+  // work-cards.css, so they never wait on this.
   function needStyles(doc, base) {
     var have = [].map.call(document.querySelectorAll('link[rel="stylesheet"]'), function (l) { return new URL(l.href).pathname; });
     var waits = [].slice.call(doc.querySelectorAll('link[rel="stylesheet"]')).map(function (l) {
@@ -267,7 +271,7 @@
         link.href = href;
         link.onload = link.onerror = resolve;
         document.head.appendChild(link);
-        setTimeout(resolve, 1500);
+        setTimeout(resolve, 6000);
       });
     }).filter(Boolean);
     return Promise.all(waits);

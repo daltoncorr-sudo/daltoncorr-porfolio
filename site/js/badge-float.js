@@ -197,4 +197,21 @@
   function init() { [].forEach.call(document.querySelectorAll('.badge-float'), build); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+
+  // A project opened in place (work-cards.js) brings its badges in after
+  // this script may already have run, so any stage that turns up later is
+  // built as it arrives. One watcher per page, however often the script is
+  // loaded; build() skips a stage that's already live.
+  if (!window.__bfWatch && 'MutationObserver' in window) {
+    window.__bfWatch = new MutationObserver(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        var added = list[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var n = added[j];
+          if (n.nodeType === 1 && (n.matches('.badge-float:not([data-ready])') || n.querySelector('.badge-float:not([data-ready])'))) { init(); return; }
+        }
+      }
+    });
+    window.__bfWatch.observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();
