@@ -72,14 +72,24 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
      deck passes beneath them */
   position: relative; z-index: 0;
 }
-/* laptops: the deck a little closer to the filters, and the room it gives
-   up (and a narrower margin on the right) goes to the work beside it */
-@media (min-width: 1100px) { .wc-detail { padding-left: 1rem; padding-right: 2.5rem; gap: clamp(2rem, 3.2vw, 3.5rem); } }
-/* a very large screen: the work stops at 1100px, and the deck and the work
-   together come in off the filters to sit on the page's centre line, like
-   the grid (50% of this box less half the menu and half of the pair) */
+/* laptops and up: three columns, evenly spaced. The menu, then the deck and
+   its words, then the work, with the same gap between each. The menu ends
+   234px in (the handwritten name, and the longest Visual filter,
+   "Art Direction", both end there), so the deck starts one gap after that
+   and the work one gap after the deck. Once the work is at its widest
+   (1100px) the room left over is shared out evenly between the two gaps
+   and the margin on the right, so the spacing stays even on any screen.
+   (This box starts after the menu and the filters' column: twice the
+   nav width, on /work/, the home page and a project page alike.) */
 @media (min-width: 1100px) {
-  .wc-detail { grid-template-columns: var(--wc-card-w) minmax(0, 1100px); padding-left: max(1rem, calc(50% - 858px)); }
+  .wc-detail {
+    --menu-edge: 234px;
+    --gap: clamp(3rem, 4.5vw, 4.5rem);
+    grid-template-columns: var(--wc-card-w) minmax(0, 1100px);
+    gap: var(--gap); justify-content: space-evenly;
+    margin-left: calc(var(--menu-edge) + var(--gap) - var(--nav-width) * 2);
+    padding-left: 0; padding-right: 2.5rem;
+  }
 }
 /* sticks while it fits the window; work-cards.js lowers `top` when the
    words make it taller, so it scrolls until its foot is in view */

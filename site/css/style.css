@@ -978,6 +978,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
    never onto it. Narrower screens: it peeks in from the right edge beside
    the contact links, cut off by the edge of the screen. */
 .about-hand { pointer-events: none; -webkit-user-select: none; user-select: none; }
+.about-hand picture { display: block; }
 .about-hand img { display: block; width: 100%; max-width: none; height: auto; }
 @media (min-width: 1100px) {
   .about-hand {
@@ -1154,13 +1155,17 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .work-toolbar .filter-submenu {
     order: 1; flex-basis: 100%;
     flex-direction: row; flex-wrap: nowrap;
-    /* Spread the sub-options edge to edge across the row, with side padding,
-       so they use the full width instead of clustering in the center. */
-    justify-content: space-between; gap: 0.4rem;
+    /* Centred, and as far apart as All · Visual · Music above them (2rem),
+       closing up only as far as a small phone needs to keep all four of
+       Visual's on one line (the four labels take about 257px) */
+    justify-content: center; gap: 0.4rem clamp(0.4rem, calc((100vw - 330px) / 3), 2rem);
     padding: 0 0.5rem;
     max-height: none; overflow: visible;
     margin-bottom: 0.75rem;
   }
+  /* a pair (Music's Original Music and Film Scores) always has room for
+     the full 2rem */
+  .work-toolbar .filter-submenu:not(:has(> :nth-child(3))) { column-gap: 2rem; }
   .work-toolbar .filter-group.is-open .filter-submenu {
     animation: submenuIn 0.3s var(--ease) both;
   }
@@ -1254,9 +1259,11 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   .about-bio p { line-height: 1.5; }
   .about-contact-list { flex-direction: column; gap: 0.4rem; }
   /* the hand starts level with the contact links, stacked short here, so
-     it never crosses a line of the bio; they leave room for a little more
-     of it (three fingers and the thumb) */
-  .about-hand { --hand-w: 230px; width: calc(0.6 * var(--hand-w)); margin-top: -88px; }
+     it never crosses a line of the bio; they leave room for more of it
+     (the thumb, three fingers and the fourth starting). A phone gets its
+     own copy with the pen line drawn fuller (images/about-hand-bold.webp),
+     since at this size the original line would thin to a hair. */
+  .about-hand { --hand-w: 290px; width: calc(0.64 * var(--hand-w)); margin-top: -88px; }
   /* Press: outlet on its own line, grey description below it, with clear
      space between entries so each outlet+description pair reads as one group */
   .press-entry { padding: 0; margin-bottom: 0.85rem; }
