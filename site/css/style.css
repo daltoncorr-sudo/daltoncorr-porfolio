@@ -968,7 +968,8 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
   margin: 2rem 0 0; display: flex; justify-content: space-between;
 }
 .about-contact-list { width: 100%; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0.25rem 2rem; }
-.about-contact a { color: var(--text); overflow-wrap: normal; white-space: nowrap; }   /* never "Insta / gram" */
+.about-contact a { color: var(--text); overflow-wrap: normal; white-space: nowrap; transition: color 0.2s ease; }   /* never "Insta / gram" */
+.about-contact a:hover { color: var(--accent); }
 /* Dalton's hand, traced in pen (images/about-hand.webp: the line on
    transparent, cut out of the photo of the page). Laptops: under the
    contact links, the thumb reaching out past the words toward the menu,
