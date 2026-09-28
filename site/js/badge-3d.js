@@ -117,7 +117,7 @@ function build(THREE) {
   var slabGeo = new THREE.ExtrudeGeometry(roundedRect(THREE, W, H, R), { depth: T, bevelEnabled: false });
   var faceGeo = new THREE.PlaneGeometry(W, H);
   var slotGeo = new THREE.PlaneGeometry(0.22, 0.05), slotMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
-  var clipGeo = new THREE.TorusGeometry(0.075, 0.018, 12, 32), barGeo = new THREE.BoxGeometry(0.2, 0.1, 0.05);
+  var RING = 0.1, ringGeo = new THREE.TorusGeometry(RING, 0.017, 12, 40), barGeo = new THREE.BoxGeometry(0.17, 0.07, 0.035);
   var slabMat = new THREE.MeshStandardMaterial({ color: 0xf1eee7, roughness: 0.45, metalness: 0, envMapIntensity: 0.6 });
 
   var badges = [], hitList = [], rails = [];
@@ -131,10 +131,13 @@ function build(THREE) {
     b.strapMat.color.set(straps[i] || '#222').convertSRGBToLinear();
     b.strap = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1, 0.012), b.strapMat); b.pivot.add(b.strap);
     b.hang = new THREE.Group(); b.pivot.add(b.hang);
-    var clip = new THREE.Mesh(clipGeo, metal); clip.position.y = -0.05; b.hang.add(clip);
-    var bar = new THREE.Mesh(barGeo, metal); bar.position.y = 0.02; b.hang.add(bar);
-    b.spin = new THREE.Group(); b.spin.position.y = -0.16; b.hang.add(b.spin);
-    var card = new THREE.Group(); card.position.y = -H / 2 - 0.02; b.spin.add(card);
+    /* one vertical axis, top to bottom: the strap, the crimp bar that ends it
+       (at the hang point), the split ring that loops round the bar and turns
+       with the card, and the card's slot that the ring's foot passes through */
+    var bar = new THREE.Mesh(barGeo, metal); b.hang.add(bar);
+    b.spin = new THREE.Group(); b.hang.add(b.spin);
+    var ring = new THREE.Mesh(ringGeo, metal); ring.position.y = -RING + 0.02; ring.rotation.y = 1.1; b.spin.add(ring);
+    var card = new THREE.Group(); card.position.y = -2 * RING + 0.02 + 0.09 - H / 2; b.spin.add(card);
     var slab = new THREE.Mesh(slabGeo, slabMat); slab.position.z = -T / 2; slab.userData.badge = b; card.add(slab); hitList.push(slab);
     b.front = new THREE.Mesh(faceGeo, new THREE.MeshStandardMaterial({ roughness: 0.4, metalness: 0, transparent: true, alphaTest: 0.5, envMapIntensity: 0.7 }));
     b.front.position.z = T / 2 + 0.001; b.front.userData.badge = b; card.add(b.front); hitList.push(b.front);
