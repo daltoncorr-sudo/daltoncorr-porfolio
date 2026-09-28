@@ -188,7 +188,7 @@ body.is-work-grid .filter-btn.active::before {
   font-size: 0.875rem; letter-spacing: -0.01em; color: #6e6e73; text-decoration: none;
   transition: color 0.2s ease, opacity 0.4s ease;
 }
-.scroll-cue:hover { opacity: 0.6; }
+.scroll-cue:hover { color: var(--accent); }
 .scroll-cue svg { width: 14px; height: 8px; animation: cue-bob 1.4s ease-in-out infinite alternate; }
 @keyframes cue-bob { from { translate: 0 -1px; } to { translate: 0 4px; } }
 /* desktop: the picture and the way down sit in the middle of the first
@@ -233,14 +233,14 @@ html { scrollbar-gutter: stable; }
 .hl-line { margin: 0 0 1.75rem; font-size: 1.0625rem; line-height: 1.5; letter-spacing: -0.012em; color: #1d1d1f; }
 .hl-actions { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .hl-go { display: inline-flex; align-items: center; gap: 0.45em; font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--text); text-decoration: none; transition: color 0.2s ease; }
-.hl-go:hover { opacity: 0.6; }
+.hl-go:hover { color: var(--accent); }
 .hl-go svg { width: 0.45em; height: 0.8em; flex: none; transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.1, 1); }
 .hl-go:hover svg { transform: translateX(2px); }
 .hl-close {
   flex: none; display: grid; place-items: center; padding: 6px; margin: -6px;
   border: 0; background: none; cursor: pointer; color: var(--text); transition: color 0.2s ease;
 }
-.hl-close:hover { opacity: 0.6; }
+.hl-close:hover { color: var(--accent); }
 .hl-close svg { width: 13px; height: 13px; }
 /* focused by the script as the card opens, never by the visitor: no ring */
 .hl-go:focus, .hl-close:focus { outline: none; }
@@ -305,10 +305,10 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 .filter-btn.filter-sub,
 .filter-btn.filter-sub.active { color: rgba(17,17,17,0.45); }
 .filter-btn.filter-sub:hover { color: rgba(17,17,17,0.75); }
-/* the menu dims on hover, the same as Back / Previous / Next */
-.nav-sublink, .nav-subsublink, .sort-toggle { transition: color 150ms var(--ease), opacity 150ms var(--ease); }
+/* the menu turns blue on hover, the same as Back / Previous / Next */
+.nav-sublink, .nav-subsublink, .sort-toggle { transition: color 150ms var(--ease); }
 .nav-link:hover, .nav-sublink:hover, .nav-subsublink:hover,
-.filter-btn:hover, .filter-btn.filter-sub:hover, .sort-toggle:hover { opacity: 0.6; }
+.filter-btn:hover, .filter-btn.filter-sub:hover, .sort-toggle:hover { color: var(--accent); }
 
 .work-page-body { margin-left: calc(var(--nav-width) * 2); }
 .work-page .work-grid { padding-top: 2rem; }
@@ -792,7 +792,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 .nf-art { display: block; }
 .nf-text { font-size: 1.125rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.35rem; }
 .nf-home { font-size: 1.125rem; border-bottom: 1px solid currentColor; }
-.nf-home:hover { opacity: 0.6; }
+.nf-home:hover { color: var(--accent); }
 
 /* ══ Glass bubble ══════════════════════════════════════════
    From Bencho (MIT, bencho.dev/licence), with js/glass-bubble.js;

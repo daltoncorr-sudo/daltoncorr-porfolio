@@ -154,7 +154,7 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
    in view whenever the deck is */
 .wc-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; white-space: nowrap; }
 .wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
-.wc-back-link:hover, .wc-arrow:hover { opacity: 0.6; }
+.wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
 .wc-arrows { display: flex; gap: 1.5rem; }
 .wc-body:empty ~ .wc-foot { visibility: hidden; }   /* until the project's work arrives */
 /* the same three at the foot of the work, for when you've read to the end */
