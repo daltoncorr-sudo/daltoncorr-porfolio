@@ -76,7 +76,13 @@ function nav(g) {
   g.beginPath(); g.arc(xs[4], cy, 20, 0, 7); g.stroke();
 }
 function avatar(g, img, cx, cy, r) {
-  g.save(); g.beginPath(); g.arc(cx, cy, r, 0, 7); g.clip(); cover(g, img, cx - r, cy - r, 2 * r, 2 * r); g.restore();
+  g.save(); g.beginPath(); g.arc(cx, cy, r, 0, 7); g.clip();
+  g.fillStyle = '#e5372f'; g.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+  if (img) {   // the white film-strip 22 (white on black, so it screens onto the colour)
+    var s = r * 2 * 1.02; g.globalCompositeOperation = 'screen';
+    g.drawImage(img, cx - s / 2, cy - s / 2, s, s);
+  }
+  g.restore();
   g.strokeStyle = '#dbdbdb'; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, r + 4, 0, 7); g.stroke();
 }
 
@@ -190,7 +196,7 @@ function build(THREE) {
   var bodyMat = new THREE.MeshStandardMaterial({ color: 0x8b8a85, metalness: 1, roughness: 0.32, envMapIntensity: 1.2 });
   var lensMat = new THREE.MeshStandardMaterial({ color: 0x08090c, metalness: 0.4, roughness: 0.1, envMapIntensity: 1.6 });
 
-  return Promise.all(grid.concat(posts, [grid[0]]).map(function (n) { return imgLoad(base + n + '.webp'); })).then(function (all) {
+  return Promise.all(grid.concat(posts).map(function (n) { return imgLoad(base + n + '.webp'); }).concat([imgLoad(base + '../logo-22-white-1200.webp')])).then(function (all) {
     var gi = all.slice(0, grid.length), pi = all.slice(grid.length, grid.length + posts.length), av = all[all.length - 1];
     var screens = [
       postScreen(pi[0], av, 'Eight passes, eight dancers.'),
