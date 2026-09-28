@@ -188,7 +188,7 @@ body.is-work-grid .filter-btn.active::before {
   font-size: 0.875rem; letter-spacing: -0.01em; color: #6e6e73; text-decoration: none;
   transition: color 0.2s ease, opacity 0.4s ease;
 }
-.scroll-cue:hover { color: var(--accent); }
+.scroll-cue:hover { opacity: 0.6; }
 .scroll-cue svg { width: 14px; height: 8px; animation: cue-bob 1.4s ease-in-out infinite alternate; }
 @keyframes cue-bob { from { translate: 0 -1px; } to { translate: 0 4px; } }
 /* desktop: the picture and the way down sit in the middle of the first
@@ -233,14 +233,14 @@ html { scrollbar-gutter: stable; }
 .hl-line { margin: 0 0 1.75rem; font-size: 1.0625rem; line-height: 1.5; letter-spacing: -0.012em; color: #1d1d1f; }
 .hl-actions { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .hl-go { display: inline-flex; align-items: center; gap: 0.45em; font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--text); text-decoration: none; transition: color 0.2s ease; }
-.hl-go:hover { color: var(--accent); }
+.hl-go:hover { opacity: 0.6; }
 .hl-go svg { width: 0.45em; height: 0.8em; flex: none; transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.1, 1); }
 .hl-go:hover svg { transform: translateX(2px); }
 .hl-close {
   flex: none; display: grid; place-items: center; padding: 6px; margin: -6px;
   border: 0; background: none; cursor: pointer; color: var(--text); transition: color 0.2s ease;
 }
-.hl-close:hover { color: var(--accent); }
+.hl-close:hover { opacity: 0.6; }
 .hl-close svg { width: 13px; height: 13px; }
 /* focused by the script as the card opens, never by the visitor: no ring */
 .hl-go:focus, .hl-close:focus { outline: none; }
@@ -305,10 +305,10 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 .filter-btn.filter-sub,
 .filter-btn.filter-sub.active { color: rgba(17,17,17,0.45); }
 .filter-btn.filter-sub:hover { color: rgba(17,17,17,0.75); }
-/* the menu takes the same blue on hover as Back / Previous / Next */
-.nav-sublink, .nav-subsublink, .sort-toggle { transition: color 150ms var(--ease); }
+/* the menu dims on hover, the same as Back / Previous / Next */
+.nav-sublink, .nav-subsublink, .sort-toggle { transition: color 150ms var(--ease), opacity 150ms var(--ease); }
 .nav-link:hover, .nav-sublink:hover, .nav-subsublink:hover,
-.filter-btn:hover, .filter-btn.filter-sub:hover, .sort-toggle:hover { color: var(--accent); }
+.filter-btn:hover, .filter-btn.filter-sub:hover, .sort-toggle:hover { opacity: 0.6; }
 
 .work-page-body { margin-left: calc(var(--nav-width) * 2); }
 .work-page .work-grid { padding-top: 2rem; }
@@ -548,9 +548,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
   cursor: grabbing;}
 
 .car-track:focus-visible {
-  outline: none;
-  border-radius: 12px;
-  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(var(--ink-rgb), 0.4);}
+  outline: none;}
 
 /* the slot holds WHERE on the ring and the card's own resting
    ANGLE, written per frame by the component — so it carries no
@@ -794,7 +792,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
 .nf-art { display: block; }
 .nf-text { font-size: 1.125rem; font-weight: 400; line-height: 1.5; margin-bottom: 0.35rem; }
 .nf-home { font-size: 1.125rem; border-bottom: 1px solid currentColor; }
-.nf-home:hover { color: var(--accent); }
+.nf-home:hover { opacity: 0.6; }
 
 /* ══ Glass bubble ══════════════════════════════════════════
    From Bencho (MIT, bencho.dev/licence), with js/glass-bubble.js;
@@ -910,8 +908,7 @@ html.hl-moving::view-transition-old(root), html.hl-moving::view-transition-new(r
     0 1px 4px rgba(0, 0, 0, 0.18);}
 
 .cow-bub:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;}
+  outline: none;}
 
 @media (prefers-reduced-motion: reduce) {
   .cow-bub::after { transition-duration: 1ms; }
@@ -1277,3 +1274,43 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
   :root { --brand-h: 10.5px; }
   .nav-links { gap: 1.5rem; }
 }
+
+/* ── The logo, in both colours (js/logo-switch.js): a button holding two
+   pictures, crossfaded. ── */
+.logo-switch { margin-top: 1.5rem; }
+.logo-switch-btn { position: relative; display: block; width: 100%; max-width: 520px; aspect-ratio: 1 / 1; margin: 0 auto; padding: 0; border: 0; background: #fff; border-radius: 2px; overflow: hidden; cursor: pointer; font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+.logo-switch-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+.logo-switch-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity .6s ease; }
+.logo-switch-btn .ls-white { opacity: 1; background: #000; }
+.logo-switch-btn .ls-black { opacity: 0; }
+.logo-switch-btn.is-black .ls-white { opacity: 0; }
+.logo-switch-btn.is-black .ls-black { opacity: 1; }
+.logo-switch-hint { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: .45rem; padding: .5rem .8rem; border-radius: 999px; font-size: .8125rem; line-height: 1; background: rgba(255,255,255,.9); color: #111; box-shadow: 0 1px 6px rgba(0,0,0,.25); white-space: nowrap; }
+.logo-switch-hint .lsh-b, .logo-switch-btn.is-black .lsh-a { display: none; }
+.logo-switch-btn.is-black .lsh-b { display: inline; }
+@media (prefers-reduced-motion: reduce) { .logo-switch-btn img { transition: none; } }
+
+/* ── The wine bottle (js/wine-bottle.js): a 3D bottle floating at an angle, that
+   you drag to turn. The flat picture is the fallback and stays if WebGL does
+   not start. ── */
+.wine-stage { position: relative; width: 100%; max-width: 700px; aspect-ratio: 1 / 1.25; margin: 1.5rem auto 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
+.wine-stage.is-dragging { cursor: grabbing; }
+.wine-canvas, .wine-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.wine-stage .wine-fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: inherit !important; }
+.wine-stage.is-live .wine-fallback { display: none; }
+
+/* ── The badges (js/badge-3d.js) and the social phones (js/phones-3d.js): 3D
+   scenes with their flat pictures as the fallback, gone only once WebGL has
+   started. ── */
+.badge3d { margin-top: 1.5rem; }
+.badge3d-stage { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; margin: 0 auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
+.badge3d-stage.is-dragging, .phones-stage.is-dragging { cursor: grabbing; }
+.badge3d-canvas, .badge3d-canvas canvas, .phones-canvas, .phones-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.badge3d-fallback { position: absolute; inset: 0; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: .5rem; }
+.badge3d-fallback img { width: 11.5%; height: auto; cursor: inherit !important; }
+.badge3d-stage.is-live .badge3d-fallback, .phones-stage.is-live .phones-fallback { display: none; }
+@media (max-width: 767px) { .badge3d-stage { aspect-ratio: 5 / 6; } .badge3d-fallback img { width: 22%; } }
+.phones-stage { position: relative; width: 100%; max-width: 900px; aspect-ratio: 16 / 9; margin: 1.5rem auto 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
+.phones-fallback { position: absolute; inset: 0; display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
+.phones-fallback img { width: 31%; height: auto; cursor: inherit !important; }
+@media (max-width: 767px) { .phones-stage { aspect-ratio: 4 / 3; } }

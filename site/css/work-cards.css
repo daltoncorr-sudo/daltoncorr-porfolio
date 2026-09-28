@@ -24,9 +24,9 @@
    very large screen they stop growing at 480 and the row stays centred */
 @media (min-width: 1280px) { .work-grid { grid-template-columns: repeat(3, minmax(0, 480px)); justify-content: center; } }
 /* no focus ring on a click or a tap, and no tap highlight; the keyboard
-   still gets a ring, so it can see where it is */
+   gets no ring either: nothing blue, nothing drawn */
 *:focus:not(:focus-visible) { outline: none; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+:focus-visible { outline: none; }
 .wc-deck .project-card:focus { outline: none; }   /* only ever focused by the script (closing the deck) */
 * { -webkit-tap-highlight-color: transparent; }
 .project-card {
@@ -154,7 +154,7 @@ body.wc-open .home, body.wc-open .home-about { display: none; }   /* the home pa
    in view whenever the deck is */
 .wc-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.75rem; white-space: nowrap; }
 .wc-back-link, .wc-arrow { font-size: 0.9375rem; letter-spacing: -0.01em; color: var(--text); padding: 0.25rem 0; text-decoration: none; transition: color 0.2s ease; }
-.wc-back-link:hover, .wc-arrow:hover { color: var(--accent); }
+.wc-back-link:hover, .wc-arrow:hover { opacity: 0.6; }
 .wc-arrows { display: flex; gap: 1.5rem; }
 .wc-body:empty ~ .wc-foot { visibility: hidden; }   /* until the project's work arrives */
 /* the same three at the foot of the work, for when you've read to the end */
@@ -309,11 +309,12 @@ body { overflow-x: clip; }
      --x --y --r    wide: centre (% of the stage) and tilt
      --px --py --pr phone
      --w --pw       width, % of the stage
+     --sar          the wide stage's aspect ratio (default 16 / 9)
      --ar           the art's width / height
    Everything inside a badge is sized to the badge (container units), so it
    scales as one piece. */
 .badge-float {
-  position: relative; width: 100%; max-width: 1040px; aspect-ratio: 16 / 9; margin: 0 auto;
+  position: relative; width: 100%; max-width: 1040px; aspect-ratio: var(--sar, 16 / 9); margin: 0 auto;
   --bg-hole: var(--bg, #f5f5f5);
   -webkit-user-select: none; user-select: none;
 }
@@ -399,7 +400,7 @@ body { overflow-x: clip; }
 
 /* ── phones: the arrangement as it was photographed, a 4:5 frame ── */
 @media (max-width: 767px) {
-  .badge-float { aspect-ratio: 4 / 5; }
+  .badge-float { aspect-ratio: var(--psar, 4 / 5); }
   .bf-badge {
     width: var(--pw, 31%);
     left: calc(var(--px) - var(--pw, 31%) / 2);
