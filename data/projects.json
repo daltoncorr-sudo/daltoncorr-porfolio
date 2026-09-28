@@ -121,6 +121,44 @@
     "placeholder": "Available upon request"
   },
   {
+    "slug": "espresso-tempo",
+    "sort": 2,
+    "year": 2020,
+    "filters": [
+      "music",
+      "original-music",
+      "film-score",
+      "visual",
+      "branding"
+    ],
+    "title": "Espresso Tempo",
+    "role": "Founder, Composer &amp; Designer",
+    "tags": [
+      "Music",
+      "Film Scores",
+      "Branding"
+    ],
+    "image": "../images/design/espresso-tempo/card.webp",
+    "alt": "Espresso Tempo"
+  },
+  {
+    "slug": "red-mask",
+    "sort": 2,
+    "year": 2025,
+    "filters": [
+      "visual",
+      "poster"
+    ],
+    "title": "Red Mask",
+    "role": "Poster Designer",
+    "tags": [
+      "Visual",
+      "Poster"
+    ],
+    "image": "../images/design/red-mask/thumb.webp",
+    "alt": "Red Mask: fictional poster series for Ritesh Films"
+  },
+  {
     "slug": "dont-mind-me",
     "sort": 2,
     "year": 2025,
@@ -153,23 +191,6 @@
     ],
     "image": "../images/design/solebury-home-watch/card.webp",
     "alt": "Solebury Home Watch Services logo, an owl on the roof of a house, in white on blue"
-  },
-  {
-    "slug": "red-mask",
-    "sort": 2,
-    "year": 2025,
-    "filters": [
-      "visual",
-      "poster"
-    ],
-    "title": "Red Mask",
-    "role": "Poster Designer",
-    "tags": [
-      "Visual",
-      "Poster"
-    ],
-    "image": "../images/design/red-mask/thumb.webp",
-    "alt": "Red Mask: fictional poster series for Ritesh Films"
   },
   {
     "slug": "kimberla-lawson-roby",
@@ -1023,26 +1044,5 @@
       "Branding"
     ],
     "placeholder": "Available upon request"
-  },
-  {
-    "slug": "espresso-tempo",
-    "sort": 11,
-    "year": 2020,
-    "filters": [
-      "music",
-      "original-music",
-      "film-score",
-      "visual",
-      "branding"
-    ],
-    "title": "Espresso Tempo",
-    "role": "Founder, Composer &amp; Designer",
-    "tags": [
-      "Music",
-      "Film Scores",
-      "Branding"
-    ],
-    "image": "../images/design/espresso-tempo/card.webp",
-    "alt": "Espresso Tempo"
   }
 ]
