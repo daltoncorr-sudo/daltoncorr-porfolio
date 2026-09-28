@@ -1,10 +1,11 @@
 /* Dalton Corr — badge-3d.js
 
-   All eight HollyShorts 22 passes, each on its own lanyard, hung together like
-   a mobile: staggered drops, uneven gaps, each turned a little off square. Every
+   All eight HollyShorts 22 passes, each on its own lanyard, hung in three rows
+   (3 / 3 / 2; on a phone two by four), every row from its own rail. The
+   badges are big, the straps short, so the artwork carries the section. Every
    one swings on its own strap; drag one to spin it (it settles face-on when
-   you let go), tap it to turn it over. Knock one and the badges either side of
-   it swing too.
+   you let go), tap it to turn it over. Knock one and the badge either side of
+   it in its row swings too.
 
    The card is a slab of rounded plastic with the artwork on its front and,
    on its back, a face made from the front: the pass's own colour, the
@@ -14,7 +15,6 @@
 
    HERE: three.js arrives only when the stage nears the viewport (see
    js/three-common.js). Without WebGL the flat fronts of the passes stay.
-   On a phone they hang in two tiers of four instead of one row of eight.
    With prefers-reduced-motion it does not swing on its own; it draws when
    you touch it. */
 (function () {
@@ -83,21 +83,25 @@ function backCanvas(img, name, serial) {
   return c;
 }
 
-/* where each pass hangs: x, depth, and how long its strap is */
-var OFFSET = [0.16, -0.22, 0.1, -0.14, 0.24, -0.1, 0.18, -0.26];   // how far off square each rests
-var JIT = [0.0, 0.06, -0.05, 0.04, -0.04, 0.07, -0.03, 0.02];
-function layout(n, wide) {
-  var out = [], i;
-  if (wide) {
-    var drops = [0.8, 2.3, 1.2, 2.7, 0.7, 2.1, 1.4, 2.5];
-    for (i = 0; i < n; i++) out.push({ x: (i - (n - 1) / 2) * 1.3 + JIT[i % 8], z: i % 2 ? -0.5 : 0, drop: drops[i % 8] });
-  } else {
-    var d1 = [0.5, 1.15, 0.75, 1.3], d2 = [3.5, 4.0, 3.7, 4.2];
-    for (i = 0; i < n; i++) {
-      var row = i < 4 ? 0 : 1, c = i % 4;
-      out.push({ x: (c - 1.5) * 1.2 + (row ? 0.6 : 0) + JIT[i % 8], z: row ? -0.8 : 0, drop: (row ? d2 : d1)[c] });
+/* where each pass hangs: its row, x, and how long its strap is (short: the
+   card is the point). Rows fall one under another, each from its own rail. */
+var OFFSET = [0.1, -0.13, 0.06, -0.09, 0.14, -0.06, 0.1, -0.15];   // how far off square each rests
+var JIT = [0.0, 0.05, -0.04, 0.04, -0.04, 0.05, -0.03, 0.02];
+var DROPS = [0.42, 0.56, 0.36, 0.5, 0.4, 0.58, 0.46, 0.38];
+var SP = 1.32, GAP = 0.24;
+var phone = window.matchMedia('(max-width: 767px)');
+function layout(n) {
+  var per = phone.matches ? [2, 2, 2, 2] : [3, 3, 2], out = [], rail = 0, i = 0;
+  per.forEach(function (cnt, r) {
+    var maxDrop = 0, first = out.length;
+    for (var c = 0; c < cnt && i < n; c++, i++) {
+      var d = DROPS[i % 8]; maxDrop = Math.max(maxDrop, d);
+      out.push({ row: r, x: (c - (cnt - 1) / 2) * SP + JIT[i % 8], drop: d, rail: rail, cnt: cnt });
     }
-  }
+    out.rows = out.rows || []; out.rows.push({ y: rail, half: (cnt - 1) / 2 * SP + W / 2 + 0.15 });
+    rail -= maxDrop + 0.16 + H + 0.04 + GAP;
+  });
+  out.bottom = rail + GAP - 0.1; out.span = ((phone.matches ? 2 : 3) - 1) * SP + W + 0.16;
   return out;
 }
 
@@ -116,12 +120,13 @@ function build(THREE) {
   var clipGeo = new THREE.TorusGeometry(0.075, 0.018, 12, 32), barGeo = new THREE.BoxGeometry(0.2, 0.1, 0.05);
   var slabMat = new THREE.MeshStandardMaterial({ color: 0xf1eee7, roughness: 0.45, metalness: 0, envMapIntensity: 0.6 });
 
-  var wide = true, badges = [], hitList = [];
-  var TOP = 0;   // the pivots sit on one line, above the top of the view
+  var badges = [], hitList = [], rails = [];
+  var railGeo = new THREE.BoxGeometry(1, 0.045, 0.06), railMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.6, envMapIntensity: 1 });
+  for (var q = 0; q < 4; q++) { var rl = new THREE.Mesh(railGeo, railMat); rl.position.z = -0.05; scene.add(rl); rails.push(rl); }
 
   names.forEach(function (nm, i) {
     var b = { i: i, name: nm, swing: 0, swingV: 0, yaw: OFFSET[i % 8], yawV: 0, target: null, phase: i * 1.9 + 0.7 };
-    b.pivot = new THREE.Group(); scene.add(b.pivot);
+    b.row = 0; b.pivot = new THREE.Group(); scene.add(b.pivot);
     b.strapMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.75, metalness: 0 });
     b.strapMat.color.set(straps[i] || '#222').convertSRGBToLinear();
     b.strap = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1, 0.012), b.strapMat); b.pivot.add(b.strap);
@@ -150,22 +155,26 @@ function build(THREE) {
   });
 
   function place() {
-    var L = layout(badges.length, wide), maxDrop = 0;
+    var L = layout(badges.length);
     badges.forEach(function (b, i) {
-      var p = L[i]; maxDrop = Math.max(maxDrop, p.drop);
+      var p = L[i];
       b.drop = p.drop;
-      b.pivot.position.set(p.x, TOP, p.z);
-      b.strap.scale.y = p.drop + 4; b.strap.position.y = -p.drop / 2 + 2;
+      b.pivot.position.set(p.x, p.rail, 0);
+      b.strap.scale.y = p.drop + 0.06; b.strap.position.y = -p.drop / 2 + 0.03;
       b.hang.position.y = -p.drop;
     });
-    return { L: L, maxDrop: maxDrop };
+    rails.forEach(function (rl, r) {
+      var row = L.rows[r]; rl.visible = !!row;
+      if (row) { rl.scale.x = row.half * 2; rl.position.set(0, row.y + 0.02, -0.05); }
+    });
+    return L;
   }
 
   /* motion: each strap is a spring; each card turns by hand and settles face-on */
   var dragging = null, moved = 0, lastX = 0, lastT = 0, visible = true, raf = 0, t0 = performance.now();
   function nudge(b, v) {
     [-1, 1].forEach(function (d) {
-      var n = badges[b.i + d]; if (n) n.swingV += -d * v * 0.55;
+      var n = badges[b.i + d]; if (n && n.row === b.row) n.swingV += -d * v * 0.55;
     });
   }
   function frame(now) {
@@ -236,14 +245,13 @@ function build(THREE) {
   });
 
   function size() {
+    var L = place(), top = 0.25, bottom = L.bottom - 0.1;
+    badges.forEach(function (b, i) { b.row = L[i].row; });
+    stage.style.aspectRatio = L.span + ' / ' + (top - bottom);   // the stage is exactly as tall as the hang
     var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h); camera.aspect = w / h;
-    wide = camera.aspect >= 1.25;
-    var lay = place();
-    var bottom = -(lay.maxDrop + 0.16 + H + 0.35), top = 0.3;
-    var needH = top - bottom, needW = wide ? 7 * 1.3 + W + 0.9 : 3 * 1.2 + 0.6 + W + 0.6;
     var f = Math.tan(camera.fov * Math.PI / 360);
-    var d = Math.max(needH / 2 / f, needW / 2 / (camera.aspect * f));
+    var d = Math.max((top - bottom) / 2 / f, L.span / 2 / (camera.aspect * f));
     camera.position.set(0, (top + bottom) / 2, d);
     camera.lookAt(0, (top + bottom) / 2, 0);
     camera.updateProjectionMatrix(); want();
@@ -254,8 +262,8 @@ function build(THREE) {
   if (reduce.addEventListener) reduce.addEventListener('change', want);
 
   host.appendChild(renderer.domElement);
-  size();
-  badges.forEach(function (b, i) { b.swingV = 0.7 * (i % 2 ? 1 : -1); });
+  size(); place();
+  badges.forEach(function (b, i) { b.swingV = 0.3 * (i % 2 ? 1 : -1); });
   stage.classList.add('is-live'); want();
 }
 

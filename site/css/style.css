@@ -1303,13 +1303,13 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
    scenes with their flat pictures as the fallback, gone only once WebGL has
    started. ── */
 .badge3d { margin-top: 1.5rem; }
-.badge3d-stage { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 16 / 9; margin: 0 auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
+.badge3d-stage { position: relative; width: 100%; max-width: 1000px; aspect-ratio: 2 / 3; margin: 0 auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
 .badge3d-stage.is-dragging, .phones-stage.is-dragging { cursor: grabbing; }
 .badge3d-canvas, .badge3d-canvas canvas, .phones-canvas, .phones-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .badge3d-fallback { position: absolute; inset: 0; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: .5rem; }
-.badge3d-fallback img { width: 11.5%; height: auto; cursor: inherit !important; }
+.badge3d-fallback img { width: 30%; height: auto; cursor: inherit !important; }
 .badge3d-stage.is-live .badge3d-fallback, .phones-stage.is-live .phones-fallback { display: none; }
-@media (max-width: 767px) { .badge3d-stage { aspect-ratio: 5 / 6; } .badge3d-fallback img { width: 22%; } }
+@media (max-width: 767px) { .badge3d-stage { aspect-ratio: 2 / 5; } .badge3d-fallback img { width: 40%; } }
 .phones-stage { position: relative; width: 100%; max-width: 900px; aspect-ratio: 16 / 9; margin: 1.5rem auto 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
 .phones-fallback { position: absolute; inset: 0; display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
 .phones-fallback img { width: 31%; height: auto; cursor: inherit !important; }
