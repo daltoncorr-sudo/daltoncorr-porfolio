@@ -1,9 +1,10 @@
 /* Espresso Tempo: the grid of album covers (js/album-grid.js). Each cover is
    a button that plays its sample; a small icon and a thin progress line show
-   which one is playing. Four across, three on a tablet, two on a phone. */
+   which one is playing. Three across, two on a phone. Under each cover: the
+   number, the title and a row of streaming links (outside the button, so
+   they never start a sample). */
 
-.et-albums { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.75rem 1rem; }
-@media (max-width: 1099px) { .et-albums { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.et-albums { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1rem; }
 @media (max-width: 599px) { .et-albums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .75rem; } }
 
 .et-album { min-width: 0; }
@@ -25,5 +26,6 @@
 .et-caption { margin: .5rem 0 0; font-size: .8rem; line-height: 1.35; }
 .et-num { display: block; color: var(--text-muted); }
 .et-name { display: block; color: var(--text); overflow-wrap: anywhere; }
-.et-link { display: inline-block; margin-top: .15rem; font-size: .75rem; color: var(--text-muted); border-bottom: 1px solid currentColor; }
-.et-link:hover { color: var(--text); }
+.et-links { margin: .3rem 0 0; font-size: .7rem; line-height: 1.6; color: var(--text-muted); }
+.et-links a { color: var(--text-muted); border-bottom: 1px solid currentColor; white-space: nowrap; }
+.et-links a:hover { color: var(--text); }
