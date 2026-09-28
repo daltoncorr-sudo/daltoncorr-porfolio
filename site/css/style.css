@@ -1310,6 +1310,17 @@ body.is-blog-grid .page-body { margin-left: calc(var(--nav-width) * 2); }
 .badge3d-fallback img { width: 30%; height: auto; cursor: inherit !important; }
 .badge3d-stage.is-live .badge3d-fallback, .phones-stage.is-live .phones-fallback { display: none; }
 @media (max-width: 767px) { .badge3d-stage { aspect-ratio: 2 / 5; } .badge3d-fallback img { width: 40%; } }
+.tee3d { margin-top: 1.5rem; }
+.tee3d-stage { position: relative; width: 100%; max-width: 640px; aspect-ratio: 1 / 1; margin: 0 auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
+.tee3d-stage.is-dragging { cursor: grabbing; }
+.tee3d-canvas, .tee3d-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.tee3d.is-flat { display: none; }
+.tee3d-ui { display: flex; flex-direction: column; align-items: center; gap: .35rem; margin-top: .25rem; }
+.tee3d-swatches { display: flex; gap: .1rem; }
+.tee3d-swatch { position: relative; width: 2.75rem; height: 2.75rem; border: 0; background: none; cursor: pointer; padding: 0; }
+.tee3d-swatch::after { content: ""; position: absolute; left: 50%; top: 50%; width: 1.1rem; height: 1.1rem; margin: -.55rem 0 0 -.55rem; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); transition: transform .2s; }
+.tee3d-swatch[aria-pressed="true"]::after { transform: scale(1.35); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), 0 0 0 3px var(--bg, #f3f3f3), 0 0 0 4px currentColor; }
+.tee3d-name { font-size: .8rem; letter-spacing: .04em; opacity: .6; }
 .phones-stage { position: relative; width: 100%; max-width: 900px; aspect-ratio: 16 / 9; margin: 1.5rem auto 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
 .phones-fallback { position: absolute; inset: 0; display: flex; gap: 0.5rem; justify-content: center; align-items: center; }
 .phones-fallback img { width: 31%; height: auto; cursor: inherit !important; }
