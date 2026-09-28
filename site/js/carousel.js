@@ -35,7 +35,7 @@
   const SHOTS = NAMES.map((name) => ({ name, src: IMG_BASE + encodeURIComponent(name) + '.webp' }));
   const CODE = conf.code || 'HS21';
   const SERIAL = Number(conf.serial || 2025000);
-  const FINE = (conf.fine || '21st Annual Oscar®-Qualifying HollyShorts Film Festival|TCL Chinese Theatres — Los Angeles||Property of Alta Global Media. Must be worn|and visible at all times. Non-transferable.').split('|').join('<br>');
+  const FINE = (conf.fine || '21st Annual Oscar®-Qualifying HollyShorts Film Festival|TCL Chinese Theatres, Los Angeles||Property of Alta Global Media. Must be worn|and visible at all times. Non-transferable.').split('|').join('<br>');
 
   /* ══ Carousel ═════════════════════════════════════════════
      Cards on a turntable that drift at rest, give under the
@@ -405,7 +405,7 @@
   track.className = 'car-track';
   track.dataset.held = 'false';
   track.setAttribute('role', 'group');
-  track.setAttribute('aria-label', (conf.label || 'HollyShorts 21 badges') + ' — use the arrow keys to turn, Enter to flip');
+  track.setAttribute('aria-label', (conf.label || 'HollyShorts 21 badges') + '. Use the arrow keys to turn, Enter to flip');
   track.setAttribute('aria-roledescription', 'carousel');
   track.tabIndex = 0;
   car.appendChild(track);

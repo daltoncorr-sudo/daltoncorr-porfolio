@@ -301,12 +301,12 @@ function build(THREE) {
     var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h); camera.aspect = w / h;
     var tv = Math.tan(camera.fov * Math.PI / 360), th = tv * camera.aspect;
-    // tall enough for the forward cover and its reflection; wide enough for
-    // the ring on a laptop, a little less than it on a phone
-    var needW = camera.aspect < 1.4 ? R * 1.7 : 2 * R + 1.4;
-    var d = Math.max(1.55 / tv + 0.7, needW / (2 * th) - R);
+    // the forward cover about half the height; wide enough for the ring on a
+    // laptop, and on a phone for its front, the sides running off the edges
+    var needW = camera.aspect < 1.4 ? R * 1.3 : 2 * R + 1.4;
+    var d = Math.max(1.07 / tv + 0.55, needW / (2 * th) - R);
     camera.position.set(0, d * 0.16, R + d);
-    camera.lookAt(0, -0.22, R * 0.35);
+    camera.lookAt(0, -0.36, R * 0.35);
     camera.updateProjectionMatrix();
     scene.fog = new THREE.Fog(bg, d + R * 0.6, d + R * 2.4);
     want();

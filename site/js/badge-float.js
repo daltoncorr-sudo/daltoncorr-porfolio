@@ -86,7 +86,7 @@
       fig.tabIndex = 0;
       fig.setAttribute('role', 'button');
       fig.setAttribute('aria-pressed', 'false');
-      fig.setAttribute('aria-label', name + ' badge — press to turn it over');
+      fig.setAttribute('aria-label', name + ' badge. Press to turn it over');
 
       function raise() { fig.style.zIndex = String(++top); }
       function turn() {

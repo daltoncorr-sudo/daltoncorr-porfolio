@@ -52,7 +52,7 @@
       "Film Scores"
     ],
     "image": "../images/design/a-promessa/cover.webp",
-    "alt": "A Promessa &mdash; SIC TV novela poster"
+    "alt": "A Promessa: SIC TV novela poster"
   },
   {
     "slug": "weissman",
@@ -169,7 +169,7 @@
       "Poster"
     ],
     "image": "../images/design/red-mask/thumb.webp",
-    "alt": "Red Mask — fictional poster series for Ritesh Films"
+    "alt": "Red Mask: fictional poster series for Ritesh Films"
   },
   {
     "slug": "kimberla-lawson-roby",
@@ -1027,17 +1027,19 @@
   {
     "slug": "espresso-tempo",
     "sort": 11,
-    "year": 2021,
+    "year": 2020,
     "filters": [
       "music",
       "original-music",
+      "film-score",
       "visual",
       "branding"
     ],
     "title": "Espresso Tempo",
-    "role": "Artist &amp; Designer",
+    "role": "Founder, Composer &amp; Designer",
     "tags": [
       "Music",
+      "Film Scores",
       "Branding"
     ],
     "image": "../images/design/espresso-tempo/card.webp",

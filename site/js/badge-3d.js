@@ -79,7 +79,7 @@ function backCanvas(img, name, serial) {
   g.font = '500 30px ui-monospace, Menlo, monospace';
   g.fillText(code + ' ' + (2026000 + serial), 412, 940);
   g.font = '400 26px -apple-system, Helvetica, Arial, sans-serif';
-  ['TCL Chinese Theatres, Hollywood', 'August 13–23, 2026', '', 'Property of Alta Global Media.', 'Must be worn and visible at all times.', 'Non-transferable.'].forEach(function (t, j) { g.fillText(t, 412, 1060 + j * 40); });
+  ['TCL Chinese Theatres, Hollywood', 'August 13 to 23, 2026'].forEach(function (t, j) { g.fillText(t, 412, 1060 + j * 40); });
   return c;
 }
 

@@ -172,7 +172,7 @@
     <div class="hero">
       <div class="kick"><a href="#categories" class="pill-cta" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'});return false;">Now Playing · Cast Your Vote</a></div>
       <h1>You pick the<br>Audience Award winners.</h1>
-      <p class="lede">Loved what you saw on screen? Choose a category, vote for your favorite film, and watch the results update live — right from your seat at the TCL Chinese Theatre.</p>
+      <p class="lede">Loved what you saw on screen? Choose a category, vote for your favorite film, and watch the results update live, right from your seat at the TCL Chinese Theatre.</p>
     </div>
 
     <div class="steps">
@@ -214,12 +214,12 @@
       <label for="footEmail">Email Address</label>
       <div class="row">
         <input type="email" id="footEmail" placeholder="Email Address" />
-        <button type="button" onclick="alert('Demo only — no email is actually collected.')">Sign Up</button>
+        <button type="button" onclick="alert('Demo only. No email is actually collected.')">Sign Up</button>
       </div>
       <div class="note">Voting in the Audience Award also opts you into this newsletter. Unsubscribe anytime.</div>
     </div>
   </div>
-  <div class="foot-bottom"><span class="demo">CONCEPT MOCKUP</span> — Audience Award voting flow. Sample films &amp; data for demonstration only.</div>
+  <div class="foot-bottom"><span class="demo">CONCEPT MOCKUP</span>: Audience Award voting flow. Sample films &amp; data for demonstration only.</div>
 </footer>
 
 <!-- ===================== EMAIL MODAL ===================== -->
@@ -228,12 +228,12 @@
     <button class="close" onclick="closeModal()">×</button>
     <div class="eyebrow">Confirm your vote</div>
     <h3>One last step</h3>
-    <p class="pick">Voting for <b id="modalFilm">—</b></p>
+    <p class="pick">Voting for <b id="modalFilm"></b></p>
     <label for="email">Email Address</label>
     <input type="email" id="email" placeholder="you@email.com" autocomplete="email" oninput="validate()" />
     <div class="consent">
       <input type="checkbox" id="consent" checked onchange="validate()" />
-      <span>Count my vote and sign me up for the HollyShorts newsletter — the first to find out about new screenings, award shows, special events, and more. Unsubscribe anytime. <a href="#">Privacy</a></span>
+      <span>Count my vote and sign me up for the HollyShorts newsletter and be the first to find out about new screenings, award shows, special events, and more. Unsubscribe anytime. <a href="#">Privacy</a></span>
     </div>
     <button class="submit" id="submitBtn" onclick="submitVote()">Submit my vote</button>
   </div>
@@ -273,10 +273,10 @@ const CATEGORIES = [
     ]},
   { id:'director',   name:'Best Director',      qual:'Jury & Audience',    ico:'🎯', note:'Across all blocks',
     films:[
-      {t:'Mara Vance — "The Last Reel"',      d:'Director', run:'', base:33, c:'#f5356b'},
-      {t:'Yuki Tanaka — "Paper Moons"',       d:'Director', run:'', base:29, c:'#7b2ff7'},
-      {t:'Hassan Adel — "The Mapmaker"',      d:'Director', run:'', base:21, c:'#00b8ff'},
-      {t:'Sofia Marchetti — "The Quiet Lane"',d:'Director', run:'', base:17, c:'#00e676'},
+      {t:'Mara Vance, "The Last Reel"',      d:'Director', run:'', base:33, c:'#f5356b'},
+      {t:'Yuki Tanaka, "Paper Moons"',       d:'Director', run:'', base:29, c:'#7b2ff7'},
+      {t:'Hassan Adel, "The Mapmaker"',      d:'Director', run:'', base:21, c:'#00b8ff'},
+      {t:'Sofia Marchetti, "The Quiet Lane"',d:'Director', run:'', base:17, c:'#00e676'},
     ]},
   { id:'comedy',     name:'Best Comedy',        qual:'Audience Choice',    ico:'😂', note:'Comedy block',
     films:[
@@ -294,7 +294,7 @@ const CATEGORIES = [
     ]},
   { id:'music',      name:'Best Music Video',   qual:'Audience Choice',    ico:'🎵', note:'Music video block',
     films:[
-      {t:'"Neon Tide" — AURA',     d:'Dir. Sam Vega',      run:'4 min',  base:44, c:'#7b2ff7'},
+      {t:'"Neon Tide" by AURA',     d:'Dir. Sam Vega',      run:'4 min',  base:44, c:'#7b2ff7'},
       {t:'"Cardboard Kings"',      d:'Dir. Jo Min-seo',    run:'3 min',  base:31, c:'#ff8c00'},
       {t:'"Ghost Radio"',          d:'Dir. P. Laurent',    run:'5 min',  base:25, c:'#00b8ff'},
     ]},
@@ -319,7 +319,7 @@ function renderCats(){
       <span class="qual">${c.qual}</span>
       <h3>${c.name}</h3>
       <div class="meta">${c.films.length} nominees · ${c.note}</div>
-      <div class="go ${voted?'voted':''}">${voted ? '✓ You voted — view results' : 'Vote now'} →</div>
+      <div class="go ${voted?'voted':''}">${voted ? '✓ You voted. View results' : 'Vote now'} →</div>
     </button>`;
   }).join('');
 }

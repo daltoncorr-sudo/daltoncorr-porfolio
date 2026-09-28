@@ -1057,7 +1057,7 @@ function initAdminReorder() {
     if (active) {
       banner = document.createElement('div');
       banner.className = 'admin-banner';
-      banner.innerHTML = '<span>Reorder mode — drag cards to rearrange</span><button id="admin-done">Done</button><button id="admin-reset">Reset</button>';
+      banner.innerHTML = '<span>Reorder mode: drag cards to rearrange</span><button id="admin-done">Done</button><button id="admin-reset">Reset</button>';
       document.body.prepend(banner);
       $('#admin-done').addEventListener('click', toggle);
       $('#admin-reset').addEventListener('click', function() {
