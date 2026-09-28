@@ -1,56 +1,29 @@
-/* Espresso Tempo: the album ring (js/album-ring.js), its player, and the
-   grid of covers that is the list without WebGL. */
+/* Espresso Tempo: the grid of album covers (js/album-grid.js). Each cover is
+   a button that plays its sample; a small icon and a thin progress line show
+   which one is playing. Four across, three on a tablet, two on a phone. */
 
-.et3d { --et-orange: #f08a5c; margin-top: 1.5rem; }
+.et-albums { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.75rem 1rem; }
+@media (max-width: 1099px) { .et-albums { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 599px) { .et-albums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem .75rem; } }
 
-/* the ring: its space is held from the start where WebGL exists (.is-3d) */
-.et3d-stage { display: none; position: relative; width: 100%; aspect-ratio: 2 / 1; margin: 0 auto; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 4px; }
-.et3d.is-3d .et3d-stage { display: block; }
-.et3d-stage.is-dragging { cursor: grabbing !important; }
-.et3d-canvas, .et3d-canvas canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.et3d-canvas canvas { opacity: 0; transition: opacity .6s var(--ease); }
-.et3d.is-live .et3d-canvas canvas { opacity: 1; }
-@media (max-width: 767px) { .et3d-stage { aspect-ratio: 1 / 1.05; } }
+.et-album { min-width: 0; }
+.et-cover { display: block; position: relative; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; line-height: 0; overflow: hidden; }
+.et-cover img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+.et-cover:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 
-/* the covers as buttons: the list when there is no ring */
-.et-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 0 auto; }
-.et3d.is-3d .et-grid { display: none; }
-.et-album { display: block; width: 100%; padding: 0; text-align: left; position: relative; }
-.et-album img { width: 100%; height: auto; aspect-ratio: 1; transition: opacity .2s var(--ease); }
-.et-album-label { display: block; font-size: .8rem; line-height: 1.3; margin-top: .35rem; color: var(--text-muted); }
-.et-album[aria-current="true"] .et-album-label { color: var(--text); }
-.et-album[aria-current="true"] img { outline: 2px solid var(--text); outline-offset: 2px; }
-.et-album:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
-@media (max-width: 767px) { .et-grid { grid-template-columns: repeat(3, 1fr); } }
+/* play / pause: a small dark disc in the corner */
+.et-icon { position: absolute; right: .5rem; bottom: .6rem; width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; background: rgba(0, 0, 0, .55); color: #fff; opacity: 0; transition: opacity .2s var(--ease); }
+.et-icon svg { width: .7rem; height: .7rem; display: block; }
+.et-i-pause, .et-cover.is-playing .et-i-play { display: none; }
+.et-cover.is-playing .et-i-pause { display: block; }
+.et-cover:hover .et-icon, .et-cover:focus-visible .et-icon, .et-cover.is-playing .et-icon { opacity: 1; }
+@media (hover: none) { .et-icon { opacity: .85; } }
 
-/* what's in front */
-.et-now { text-align: center; margin-top: .5rem; }
-.et-now-title { font-size: 1.05rem; font-weight: 600; line-height: 1.35; }
-.et-now-meta { font-size: .8rem; letter-spacing: .08em; color: var(--text-muted); font-variant-numeric: tabular-nums; white-space: pre; }
+/* progress along the bottom edge */
+.et-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: #fff; transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform .25s linear; }
 
-/* the player */
-.et-player { display: grid; grid-template-columns: 2.75rem 3rem minmax(0, 1fr) 2.75rem; align-items: center; gap: .5rem; max-width: 520px; margin: 1rem auto 0; }
-.et-player button { width: 2.75rem; height: 2.75rem; display: grid; place-items: center; border-radius: 50%; }
-.et-player button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-.et-player svg { width: 1rem; height: 1rem; display: block; }
-.et-play { width: 3rem !important; height: 3rem !important; background: var(--text) !important; color: var(--bg); }
-.et-play .et-i-pause, .et-play.is-playing .et-i-play { display: none; }
-.et-play.is-playing .et-i-pause { display: block; }
-.et-prev, .et-next { color: var(--text); }
-.et-prev:hover, .et-next:hover { opacity: .6; }
-.et-track { min-width: 0; text-align: left; }
-.et-track-row { display: flex; justify-content: space-between; gap: .75rem; font-size: .8rem; line-height: 1.3; }
-.et-track-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.et-time { color: var(--text-muted); font-variant-numeric: tabular-nums; flex: none; }
-.et-seek { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 1.25rem; margin: .1rem 0 0; background: transparent; cursor: pointer; }
-.et-seek::-webkit-slider-runnable-track { height: 2px; background: var(--border); }
-.et-seek::-moz-range-track { height: 2px; background: var(--border); }
-.et-seek::-moz-range-progress { height: 2px; background: var(--text); }
-.et-seek::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; margin-top: -4px; border-radius: 50%; background: var(--text); border: 0; }
-.et-seek::-moz-range-thumb { width: 10px; height: 10px; border-radius: 50%; background: var(--text); border: 0; }
-.et-seek:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-.et-listen { text-align: center; font-size: .85rem; margin-top: .75rem; color: var(--text-muted); }
-.et-listen a { color: var(--text-muted); border-bottom: 1px solid currentColor; }
-.et-listen a:hover { color: var(--text); }
-.et-hint { text-align: center; font-size: .8rem; color: var(--text-muted); margin-top: .25rem; }
-.et3d:not(.is-3d) .et-hint { display: none; }
+.et-caption { margin: .5rem 0 0; font-size: .8rem; line-height: 1.35; }
+.et-num { display: block; color: var(--text-muted); }
+.et-name { display: block; color: var(--text); overflow-wrap: anywhere; }
+.et-link { display: inline-block; margin-top: .15rem; font-size: .75rem; color: var(--text-muted); border-bottom: 1px solid currentColor; }
+.et-link:hover { color: var(--text); }
