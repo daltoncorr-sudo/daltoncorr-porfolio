@@ -30,15 +30,24 @@ function loaders() {
   g.register((parser) => { const tl = new THREE.TextureLoader(parser.options.manager); tl.setCrossOrigin(parser.options.crossOrigin || 'anonymous'); parser.textureLoader = tl; return { name: 'NC_image_textures' }; });
   return g;
 }
-// Binary files: fetched directly on the site; in the private preview (which serves no .glb/.hdr)
-// they ride along as base64 modules next to the originals.
+// Binary files: fetched directly on the site. The private preview serves no .glb or .hdr, so there the models travel
+// as embedded glTF (.json with WebP textures beside it, in models/preview/<name>/) and the HDR as JSON data.
 const PACKED = !!document.querySelector('meta[name="nc-packed"]');
 async function bin(path) {
   if (PACKED) {
-    const m = await import(BASE + path + '.js'); const s = atob(m.default); const u = new Uint8Array(s.length);
+    const j = await (await fetch(BASE + 'models/preview/' + path.split('/').pop() + '.json')).json(); const s = atob(j.data); const u = new Uint8Array(s.length);
     for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer;
   }
   const r = await fetch(BASE + path); if (!r.ok) throw new Error(path + ' ' + r.status); return r.arrayBuffer();
+}
+async function model(file) {
+  if (PACKED) {
+    const name = file.replace(/^SB-NC-|\.glb$/g, '');
+    const dir = BASE + 'models/preview/' + name + '/';
+    const text = await (await fetch(dir + 'SB-NC-' + name + '.json')).text();
+    return loaders().parseAsync(text, dir);
+  }
+  return bin('models/' + file).then((b) => loaders().parseAsync(b, BASE + 'models/'));
 }
 let hdrData;
 function hdr() {
@@ -130,7 +139,7 @@ export class FloatObject {
   }
 
   async load() {
-    const [gltf, env] = await Promise.all([bin('models/' + this.cfg.file).then((b) => loaders().parseAsync(b, BASE + 'models/')), hdr()]);
+    const [gltf, env] = await Promise.all([model(this.cfg.file), hdr()]);
     const pm = new THREE.PMREMGenerator(this.renderer);
     const tex = env.clone(); tex.mapping = THREE.EquirectangularReflectionMapping; tex.needsUpdate = true;
     this.scene.environment = pm.fromEquirectangular(tex).texture; pm.dispose();
