@@ -42,7 +42,7 @@ TOOLBAR_RE = re.compile(r"  <div class=\"work-toolbar\">.*?\n  </div>", re.DOTAL
 # Pages that have a custom nav/toolbar — leave them alone.
 NAV_SKIP = {"site/404.html"}
 # Unlisted client demos — standalone pages with no site nav at all.
-SKIP_DIRS = {"site/experiments"}
+SKIP_DIRS = {"site/experiments", "site/sunnys"}
 TOOLBAR_SKIP = {"site/index.html", "site/work/index.html", "site/404.html"}
 # Project pages with a 2-up gallery get the inline layout (templates/
 # masonry-inline.html) just before </main>, so the gallery is laid out before

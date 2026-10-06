@@ -32,7 +32,7 @@ SKIP = {"site/404.html", "site/press.html",
         # redirect stubs for old duplicate project pages
         "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html"}
 # Unlisted client demos — self-contained pages, noindex, no canonical/OG wanted.
-SKIP_DIRS = {"site/experiments"}
+SKIP_DIRS = {"site/experiments", "site/sunnys"}
 
 DEFAULT_DESC = (
     "Dalton Corr is a multidisciplinary creative working across film, music, "

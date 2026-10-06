@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Sunny's Next Chapter</title>
+<link rel="preload" href="fonts/EBGaramond-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/seq/d000.webp" as="image" media="(prefers-reduced-motion: no-preference)">
+<link rel="preload" href="assets/svg/h-next-chapter.svg" as="image" fetchpriority="high">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/page.css">
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
+</head>
+<body>
+<main id="page">
+
+  <!-- 1 · The next chapter — Library Green leather -->
+  <section class="sec sec-chapter" id="chapter" data-plate="0.7" aria-labelledby="chapter-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <div class="stage">
+      <h1 class="head" id="chapter-h"><img src="assets/svg/h-next-chapter.svg" alt="The next chapter." class="head-svg" width="853" height="200" fetchpriority="high"></h1>
+      <div class="drawing" id="drawing">
+        <canvas id="drawing-canvas" width="800" height="444" aria-hidden="true"></canvas>
+        <img class="drawing-final" id="drawing-final" fetchpriority="low" decoding="async" src="assets/svg/book-hero-vellum.svg" alt="The Sunny's Bookshop book, drawn by hand">
+      </div>
+      <img class="signature" id="signature" fetchpriority="low" decoding="async" src="assets/svg/signature-bookshop-vellum.svg" alt="Sunny's Bookshop, in script">
+      <p class="line">NoHo opens in 2027. Here&#8217;s what I can build with you for Sunny&#8217;s Bookshop, as your creative director.</p>
+      <p class="credit">Creative direction · Dalton Corr</p>
+      <p class="cue" id="cue" aria-hidden="true">Scroll</p>
+    </div>
+  </section>
+
+  <!-- 2 · Social — Vellum -->
+  <section class="sec sec-social" id="social" data-plate="0.7" aria-labelledby="social-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <header class="intro">
+      <h2 class="head" id="social-h"><img src="assets/svg/h-socials.svg" alt="Socials, reinvented." class="head-svg" width="958" height="200"></h2>
+      <p class="line">We can build a sophisticated social presence for both shops, and I can help create every post.</p>
+    </header>
+    <div class="band" id="band" aria-label="Twelve posts for the Sunny's feed">
+      <div class="band-track" id="band-track"></div>
+    </div>
+    <p class="band-note">Reveal · System · Process · Seal · Events · New arrivals · Journal &amp; Press · Staff picks · NoHo 2027 · A line from the shop</p>
+    <div class="room" data-for="float-phone" aria-hidden="true"></div>
+  </section>
+
+  <!-- 3 · Website — paper with a faint grid -->
+  <section class="sec sec-web" id="web" data-plate="0.7" aria-labelledby="web-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <header class="intro">
+      <h2 class="head" id="web-h"><img src="assets/svg/h-fresh-site.svg" alt="A fresh site." class="head-svg" width="596" height="200"></h2>
+      <p class="line">I can redesign sunnysbookshop.com around both shops: a page for each, events people can find, and a real home for the Journal.</p>
+    </header>
+    <ul class="pages">
+      <li class="page-phone" aria-hidden="true">
+        <div class="device"><div class="device-screen"><video muted loop playsinline preload="none" poster="assets/web/home-phone-poster.webp"><source src="assets/web/home-phone.mp4" type="video/mp4"></video></div></div>
+      </li>
+      <li class="page-card" data-depth="0.00"><figure><div class="browser"><div class="browser-bar"><i></i><i></i><i></i><span>sunnysbookshop.com/visit</span></div><img src="assets/img/web/visit.webp" alt="The Visit page: Tarzana now, NoHo in 2027" loading="lazy" decoding="async" width="960" height="667"></div>
+        <figcaption><span class="label">Visit</span><span class="sub">Tarzana and NoHo, a page each.</span></figcaption></figure></li>
+      <li class="page-card" data-depth="0.05"><figure><div class="browser"><div class="browser-bar"><i></i><i></i><i></i><span>sunnysbookshop.com/events</span></div><img src="assets/img/web/events.webp" alt="The Events page: readings, signings, the book club" loading="lazy" decoding="async" width="960" height="667"></div>
+        <figcaption><span class="label">Events</span><span class="sub">Readings, signings, the book club.</span></figcaption></figure></li>
+      <li class="page-card" data-depth="0.10"><figure><div class="browser"><div class="browser-bar"><i></i><i></i><i></i><span>sunnysbookshop.com/journal</span></div><img src="assets/img/web/journal.webp" alt="The Journal &amp; Press page" loading="lazy" decoding="async" width="960" height="667"></div>
+        <figcaption><span class="label">Journal &amp; Press</span><span class="sub">The magazine and the Letter, online.</span></figcaption></figure></li>
+    </ul>
+    <div class="room" data-for="float-laptop" aria-hidden="true"></div>
+  </section>
+
+  <!-- 4 · Merch — natural canvas -->
+  <section class="sec sec-merch" id="merch" data-plate="0.7" aria-labelledby="merch-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <header class="intro">
+      <h2 class="head" id="merch-h"><img src="assets/svg/h-worn-carried-kept.svg" alt="Worn, carried, kept." class="head-svg" width="983" height="200"></h2>
+      <p class="line">We can build an entirely new line of merch that develops the brand further and generates real revenue.</p>
+    </header>
+    <div class="shelf" aria-labelledby="worn-h">
+      <h3 class="kicker" id="worn-h">Worn <span class="count">13</span></h3>
+      <ul class="goods">
+      <li class="good good-hero" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/tee-script.webp" srcset="assets/img/merch/tee-script.webp 560w, assets/img/merch/tee-script-lg.webp 960w" sizes="(max-width: 699px) 92vw, 48vw" alt="A Library Green tee with the Sunny’s Bookshop signature" loading="lazy" decoding="async" width="960" height="1200"></div><figcaption><span class="good-name">The script tee</span><span class="good-how">The signature, screen printed in Vellum on Library Green.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/tee-script-brown.webp" alt="A brown tee with the signature" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The script tee, brown</span><span class="good-how">The same signature on Binding Brown.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/tee-script-navy.webp" alt="A navy tee with the signature" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The script tee, navy</span><span class="good-how">The same signature on Ink Navy.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/tee-monogram.webp" alt="A vellum tee with the SB monogram in its rings" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The seal tee</span><span class="good-how">The SB in its rings, embroidered at the chest.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/tee-monogram-colours.webp" alt="Five tees with the SB monogram, in five colors" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The seal tee, five blanks</span><span class="good-how">Vellum, green, navy, sand and brown.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/tee-performative.webp" alt="A vellum tee: Performative Reader" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Performative Reader</span><span class="good-how">A joke for the regulars, screen printed.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/le-tee-tarzana.webp" alt="A black tee, the Tarzana limited edition" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Tarzana limited edition</span><span class="good-how">The reading figure in faded rose. Only at Tarzana.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/le-tee-noho.webp" alt="A black tee, the NoHo limited edition" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">NoHo limited edition</span><span class="good-how">The reading figure in line. Only at NoHo.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/sweater.webp" alt="A green knit sweater, FOR READERS AND WRITERS at the chest" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The reader’s sweater</span><span class="good-how">For readers and writers, stitched small.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/breton.webp" alt="A striped Breton top with the signature" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The Breton top</span><span class="good-how">The signature, embroidered small at the chest.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/cap.webp" alt="A Library Green cap with the embroidered logo" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The cap</span><span class="good-how">The logo embroidered in Vellum thread.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/cap-colours.webp" alt="Five caps in five colors" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The cap, five colors</span><span class="good-how">Green, navy, sand, brown and black.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/socks.webp" alt="Green and cream reading socks with the signature" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Reading socks</span><span class="good-how">The signature knitted in at the cuff.</span></figcaption></figure></li>
+      </ul>
+    </div>
+    <div class="shelf" aria-labelledby="carried-h">
+      <h3 class="kicker" id="carried-h">Carried <span class="count">5</span></h3>
+      <ul class="goods">
+      <li class="good good-hero" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/tote-logo.webp" srcset="assets/img/merch/tote-logo.webp 560w, assets/img/merch/tote-logo-lg.webp 960w" sizes="(max-width: 699px) 92vw, 48vw" alt="A natural canvas tote with the horizontal logo" loading="lazy" decoding="async" width="960" height="1200"></div><figcaption><span class="good-name">The tote</span><span class="good-how">The horizontal logo, screen printed on natural canvas.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/tote-books.webp" alt="A canvas tote: I bought these books at Sunny’s Bookshop" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The honest tote</span><span class="good-how">I bought these books. I will read them.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/tote-performative.webp" alt="A canvas tote: Performative Reader" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Performative Reader, carried</span><span class="good-how">The tee’s joke, on canvas.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/le-tarzana.webp" alt="The Tarzana limited-edition tote" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Tarzana limited tote</span><span class="good-how">Faded rose and green on canvas. Only at Tarzana.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/le-noho.webp" alt="The NoHo limited-edition tote" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">NoHo limited tote</span><span class="good-how">Black canvas, leather straps. Only at NoHo.</span></figcaption></figure></li>
+      </ul>
+    </div>
+    <div class="shelf" aria-labelledby="kept-h">
+      <h3 class="kicker" id="kept-h">Kept <span class="count">9</span></h3>
+      <ul class="goods">
+      <li class="good good-hero" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/journals.webp" srcset="assets/img/merch/journals.webp 560w, assets/img/merch/journals-lg.webp 960w" sizes="(max-width: 699px) 92vw, 48vw" alt="Two cloth-bound journals, navy and green" loading="lazy" decoding="async" width="960" height="1200"></div><figcaption><span class="good-name">Cloth journals</span><span class="good-how">Navy and green cloth, the signature in gold foil.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/wax-seal.webp" alt="A brass wax stamp and a green wax seal with the SB monogram" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The wax seal</span><span class="good-how">A brass stamp of the SB, Library Green wax.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/embosser.webp" alt="A green library embosser and an embossed page" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The library embosser</span><span class="good-how">From the library of, pressed blind.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/bookmarks.webp" alt="Four bookmarks: leather, card, Tarzana and NoHo" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Bookmarks</span><span class="good-how">Leather and card, one for each shop.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/annotation-kit.webp" alt="A green tin with a pencil, tabs and an eraser" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The annotation kit</span><span class="good-how">Pencil, tabs and a tin, for the margins.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.03"><figure><div class="good-img"><img src="assets/img/merch/book-club.webp" alt="A book club member card and a gift card" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Book club and gift cards</span><span class="good-how">A member’s card, and one to give.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.06"><figure><div class="good-img"><img src="assets/img/merch/candle.webp" alt="An amber candle labelled Old Pages, with a matchbook" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">Old Pages</span><span class="good-how">A candle, and Light Reading matches.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.09"><figure><div class="good-img"><img src="assets/img/merch/mug.webp" alt="A green mug: Just one more chapter" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The mug</span><span class="good-how">Just one more chapter.</span></figcaption></figure></li>
+      <li class="good" data-depth="0.00"><figure><div class="good-img"><img src="assets/img/merch/puzzle.webp" alt="A 1,000-piece puzzle of a painting of Sunny’s Bookshop" loading="lazy" decoding="async" width="560" height="700"></div><figcaption><span class="good-name">The puzzle</span><span class="good-how">Dalton’s painting of the shop, in 1,000 pieces.</span></figcaption></figure></li>
+      </ul>
+    </div>
+    <div class="room" data-for="float-tote" aria-hidden="true"></div>
+  </section>
+
+  <!-- 5 · Journal & Press — Ink Navy wallpaper -->
+  <section class="sec sec-journal" id="journal" data-plate="0.65" aria-labelledby="journal-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <header class="intro">
+      <h2 class="head" id="journal-h"><img src="assets/svg/h-journal-press.svg" alt="Sunny&#8217;s Journal &amp; Press." class="head-svg" width="1224" height="200"></h2>
+      <p class="subhead">Printed, and now on mobile.</p>
+      <p class="line">I can design a quarterly print edition with a new illustrated cover each season, see it through printing, and give the Journal a reader made for the phone.</p>
+    </header>
+    <ol class="covers" id="covers">
+      <li class="cover" data-depth="0.00"><div class="cover-page"><img src="assets/img/cover-winter.webp" alt="Sunny&#8217;s Journal &amp; Press, Winter 2027, No. 1: an illustrated cover" loading="lazy" decoding="async" width="640" height="838"></div></li>
+      <li class="cover" data-depth="0.06"><div class="cover-page"><img src="assets/img/cover-spring.webp" alt="Sunny&#8217;s Journal &amp; Press, Spring 2027, No. 2: an illustrated cover" loading="lazy" decoding="async" width="640" height="838"></div></li>
+      <li class="cover" data-depth="0.12"><div class="cover-page"><img src="assets/img/cover-summer.webp" alt="Sunny&#8217;s Journal &amp; Press, Summer 2027, No. 3: an illustrated cover" loading="lazy" decoding="async" width="640" height="838"></div></li>
+      <li class="cover" data-depth="0.18"><div class="cover-page"><img src="assets/img/cover-autumn.webp" alt="Sunny&#8217;s Journal &amp; Press, Autumn 2027, No. 4: an illustrated cover" loading="lazy" decoding="async" width="640" height="838"></div></li>
+    </ol>
+    <div class="pair">
+      <figure class="pair-mag" id="mag-room"><figcaption><span class="label">In print</span><span class="sub">Four editions a year, designed and seen through printing.</span></figcaption></figure>
+      <figure class="letter">
+        <div class="letter-device"><div class="letter-screen"><div class="reader-bar" aria-hidden="true"><i class="rb-back"></i><img src="assets/svg/jp-wordmark-navy.svg" alt=""><span class="rb-aa">Aa</span><b class="rb-prog" id="reader-prog"></b></div><img id="letter-img" src="assets/img/reader.webp" alt="Sunny&#8217;s Journal &amp; Press on a phone: the autumn issue, its contents, and an essay in the reader" loading="lazy" width="720" height="3932"></div></div>
+        <figcaption><span class="label">On mobile</span><span class="sub">Sunny&#8217;s Journal &amp; Press, in a reader made for the phone.</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 6 · One brand, two flavors — limewash and brick -->
+  <section class="sec sec-flavors" id="flavors" data-plate="0.7" aria-labelledby="flavors-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate plate-lime"></div><div class="plate plate-brick"></div></div>
+    <div class="ticket">
+      <h2 class="head" id="flavors-h"><img src="assets/svg/h-one-brand.svg" alt="One brand. Two flavors." class="head-svg" width="1160" height="200"></h2>
+      <p class="line">I keep one Sunny&#8217;s Bookshop brand across both shops, and give each its own flavor: Tarzana shabby chic, NoHo industrial warm.</p>
+      <ul class="system" aria-label="The brand both shops share">
+        <li><img src="assets/svg/seal-green.svg" alt="The seal" class="sys-seal" loading="lazy"><span class="label">One seal</span></li>
+        <li><img src="assets/svg/signature-bookshop-green.svg" alt="The signature" class="sys-sig" loading="lazy"><span class="label">One signature</span></li>
+        <li><span class="chips" aria-hidden="true"><i style="--c:#1E3A2F"></i><i style="--c:#CBA65E"></i><i style="--c:#F2EBDC"></i><i style="--c:#1F2B45"></i><i style="--c:#6B4A33"></i><i style="--c:#E3D7BD"></i></span><span class="label">Six colors</span></li>
+      </ul>
+    </div>
+    <div class="compare" id="compare">
+      <img class="cmp-noho" src="assets/img/flavors/noho-sm.webp" srcset="assets/img/flavors/noho-sm.webp 900w, assets/img/flavors/noho.webp 1600w" sizes="(max-width: 1240px) 100vw, 1180px" alt="The NoHo window: brick, blackened steel, walnut and brass, warm bulbs" loading="lazy" decoding="async" width="1600" height="1067">
+      <div class="cmp-top"><img src="assets/img/flavors/tarzana-sm.webp" srcset="assets/img/flavors/tarzana-sm.webp 900w, assets/img/flavors/tarzana.webp 1600w" sizes="(max-width: 1240px) 100vw, 1180px" alt="The Tarzana window: whitewashed wood, faded florals, lace, soft afternoon light" loading="lazy" decoding="async" width="1600" height="1067"></div>
+      <div class="cmp-handle" aria-hidden="true"><span></span></div>
+      <span class="cmp-tag cmp-tag-l" aria-hidden="true">Tarzana</span><span class="cmp-tag cmp-tag-r" aria-hidden="true">NoHo</span>
+      <label class="vh" for="cmp-range">Move between the Tarzana and NoHo windows</label>
+      <input class="vh" id="cmp-range" type="range" min="0" max="100" value="50">
+    </div>
+    <div class="flavor-notes">
+      <figure class="flavor"><img src="assets/img/merch/le-tarzana.webp" alt="The Tarzana limited-edition tote" loading="lazy" decoding="async" width="400" height="500">
+        <figcaption><span class="label"><i class="dot" style="--c:#A17F50"></i>Tarzana</span><span class="sub">Whitewashed wood, faded florals, lace, the late sun. Its accent is an old brass.</span></figcaption></figure>
+      <figure class="flavor"><img src="assets/img/merch/le-noho.webp" alt="The NoHo limited-edition tote" loading="lazy" decoding="async" width="400" height="500">
+        <figcaption><span class="label"><i class="dot" style="--c:#55563B"></i>NoHo</span><span class="sub">Brick, blackened steel, walnut and brass under warm bulbs. Its accent is a deep olive.</span></figcaption></figure>
+    </div>
+    <div class="room" data-for="float-sign" aria-hidden="true"></div>
+  </section>
+
+  <!-- 7 · Close — Library Green again -->
+  <section class="sec sec-close" id="close" data-plate="0.7" aria-labelledby="close-h">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <div class="ar" data-ar="sign" hidden><button class="ar-btn" type="button">See the sign in your room</button></div>
+    <header class="intro">
+      <h2 class="head" id="close-h"><img src="assets/svg/h-more-chapters.svg" alt="More chapters." class="head-svg" width="724" height="200"></h2>
+      <p class="line">More I can take on with you, when the time is right.</p>
+    </header>
+    <ol class="teasers">
+      <li><span class="num">viii</span><span class="t">AR books</span></li>
+      <li><span class="num">ix</span><span class="t">Film nights and events</span></li>
+      <li><span class="num">x</span><span class="t">Original music, and a playlist for each shop</span></li>
+      <li><span class="num">xi</span><span class="t">The coloring book</span></li>
+      <li><span class="num">xii</span><span class="t">The Sunny&#8217;s Bookshop app, with the Journal by subscription</span></li>
+      <li><span class="num">xiii</span><span class="t">The painted sign</span></li>
+    </ol>
+    <!-- D's note: placeholder copy in D's voice, for D to rewrite -->
+    <div class="note">
+      <p>NoHo opens in 2027, and a second shop is a good reason to look at everything at once: the feed, the site, the things people carry home. I&#8217;d like to keep doing that with you, a season at a time, so both rooms read as the same bookshop.</p>
+      <p class="note-sign">Dalton</p>
+    </div>
+    <h2 class="talk"><img src="assets/svg/h-lets-talk.svg" alt="Let&#8217;s talk at the new space." class="head-svg" width="1322" height="200"></h2>
+    <div class="room" data-for="float-seal-end" aria-hidden="true"></div>
+  </section>
+
+  <footer class="sec sec-end" id="end" data-plate="0.7">
+    <div class="plate-wrap" aria-hidden="true"><div class="plate"></div></div>
+    <div class="end-inner">
+      <div class="ar" data-ar="seal" hidden><button class="ar-btn" type="button">See the seal in your room</button></div>
+      <p class="label end-name">Dalton Corr</p>
+      <p class="end-role">Creative direction for Sunny&#8217;s Bookshop</p>
+      <p class="end-contact"><a href="mailto:daltoncorr@gmail.com">daltoncorr@gmail.com</a></p>
+      <p class="end-fine">A vision. Nothing here is contracted.</p>
+    </div>
+  </footer>
+
+  <!-- floating objects (they cross the section divides) -->
+  <div class="floats" aria-hidden="true">
+    <div class="float" id="float-seal" data-model="seal" data-from="chapter" data-to="social" data-speed="1.15" data-overlap="0.25">
+      <img class="still" src="assets/img/seal-still.webp" alt="" loading="lazy">
+    </div>
+    <div class="float float-phone" id="float-phone" data-model="phone" data-from="social" data-to="web" data-speed="1.12" data-overlap="0.25">
+      <img class="still" src="assets/turn/phone-00.webp" alt="" loading="lazy">
+    </div>
+    <div class="float float-laptop" id="float-laptop" data-model="laptop" data-from="web" data-to="merch" data-speed="1.14" data-overlap="0.25">
+      <img class="still" src="assets/img/laptop-still.webp" alt="" loading="lazy">
+      <div class="lap-phone"><div class="device"><div class="device-screen"><video muted loop playsinline preload="none" poster="assets/web/home-phone-poster.webp"><source src="assets/web/home-phone.mp4" type="video/mp4"></video></div></div></div>
+    </div>
+    <div class="float float-tote" id="float-tote" data-model="tote" data-from="merch" data-to="journal" data-speed="1.16" data-overlap="0.25">
+      <img class="still" src="assets/img/tote-still.webp" alt="" loading="lazy">
+    </div>
+    <div class="float float-mag" id="float-mag" data-model="magazine" data-from="journal" data-to="flavors" data-speed="1.18" data-overlap="0.25">
+      <img class="still" src="assets/img/magazine-still.webp" alt="" loading="lazy">
+    </div>
+    <div class="float float-sign" id="float-sign" data-model="sign" data-from="flavors" data-to="close" data-speed="1.13" data-overlap="0.25">
+      <img class="still" src="assets/img/sign-still.webp" alt="" loading="lazy">
+    </div>
+    <div class="float" id="float-seal-end" data-model="seal" data-from="close" data-to="end" data-speed="1.12" data-overlap="0.3">
+      <img class="still" src="assets/img/seal-still.webp" alt="" loading="lazy">
+    </div>
+  </div>
+</main>
+<noscript><style>.pages .page-phone{display:none}.float .still{opacity:1}.drawing-final,.signature{opacity:1;clip-path:none}#drawing-canvas{display:none}.cue{display:none}</style></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
