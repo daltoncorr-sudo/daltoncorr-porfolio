@@ -77,6 +77,11 @@ figure { margin: 0; }
 .sec-social { color: var(--ink); padding-block: var(--top-room, clamp(140px, 22svh, 240px)) 0; }
 .intro { display: grid; justify-items: center; gap: clamp(14px, 2svh, 24px); text-align: center; }
 .sec-social .head { width: min(70vw, 600px); }
+.sec-social .head-2l { width: min(84vw, 760px); }
+.band-kicker { text-align: center; color: var(--brown); margin-bottom: 0; }
+.band-kicker + .band { margin-top: 10px; }
+.mail { flex: none; width: clamp(220px, 25vw, 360px); aspect-ratio: 3 / 4; overflow: hidden; border-radius: 6px; background: #fff; box-shadow: 0 1px 1px rgba(27,42,35,.1), 0 18px 36px -20px rgba(27,42,35,.5); }
+.mail img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .sec-social .line { color: var(--ink-line); }
 .band { margin-top: clamp(56px, 9svh, 110px); margin-inline: calc(var(--gutter) * -1); overflow: hidden; padding-block: 28px; }
 .band-track { display: flex; gap: clamp(12px, 1.4vw, 22px); width: max-content; padding-inline: 6vw; will-change: transform; }
@@ -235,6 +240,7 @@ html.laid .floats { display: block; }   /* shown once placed: no layout shift, n
   .pair-mag { order: 2; }
   .letter { padding-bottom: 6svh; }
   .post { width: 46vw; }
+  .mail { width: 66vw; }
   .pages { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin-inline: calc(var(--gutter) * -1); padding: 6px var(--gutter) 16px; scrollbar-width: none; }
   .pages::-webkit-scrollbar { display: none; }
   .pages > li { flex: none; width: 78vw; scroll-snap-align: center; }

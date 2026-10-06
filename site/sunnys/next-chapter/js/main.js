@@ -31,6 +31,7 @@ for (const [n, alt] of POSTS) {
   track.appendChild(d);
 }
 const reel = $('video', track);
+const mailTrack = $('#mail-track'), mailBand = $('#band-mail');
 new IntersectionObserver(([e]) => { if (!reel) return; if (e.isIntersecting && !reduced) { reel.play().catch(() => {}); } else reel.pause(); }, { threshold: 0.2 }).observe($('#band'));
 
 // ---------- 1 · the drawing, scrubbed from the timelapse ----------
@@ -120,13 +121,14 @@ function layout() {
   }
   document.documentElement.classList.add('laid');
   bandMax = Math.max(0, track.scrollWidth - vw * 0.92);
+  mailMax = Math.max(0, mailTrack.scrollWidth - vw * 0.92);
   chapterRun = S.chapter.el.clientHeight - parseFloat(getComputedStyle(S.chapter.el).paddingBottom) - vh;
   letterMax = letterImg.offsetHeight - letterScreen.clientHeight;
   for (const o of depthEls) { o.inner.style.transform = ''; const r = o.el.getBoundingClientRect(); o.mid = r.top + scrollY + r.height / 2; }
   cmpLayout();
   tick(true);
 }
-let bandMax = 0, letterMax = 0, chapterRun = 1;
+let bandMax = 0, mailMax = 0, letterMax = 0, chapterRun = 1;
 
 // ---------- per-frame ----------
 let queued = false;
@@ -162,6 +164,9 @@ function frame() {
     const br = band.offsetTop + b.top;
     const q = band01(sy, br - vh, br + band.offsetHeight + vh * 0.25);
     track.style.transform = `translate3d(${(-q * bandMax).toFixed(1)}px,0,0)`;
+    // the newsletters drift the other way
+    const mr = mailBand.offsetTop + b.top, mq = band01(sy, mr - vh, mr + mailBand.offsetHeight + vh * 0.25);
+    mailTrack.style.transform = `translate3d(${(-(1 - mq) * mailMax).toFixed(1)}px,0,0)`;
     // 5 · covers drift at slightly different depths; the Letter scrolls in its phone
     const j = S.journal;
     for (const o of depthEls) { if (!o.d) continue; const off = o.mid - (sy + vh / 2); if (Math.abs(off) > vh * 1.5) continue; o.inner.style.transform = `translate3d(0,${(off * o.d).toFixed(1)}px,0)`; }
