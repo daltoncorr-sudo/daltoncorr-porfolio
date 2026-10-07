@@ -30,7 +30,8 @@ BASE = "https://daltoncorr.com"
 # 404 is noindex (no canonical wanted); press is a redirect stub.
 SKIP = {"site/404.html", "site/press.html",
         # redirect stubs for old duplicate project pages
-        "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html"}
+        "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html",
+        "site/work/sunnys-journal.html"}
 # Unlisted client demos — self-contained pages, noindex, no canonical/OG wanted.
 SKIP_DIRS = {"site/experiments", "site/sunnys"}
 

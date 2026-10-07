@@ -69,16 +69,23 @@ def main():
         if not page.exists() or not src.is_file():
             continue
         out = OG / f"{slug}{'.png' if has_alpha(src) else '.jpg'}"
+        # a project can bring its own ready-made 1200x630 preview ("og" in
+        # projects.json, relative to work/ like "image"): used as it is
+        if p.get("og"):
+            out = (page.parent / urllib.parse.unquote(p["og"])).resolve()
+            if not out.is_file():
+                problems.append(f"missing preview: {p['og']}")
+                continue
         # (--check only asks that the preview exists: a git checkout gives every
         # file a fresh timestamp, so "older than the artwork" means nothing in CI)
-        if check:
+        elif check:
             if not out.exists():
                 problems.append(f"missing preview: {out.relative_to(SITE)}")
                 continue
         elif not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
             make(src, out)
             made += 1
-        url = f"{BASE}/images/og/{out.name}?v={hashlib.sha256(out.read_bytes()).hexdigest()[:8]}"
+        url = f"{BASE}/{out.relative_to(SITE).as_posix()}?v={hashlib.sha256(out.read_bytes()).hexdigest()[:8]}"
         txt = page.read_text(encoding="utf-8")
         new = re.sub(r'(<meta property="og:image" content=")[^"]*(")', rf"\g<1>{url}\2", txt)
         new = re.sub(r'(<meta name="twitter:image" content=")[^"]*(")', rf"\g<1>{url}\2", new)

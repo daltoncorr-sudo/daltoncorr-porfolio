@@ -49,7 +49,10 @@ SRC = re.compile(r'\ssrc="([^"]*)"')
 OLD = re.compile(r'\s(?:srcset|sizes)="[^"]*"')
 BODY = '<div class="wc-body">'
 # Pages Dalton wants left exactly as they are.
-LEAVE = {"skyfire-artists.html"}
+LEAVE = {"skyfire-artists.html",
+         # hand-built <picture> frames with their own WebP srcsets; its first
+         # picture sits below the hero film, so it stays lazy
+         "sunnys-bookshop.html"}
 
 
 def sizes_for(kind, w, h, alone=False, capped=False):

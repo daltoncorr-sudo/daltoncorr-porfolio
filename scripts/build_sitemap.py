@@ -20,7 +20,8 @@ BASE = "https://daltoncorr.com"
 
 SKIP = {"site/404.html", "site/press.html",
         # redirect stubs for old duplicate project pages
-        "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html"}
+        "site/work/cannes.html", "site/work/feeling.html", "site/work/hollyshorts-comedy.html",
+        "site/work/sunnys-journal.html"}
 SKIP_DIRS = {"site/blog", "site/experiments", "site/sunnys"}
 
 

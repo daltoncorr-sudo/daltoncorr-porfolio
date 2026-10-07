@@ -1,5 +1,26 @@
 [
   {
+    "slug": "sunnys-bookshop",
+    "sort": 0,
+    "year": 2026,
+    "filters": [
+      "visual",
+      "branding",
+      "art-direction",
+      "illustration"
+    ],
+    "title": "Sunny's Bookshop",
+    "role": "Creative Direction, Rebrand and Logo Design",
+    "tags": [
+      "Branding",
+      "Art Direction",
+      "Illustration"
+    ],
+    "image": "../images/design/sunnys-bookshop/sb-00-thumb-01-1x1-1200.webp",
+    "alt": "The Sunny's Bookshop seal in vellum on Library Green.",
+    "og": "../images/design/sunnys-bookshop/sb-00-og-01-1200x630.jpg"
+  },
+  {
     "slug": "hollyshorts-22",
     "sort": 0,
     "year": 2026,
@@ -222,23 +243,6 @@
     ],
     "placeholder": "PRIVATE",
     "hidden": true
-  },
-  {
-    "slug": "sunnys-journal",
-    "sort": 2,
-    "year": 2024,
-    "filters": [
-      "visual",
-      "illustration"
-    ],
-    "title": "Sunny's Journal and Press",
-    "role": "Digital Illustration",
-    "tags": [
-      "Visual",
-      "Illustration"
-    ],
-    "image": "../images/design/sunnys-journal/final.webp",
-    "alt": "Sunny's Journal and Press"
   },
   {
     "slug": "polish-film-festival",

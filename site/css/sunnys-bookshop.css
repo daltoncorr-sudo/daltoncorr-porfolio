@@ -1,0 +1,75 @@
+/* Sunny's Bookshop (work/sunnys-bookshop). The page stays white: the brand's
+   colours appear only inside the frames, the page viewers' grey stage and
+   the announcement film's Vellum stage. Behaviour: js/sunnys-bookshop.js. */
+
+/* the deck sentence, then Client / Year / Role, in the meta line's type */
+.wc-info .sb-meta { margin: 0 0 1em; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
+.sb-meta div { display: grid; grid-template-columns: 3.4em 1fr; gap: 0.6em; }
+.sb-meta dt { color: #6e6e73; flex: none; }
+.sb-meta dd { margin: 0; }
+
+/* frames: 16:9 full width, one per row; 4:5 two to a row, one on phones */
+.sb-frames { display: grid; gap: 16px; }
+.sb-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 767px) { .sb-pair { grid-template-columns: 1fr; } }
+.sb-frames picture { display: block; }
+.sb-frames img, .sb-frames video { display: block; width: 100%; height: auto; }
+.sb-frames video { aspect-ratio: 16 / 9; object-fit: cover; }
+
+/* outcome and credits */
+.wc-body .sb-prose { max-width: 42em; margin-left: auto; margin-right: auto; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
+.wc-body .sb-credits { max-width: 42em; margin-left: auto; margin-right: auto; text-align: left; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
+.sb-credits div { display: grid; grid-template-columns: 9em 1fr; gap: 1em; padding: 0.55em 0; border-top: 1px solid rgba(0, 0, 0, 0.1); }
+.sb-credits div:last-child { border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+.sb-credits dt { color: #6e6e73; }
+.sb-credits dd { margin: 0; }
+.sb-credits a { color: inherit; text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+.sb-credits a:hover { color: var(--accent); }
+@media (max-width: 767px) { .sb-credits div { grid-template-columns: 1fr; gap: 0.1em; } }
+
+/* ── Page viewer: one page at a time on a light grey stage ──
+   The stage's shape is fixed (never the page's), so turning a page moves
+   nothing. */
+.sb-viewer { outline: none; }
+.sb-viewer-stage {
+  position: relative; width: 100%; aspect-ratio: 5 / 4; max-height: 85vh;
+  background: #F4F4F2; border-radius: 14px; overflow: hidden;
+  touch-action: pan-y; -webkit-user-select: none; user-select: none;
+}
+@media (max-width: 767px) { .sb-viewer-stage { aspect-ratio: 4 / 5; } }
+.wc-body .sb-viewer-stage img {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  height: 88%; width: auto; max-width: 92%; object-fit: contain;
+  border-radius: 2px; background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+.sb-viewer-bar { display: flex; align-items: center; justify-content: center; gap: 1.25rem; margin-top: 0.9rem; }
+.sb-viewer-count { margin: 0; min-width: 0; font-size: 0.9375rem; line-height: 1.4; letter-spacing: -0.01em; color: #6e6e73; font-variant-numeric: tabular-nums; }
+.sb-viewer-btn {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+  padding: 0; border: 0; background: none; color: var(--text); cursor: pointer; transition: color 0.2s ease;
+}
+.sb-viewer-btn:hover { color: var(--accent); }
+.sb-viewer-btn svg { width: 9px; height: 16px; }
+/* without the script: the first page, and every page as a list */
+.sb-viewer:not(.is-live) .sb-viewer-btn { display: none; }
+.sb-viewer.is-live .sb-viewer-all { display: none; }
+.sb-viewer-all { margin-top: 0.75rem; font-size: 0.9375rem; color: #6e6e73; }
+.sb-viewer-all summary { cursor: pointer; }
+.sb-viewer-all ol { margin: 0.75rem auto 0; padding: 0; list-style: none; text-align: left; max-width: 32em; }
+.sb-viewer-all a { color: inherit; }
+
+/* ── The announcement film on a full-width Vellum stage ── */
+.sb-film {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 100%; aspect-ratio: 16 / 9; background: #F2EBDC; border-radius: 14px;
+}
+@media (max-width: 767px) { .sb-film { aspect-ratio: 3 / 4; } }
+.wc-body .sb-film video { display: block; height: 90%; width: auto; max-width: min(520px, 90%); aspect-ratio: 9 / 16; object-fit: cover; }
+.sb-sound {
+  position: absolute; right: 14px; bottom: 14px; padding: 0.4em 0.85em; border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85); color: var(--text); font: inherit; font-size: 0.875rem; line-height: 1.3; cursor: pointer;
+  transition: color 0.2s ease;
+}
+.sb-sound:hover { color: var(--accent); }
+.sb-sound[hidden] { display: none; }
