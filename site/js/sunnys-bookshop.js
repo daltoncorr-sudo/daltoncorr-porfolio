@@ -8,7 +8,8 @@
 
    Videos (video[data-inview]): silent loops that play while they're on
    screen. Under reduced motion they stay paused on their poster. The film
-   has a Sound on / Sound off toggle.
+   has a Sound on / Sound off toggle. The ones further down fetch nothing,
+   not even their poster, until they come near.
 
    work-cards.js runs this again each time a project opens in place, so
    everything it sets up is marked and skipped the second time. */
@@ -109,6 +110,18 @@
         label();
       });
       label();
+    }
+
+    // a video further down holds its poster (data-poster) until it's close
+    if (v.dataset.poster) {
+      var dress = function () { v.poster = v.dataset.poster; };
+      if (!seen) dress();
+      else {
+        var near = new IntersectionObserver(function (es) {
+          if (es[es.length - 1].isIntersecting) { near.disconnect(); dress(); }
+        }, { rootMargin: '600px 0px' });
+        near.observe(v);
+      }
     }
 
     if (!seen) { if (wants) play(); return; }
