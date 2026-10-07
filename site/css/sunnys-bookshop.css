@@ -73,3 +73,6 @@
 }
 .sb-sound:hover { color: var(--accent); }
 .sb-sound[hidden] { display: none; }
+
+/* a viewer straight after frames: a gallery's own gap apart */
+.sb-frames + .sb-viewer { margin-top: 16px; }
