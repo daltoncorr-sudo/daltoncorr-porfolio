@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /blog/
-Disallow: /sunnys/next-chapter/
 Sitemap: https://daltoncorr.com/sitemap.xml
