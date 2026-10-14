@@ -634,7 +634,8 @@ function initGalleryMasonry(root) {
    anywhere but the arrows, closes it. It always opens the full-size
    original, even where the gallery shows a smaller copy. */
 function initLightbox() {
-  var SEL = '.project-gallery img, .project-gallery-grid img';
+  // and Sunny's Bookshop's pictures, laid out as on opmetosserpse.com (its .pp)
+  var SEL = '.project-gallery img, .project-gallery-grid img, .pp[data-lightbox] .m img';
   var imgs = [];   // the page's photos, read fresh each time it opens
   var lb = document.createElement('div');
   lb.className = 'lightbox';

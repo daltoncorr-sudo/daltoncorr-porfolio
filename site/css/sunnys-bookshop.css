@@ -1,20 +1,28 @@
-/* Sunny's Bookshop (work/sunnys-bookshop). The page stays white: the brand's
-   colours appear only inside the frames, the page viewers' grey stage and
-   the announcement film's Vellum stage. Behaviour: js/sunnys-bookshop.js. */
+/* Sunny's Bookshop (work/sunnys-bookshop), laid out as on opmetosserpse.com
+   (Oct. 14, 2026: "the Opmet version is the correct one"): the work straight
+   on the paper; the book, the marks, the type, the colours and the
+   stationery as cut-outs, numbered and labelled; a chapter label over each
+   part; the films play once and rest (the signature round and round), with
+   Play again and Play with sound. The rules below are opmetosserpse.com's
+   (its .pp project page), held inside .sb-os, which is their container: the
+   work column lays out as that site would at the column's width. The words,
+   the outcome and the credits stay this site's. Behaviour:
+   js/sunnys-bookshop.js. */
+
+/* Opmet Serif (the controls and the label numerals, in italic) and
+   Instrument Sans (SIL Open Font License, fonts/instrument-sans/OFL.txt) */
+@font-face { font-family: "Opmet Serif"; font-style: italic; font-weight: 100 900; font-display: swap; src: url(../fonts/opmet-serif/opmet-serif-italic.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF; }
+
+/* the paper, while the page is showing (the veil over the work takes it too) */
+:root:has(.sb-os) { --bg: #F7F6F2; }
 
 /* the deck sentence, then Client / Year / Role, in the meta line's type */
 .wc-info .sb-meta { margin: 0 0 1em; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
 .sb-meta div { display: grid; grid-template-columns: 3.4em 1fr; gap: 0.6em; }
 .sb-meta dt { color: #6e6e73; flex: none; }
 .sb-meta dd { margin: 0; }
-
-/* frames: 16:9 full width, one per row; 4:5 two to a row, one on phones */
-.sb-frames { display: grid; gap: 16px; }
-.sb-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 767px) { .sb-pair { grid-template-columns: 1fr; } }
-.sb-frames picture { display: block; }
-.sb-frames img, .sb-frames video { display: block; width: 100%; height: auto; }
-.sb-frames video { aspect-ratio: 16 / 9; object-fit: cover; }
 
 /* outcome and credits */
 .wc-body .sb-prose { max-width: 42em; margin-left: auto; margin-right: auto; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
@@ -26,58 +34,93 @@
 .sb-credits a { color: inherit; text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 .sb-credits a:hover { color: var(--accent); }
 @media (max-width: 767px) { .sb-credits div { grid-template-columns: 1fr; gap: 0.1em; } }
+.sb-os + .project-section { padding-top: 120px; }
 
-/* ── Page viewer: one page at a time on a light grey stage ──
-   The stage's shape is fixed (never the page's), so turning a page moves
-   nothing. */
-.sb-viewer { outline: none; }
-.sb-viewer-stage {
-  position: relative; width: 100%; aspect-ratio: 5 / 4; max-height: 85vh;
-  background: #F4F4F2; border-radius: 14px; overflow: hidden;
-  touch-action: pan-y; -webkit-user-select: none; user-select: none;
+/* ── The work, as on opmetosserpse.com ──
+   Its own stacking context, so its pictures (raised over the paper) stay
+   under the veil the work goes behind while the deck turns. */
+.sb-os {
+  container: sbpp / inline-size; isolation: isolate; text-align: left;
+  --paper: #F7F6F2; --ink: #161512;
+  --serif: "Opmet Serif", Georgia, "Times New Roman", serif;
+  --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --t: .5s; --ease: ease; --s3: 24px;
+  --ctl-font: var(--serif); --ctl-size: clamp(17px, 1.35vw, 20px);
 }
-@media (max-width: 767px) { .sb-viewer-stage { aspect-ratio: 4 / 5; } }
-.wc-body .sb-viewer-stage img {
-  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
-  height: 88%; width: auto; max-width: 92%; object-fit: contain;
-  border-radius: 2px; background: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.12);
-}
-/* the label on its own line (room for two, so nothing below it moves),
-   the two arrows side by side under it, centred */
-.sb-viewer-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 0.5rem; width: min(100%, 34rem); margin: 0.9rem auto 0; }
-.sb-viewer-count {
-  order: -1; flex: 0 0 100%; display: flex; align-items: center; justify-content: center; min-height: 2.8em; margin: 0; text-align: center;
-  font-size: 0.9375rem; line-height: 1.4; letter-spacing: -0.01em; color: #6e6e73; font-variant-numeric: tabular-nums;
-}
-.sb-viewer-btn {
-  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
-  padding: 0; border: 0; background: none; color: var(--text); cursor: pointer; transition: color 0.2s ease;
-}
-.sb-viewer-btn:hover { color: var(--accent); }
-.sb-viewer-btn svg { width: 9px; height: 16px; }
-/* without the script: the first page, and every page as a list */
-.sb-viewer:not(.is-live) .sb-viewer-btn { display: none; }
-.sb-viewer.is-live .sb-viewer-all { display: none; }
-.sb-viewer-all { margin-top: 0.75rem; font-size: 0.9375rem; color: #6e6e73; }
-.sb-viewer-all summary { cursor: pointer; }
-.sb-viewer-all ol { margin: 0.75rem auto 0; padding: 0; list-style: none; text-align: left; max-width: 32em; }
-.sb-viewer-all a { color: inherit; }
+.sb-os .ctl { position: relative; display: inline-grid; align-items: center; justify-items: center; padding: 0;
+  font: italic 400 var(--ctl-size)/1.4 var(--ctl-font); font-optical-sizing: auto; letter-spacing: .01em; color: var(--ink); background: none; border: 0; border-radius: 0;
+  cursor: pointer; text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.sb-os .ctl::before { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%); }
+.sb-os .ctl:hover { color: var(--ink); }
+.sb-os .ctl-w, .sb-os .ctl-v { grid-area: 1/1; white-space: nowrap; }
+.sb-os .ctl-w { visibility: hidden; font-weight: 900; }
+.sb-os .ctl-v { font-weight: 400; transition: font-weight .3s var(--ease); }
 
-/* ── The announcement film on a full-width Vellum stage ── */
-.sb-film {
-  position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; aspect-ratio: 16 / 9; background: #F2EBDC; border-radius: 14px;
+/* the column has no page margin of its own (--m: 0); the rest as there */
+.sb-os .pp { --m: 0px; --g: clamp(12px, 1.6667cqw, 24px); --u: 56px; --U: 120px; --b: 16px; --s: 13px;
+  --gray: #6B665E; --hair: rgba(22, 21, 18, .16); --cap: 85vh; --cap: 85svh;
+  width: 100%; font: 400 var(--s)/1.45 var(--sans); color: var(--ink); }
+.sb-os .pp img, .sb-os .pp video { display: block; width: 100%; height: auto; max-width: none; }
+.sb-os .pp a:hover { color: var(--gray); }
+.sb-os .pp figure, .sb-os .pp h2, .sb-os .pp p { margin: 0; }
+.sb-os .pp .g { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--g); padding: 0 var(--m); }
+.sb-os .pp > .b + .ch { margin-top: var(--u); }
+.sb-os .pp > .ch { margin-top: var(--U); }
+.sb-os .pp .ch > .b + .b, .sb-os .pp > .b + .b { margin-top: var(--u); }
+.sb-os .pp-air > .ch { margin-top: calc(var(--U) * 2); }
+.sb-os .pp-air .ch > .b + .b { margin-top: calc(var(--u) * 1.75); }
+/* a chapter's label over its first part, always: the column has no margin to hold it */
+.sb-os .pp .chl { position: relative; z-index: 3; margin-bottom: 12px; }
+.sb-os .pp .chap { grid-column: 1/-1; font: 400 var(--s)/1.45 var(--sans); letter-spacing: 0; text-align: left; color: var(--ink); white-space: nowrap; overflow: hidden; }
+.sb-os .pp .chap .n { color: var(--gray); display: inline-block; min-width: 1.8em; }
+.sb-os .pp .b { align-items: start; }
+.sb-os .pp .b .m, .sb-os .pp .b .row { grid-column: 3/11; grid-row: 1; }
+.sb-os .pp .b-tall .m { grid-column: 4/10; }
+.sb-os .pp .b-wide .m, .sb-os .pp .b-wide .row { grid-column: 2/12; }
+.sb-os .pp .b .m.cap { width: 100%; max-width: calc(var(--cap) * var(--ar)); margin-inline: auto; }
+.sb-os .pp .b .row { width: 100%; max-width: calc(var(--cap) * var(--ar) + var(--g) * (var(--n) - 1)); margin-inline: auto; }
+.sb-os .pp .b-cuts .cuts { grid-column: 1/13; grid-row: 1; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--u) clamp(16px, 2.8cqw, 40px); }
+.sb-os .pp .cuts.end { align-items: flex-end; }
+.sb-os .pp .cuts.top { align-items: flex-start; }
+.sb-os .pp .b .cut { flex: 0 1 var(--cw); min-width: 0; }
+.sb-os .pp .cuts .cut img { width: var(--cw); max-width: 100%; }
+.sb-os .pp .cuts.end .cut, .sb-os .pp .cuts.top .cut { flex-basis: max(var(--cw), 150px); }
+.sb-os .pp .cut-small { --cw: clamp(72px, 11cqw, 168px); }
+.sb-os .pp .cut-medium { --cw: clamp(104px, 18cqw, 272px); }
+.sb-os .pp .cut-large { --cw: clamp(150px, 30cqw, 440px); }
+.sb-os .pp .cut-xl { --cw: clamp(220px, 44cqw, 640px); }
+.sb-os .pp .cut-true { --cw: calc(var(--w) * clamp(.7px, .11cqw, 1.6px)); }
+.sb-os .pp .lbl { margin: 12px 0 0; font: 400 var(--s)/1.4 var(--sans); color: var(--ink); text-align: left; }
+.sb-os .pp .lbl-n { margin-right: .45em; font: italic 400 1.2em/1 var(--ctl-font); font-variant-numeric: oldstyle-nums; color: #CBA65E; }
+.sb-os .pp .lbl-s { display: block; color: var(--gray); }
+.sb-os .pp .b-wide .note { grid-row: 2; }
+.sb-os .pp .row { display: flex; gap: var(--g); align-items: flex-start; }
+.sb-os .pp .row .m { flex: 1 1 0; min-width: 0; }
+.sb-os .pp .b video { background: var(--paper); }
+.sb-os .pp .b .m { position: relative; z-index: 2; }
+.sb-os .pp .b .m.grain { z-index: auto; }
+.sb-os .pp .note { grid-column: 11/13; grid-row: 1; align-self: start; font-size: var(--s); line-height: 1.45; color: var(--gray); text-wrap: pretty; transition: color var(--t) var(--ease); }
+.sb-os .pp [data-read].on .note { color: var(--ink); }
+.sb-os .pp .note .again { display: block; margin-top: 4px; font-style: italic; color: var(--ink); border-bottom: 1px solid var(--hair); width: max-content; }
+.sb-os .pp .note .again[hidden] { display: none; }
+.sb-os .pp .film-ctl { grid-column: 1/-1; grid-row: 3; margin-top: 10px; text-align: center; }
+.sb-os .pp .m img { cursor: zoom-in; }
+@container sbpp (min-width: 641px) and (max-width: 1099px) {
+  .sb-os .pp .b .m, .sb-os .pp .b .row { grid-column: 2/12; }
+  .sb-os .pp .b-tall .m { grid-column: 3/11; }
+  .sb-os .pp .b-wide .m, .sb-os .pp .b-wide .row { grid-column: 1/13; }
+  .sb-os .pp .note:not(:has(.again)) { display: none; }
+  .sb-os .pp .note, .sb-os .pp .b-wide .note { grid-column: 8/13; grid-row: 2; margin: 10px 0 0; }
 }
-@media (max-width: 767px) { .sb-film { aspect-ratio: 3 / 4; } }
-.wc-body .sb-film video { display: block; height: 90%; width: auto; max-width: min(520px, 90%); aspect-ratio: 9 / 16; object-fit: cover; }
-.sb-sound {
-  position: absolute; right: 14px; bottom: 14px; padding: 0.4em 0.85em; border: 0; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85); color: var(--text); font: inherit; font-size: 0.875rem; line-height: 1.3; cursor: pointer;
-  transition: color 0.2s ease;
+@media (prefers-reduced-motion: reduce) { .sb-os .pp [data-read] .note { color: var(--ink); } }
+@container sbpp (max-width: 640px) {
+  .sb-os .pp { --g: 12px; --u: 24px; --U: 64px; }
+  .sb-os .pp .g { grid-template-columns: 1fr 1fr; }
+  .sb-os .pp .g > *, .sb-os .pp .b .m, .sb-os .pp .b .row, .sb-os .pp .note, .sb-os .pp .chap { grid-column: 1/-1 !important; grid-row: auto !important; }
+  .sb-os .pp .note:not(:has(.again)) { display: none; }
+  .sb-os .pp .note { margin: 6px 0 0; }
+  .sb-os .pp .row-stack { flex-direction: column; gap: var(--u); }
+  .sb-os .pp .row-stack .m { flex: none !important; width: 100%; }
+  .sb-os .pp .cuts.end .cut, .sb-os .pp .cuts.top .cut { flex-basis: max(var(--cw), 120px); }
+  .sb-os .pp .cut-xl { --cw: 100%; }
 }
-.sb-sound:hover { color: var(--accent); }
-.sb-sound[hidden] { display: none; }
-
-/* a viewer straight after frames: a gallery's own gap apart */
-.sb-frames + .sb-viewer { margin-top: 16px; }

@@ -1,134 +1,115 @@
-/* Sunny's Bookshop (work/sunnys-bookshop): the page viewers and the videos.
+/* Sunny's Bookshop (work/sunnys-bookshop), as on opmetosserpse.com: its
+   films and its controls, with that site's own code (its site.js).
 
-   Page viewer (.sb-viewer, three on the page): one page at a time on a grey
-   stage. Previous / Next, ← → while it has focus, a swipe on touch. Its
-   pages are the links in its "View all pages" list, which is all that shows
-   without this script (with the first page). Only the page on show and its
-   two neighbours are ever fetched.
+   Films: every film plays muted. The signature (video[loop]) goes round
+   while it's on screen; every other film (video[data-rest]) plays once when
+   it's on screen and rests on its last frame, with Play again under it. The
+   announcement film has Play with sound, which turns into Mute. Under
+   reduced motion nothing plays until asked (Play).
 
-   Videos (video[data-inview]): silent loops that play while they're on
-   screen. Under reduced motion they stay paused on their poster. The film
-   has a Sound on / Sound off toggle. The ones further down fetch nothing,
-   not even their poster, until they come near.
+   Controls (.ctl): with a fine pointer, the word's weight follows the cursor
+   across it, thin to black, over a hidden heaviest copy that holds its width.
 
-   work-cards.js runs this again each time a project opens in place, so
-   everything it sets up is marked and skipped the second time. */
+   Parts marked data-read turn their notes from grey to ink on the reading
+   line.
+
+   work-cards.js runs this again each time a project opens in place, so each
+   film is marked and skipped the second time, and the page-wide listeners
+   are added once. */
 (function () {
   'use strict';
-  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen = 'IntersectionObserver' in window;
+  var root = document.querySelector('.sb-os');
+  if (!root) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var watch = 'IntersectionObserver' in window;
 
-  /* ── Page viewer ── */
-  [].forEach.call(document.querySelectorAll('.sb-viewer'), function (root) {
-    if (root.dataset.sbReady) return;
-    root.dataset.sbReady = '1';
-    var links = [].slice.call(root.querySelectorAll('.sb-viewer-all a'));
-    var img = root.querySelector('.sb-viewer-stage img');
-    var count = root.querySelector('.sb-viewer-count');
-    if (!links.length || !img) return;
-    var pages = links.map(function (a) {
-      return {
-        srcset: a.dataset.small + ' ' + a.dataset.sw + 'w, ' + a.getAttribute('href') + ' ' + a.dataset.w + 'w',
-        src: a.getAttribute('href'), alt: a.dataset.alt, text: a.textContent
-      };
+  function label(el, text) {
+    var w = el.querySelector('.ctl-w'), v = el.querySelector('.ctl-v');
+    if (w && v) { w.textContent = v.textContent = text; } else el.textContent = text;
+  }
+  // Play with sound turns the film's sound on (from the start, if it has
+  // already played and rests) and becomes Mute; Mute turns it back off. If a
+  // browser won't play it with sound, it goes back to muted.
+  function soundCtl(v, b, play) {
+    function say() { label(b, b.getAttribute(v.muted ? 'data-off' : 'data-on')); }
+    b.addEventListener('click', function (e) {
+      e.preventDefault(); v.muted = !v.muted; say();
+      if (!v.muted && v.paused) play(true);
     });
-    var cur = 0, near = !seen;
-    var warmed = {};
-    function warm(i) {
-      i = (i + pages.length) % pages.length;
-      if (warmed[i]) return;
-      warmed[i] = true;
-      var pre = new Image();
-      pre.sizes = img.sizes;
-      pre.srcset = pages[i].srcset;
-      pre.src = pages[i].src;
-    }
-    function show(i) {
-      cur = (i + pages.length) % pages.length;
-      var p = pages[cur];
-      img.srcset = p.srcset;
-      img.src = p.src;
-      img.alt = p.alt;
-      count.textContent = p.text;
-      warmed[cur] = true;
-      if (near) { warm(cur - 1); warm(cur + 1); }
-    }
-    root.classList.add('is-live');
-    root.querySelector('.sb-viewer-prev').addEventListener('click', function () { show(cur - 1); });
-    root.querySelector('.sb-viewer-next').addEventListener('click', function () { show(cur + 1); });
-    // ← → turn the page (and stop here: on a project page they'd also
-    // shuffle to the next project)
-    root.addEventListener('keydown', function (e) {
-      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      e.preventDefault();
-      e.stopPropagation();
-      show(cur + (e.key === 'ArrowRight' ? 1 : -1));
-    });
-    var stage = root.querySelector('.sb-viewer-stage'), tx = null, ty = 0;
-    stage.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
-    stage.addEventListener('touchend', function (e) {
-      if (tx === null) return;
-      var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
-      tx = null;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(cur + (dx < 0 ? 1 : -1));
-    });
-    // the neighbours are fetched once the viewer is close to the screen
-    if (seen) {
-      var io = new IntersectionObserver(function (es) {
-        if (!es[0].isIntersecting) return;
-        io.disconnect();
-        near = true;
-        warm(cur - 1); warm(cur + 1);
-      }, { rootMargin: '300px 0px' });
-      io.observe(root);
-    } else {
-      show(0);
-    }
-  });
+    return say;
+  }
+  function start(v, say) {
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { if (!v.muted) { v.muted = true; if (say) say(); var q = v.play(); if (q && q.catch) q.catch(function () {}); } });
+    return p;
+  }
 
-  /* ── Videos ── */
-  [].forEach.call(document.querySelectorAll('video[data-inview]'), function (v) {
+  // the signature: round and round while on screen
+  [].forEach.call(root.querySelectorAll('.pp video[loop]'), function (v) {
     if (v.dataset.sbReady) return;
     v.dataset.sbReady = '1';
-    v.muted = true;
-    v.removeAttribute('controls');   // there for when this script isn't
-    var wants = !still;              // play while on screen
-    if (still) {
-      v.removeAttribute('autoplay');
-      v.pause();
-      if (v.currentTime > 0) v.load();   // back to the poster
-    }
-    function play() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-
-    var btn = v.parentNode.querySelector('.sb-sound');
-    if (btn) {
-      btn.hidden = false;
-      var label = function () { btn.textContent = v.muted ? 'Sound on' : 'Sound off'; };
-      btn.addEventListener('click', function () {
-        v.muted = !v.muted;
-        if (!v.muted) { wants = true; if (v.paused) play(); }
-        label();
-      });
-      label();
-    }
-
-    // a video further down holds its poster (data-poster) until it's close
-    if (v.dataset.poster) {
-      var dress = function () { v.poster = v.dataset.poster; };
-      if (!seen) dress();
-      else {
-        var near = new IntersectionObserver(function (es) {
-          if (es[es.length - 1].isIntersecting) { near.disconnect(); dress(); }
-        }, { rootMargin: '600px 0px' });
-        near.observe(v);
-      }
-    }
-
-    if (!seen) { if (wants) play(); return; }
+    var again = root.querySelector('[data-again="' + v.id + '"]'), b = root.querySelector('[data-unmute="' + v.id + '"]'), say = null;
+    function play() { if (again) again.hidden = true; start(v, say); }
+    if (b) say = soundCtl(v, b, play);
+    if (again) again.addEventListener('click', function (e) { e.preventDefault(); play(); });
+    if (reduce || !watch) { if (again) { again.hidden = false; again.textContent = 'Play'; } return; }
     new IntersectionObserver(function (es) {
-      var e = es[es.length - 1];
-      if (e.isIntersecting && wants) play();
-      else if (!e.isIntersecting) v.pause();
+      es.forEach(function (e) { if (e.isIntersecting) { if (v.paused) play(); } else if (!v.paused) v.pause(); });
     }, { threshold: 0.25 }).observe(v);
   });
+
+  // every other film: once, when it's well on screen, then at rest on its last frame
+  [].forEach.call(root.querySelectorAll('.pp video[data-rest]'), function (v) {
+    if (v.dataset.sbReady) return;
+    v.dataset.sbReady = '1';
+    var state = 'idle', again = root.querySelector('[data-again="' + v.id + '"]'), b = root.querySelector('[data-unmute="' + v.id + '"]'), r = v.dataset.rest, say = null;
+    function rest() { try { v.currentTime = r === 'end' ? Math.max(0, v.duration - 0.05) : parseFloat(r); } catch (e) {} }
+    function offer(t) { if (again) { again.hidden = false; again.textContent = t; } }
+    function play(asked) {
+      if (state === 'done') v.currentTime = 0;
+      state = 'playing'; if (again) again.hidden = true;
+      var p = start(v, say); if (p && p.catch && !asked) p.catch(function () { offer('Play'); });
+    }
+    if (b) say = soundCtl(v, b, play);
+    v.addEventListener('ended', function () { state = 'done'; rest(); offer('Play again'); });
+    if (again) again.addEventListener('click', function (e) { e.preventDefault(); play(true); });
+    if (reduce || !watch) { offer('Play'); return; }
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var seen = e.intersectionRect.height >= Math.min(e.boundingClientRect.height * 0.6, innerHeight * 0.35);
+        if (seen && state !== 'done') { if (v.paused) play(); }
+        else if (!e.isIntersecting && !v.paused) v.pause();
+      });
+    }, { threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] }).observe(v);
+  });
+
+  if (window.sbOnce) return;
+  window.sbOnce = true;
+
+  // the reading line
+  var queued = false;
+  function read() {
+    queued = false;
+    var h = innerHeight;
+    [].forEach.call(document.querySelectorAll('.sb-os [data-read]'), function (el) {
+      var r = el.getBoundingClientRect(); el.classList.toggle('on', r.top < h * 0.62 && r.bottom > h * 0.38);
+    });
+  }
+  function soon() { if (!queued) { queued = true; requestAnimationFrame(read); } }
+  document.addEventListener('scroll', soon, { passive: true, capture: true });
+  window.addEventListener('resize', soon);
+  soon();
+
+  // the controls' weight, under a fine pointer
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  var cur = null;
+  function settle(c) { var v = c && c.querySelector('.ctl-v'); if (v) v.style.fontWeight = ''; }
+  document.addEventListener('mousemove', function (e) {
+    var c = e.target.closest ? e.target.closest('.sb-os .ctl') : null;
+    if (c !== cur) { settle(cur); cur = c; }
+    var v = c && c.querySelector('.ctl-v'); if (!v) return;
+    var r = c.getBoundingClientRect(), t = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    v.style.fontWeight = reduce ? 700 : Math.round(200 + t * 700);
+  }, { passive: true });
+  document.addEventListener('mouseout', function (e) { if (cur && !(e.relatedTarget && cur.contains(e.relatedTarget))) { settle(cur); cur = null; } });
 })();
