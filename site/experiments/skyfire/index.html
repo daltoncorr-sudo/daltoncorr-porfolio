@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skyfire Artists, a concept by Dalton Corr</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A website concept by Dalton Corr for Skyfire Artists. Not the official site.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://daltoncorr.com/experiments/skyfire/">
+<meta property="og:title" content="Skyfire Artists, a concept by Dalton Corr">
+<meta property="og:description" content="A website concept by Dalton Corr for Skyfire Artists. Not the official site.">
+<meta property="og:image" content="https://daltoncorr.com/experiments/skyfire/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Skyfire Artists logo above the headline: Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Skyfire Artists, website concept by Dalton Corr. Built from the approved reference (2026-10-15 blackout v01). */
+@font-face{font-family:"Schibsted Grotesk";font-style:normal;font-weight:400 900;font-display:swap;src:url("fonts/schibsted-grotesk-latin-wght-normal.woff2") format("woff2")}
+@font-face{font-family:"Libre Caslon Text";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/libre-caslon-text-latin-400-normal.woff2") format("woff2")}
+
+:root{
+  --black:#000;--white:#fff;--panel:#111;--line:#2B2B2B;
+  --grey-1:#D4D4D4;--grey-2:#C9C9C9;--grey-3:#B5B5B5;--grey-4:#8F8F8F;
+  --max:1360px;--gutter:40px;
+  --sans:"Schibsted Grotesk",system-ui,sans-serif;
+  --serif:"Libre Caslon Text",Georgia,serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (max-width:600px){:root{--gutter:20px}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+html{background:var(--black)}
+body{margin:0;background:var(--black);color:var(--white);font-family:var(--sans);font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--white)}
+a:hover{color:#BDBDBD}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--white);outline-offset:3px}
+.sf-light a:focus-visible{outline-color:var(--black)}
+main:focus{outline:none}
+
+.sf-skip,.sf-skip:hover{position:absolute;left:16px;top:-100px;z-index:10;background:var(--white);color:var(--black);padding:12px 18px;font-weight:600;text-decoration:none}
+.sf-skip:focus{top:16px}
+
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter)}
+.sf-rule{border-top:1px solid var(--line)}
+.sf-light{background:var(--white);color:var(--black)}
+.sf-h2{margin:0;font-weight:600;font-size:clamp(40px,4.6vw,64px);line-height:1;letter-spacing:-.028em}
+.sf-h2-md{margin:0;font-weight:600;font-size:clamp(36px,4vw,56px);line-height:1.04;letter-spacing:-.025em}
+.sf-serif{font-family:var(--serif)}
+
+/* Buttons: the solid ones keep their colours on hover, as in the reference */
+.btn{text-decoration:none;font-weight:600}
+.btn-white,.btn-white:hover{background:var(--white);color:var(--black)}
+.btn-black,.btn-black:hover{background:var(--black);color:var(--white)}
+.btn-line{border:1px solid var(--white)}
+.btn-ink-line,.btn-ink-line:hover{color:var(--black);border:1px solid var(--black)}
+
+/* Header */
+.sf-header{padding-top:32px;padding-bottom:32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+.sf-logo{display:block}
+.sf-logo img{height:92px;width:auto;display:block}
+.sf-nav{display:flex;flex-wrap:wrap;align-items:center;gap:12px 32px;font-size:16px;font-weight:500}
+.sf-nav a{text-decoration:none}
+.sf-nav .btn{padding:13px 20px}
+
+/* Hero */
+.sf-hero{padding-top:120px;padding-bottom:136px}
+.sf-hero h1{margin:0;max-width:1120px;font-weight:600;font-size:clamp(40px,5.4vw,82px);line-height:1.04;letter-spacing:-.028em}
+.sf-hero-foot{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:40px;margin-top:56px}
+.sf-lede{margin:0;max-width:520px;font-size:22px;line-height:1.6;color:var(--grey-1)}
+.sf-actions{display:flex;flex-wrap:wrap;gap:14px}
+.sf-hero .btn-white{padding:18px 26px;font-size:17px}
+.sf-hero .btn-line{padding:17px 25px;font-size:17px}
+
+/* Results: white fills each box from the bottom */
+.sf-results{padding-top:112px;padding-bottom:112px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:48px 80px}
+.sf-results h2{flex:1 1 300px;max-width:380px;margin:0;font-weight:600;font-size:clamp(34px,3.6vw,52px);line-height:1.04;letter-spacing:-.028em}
+.sf-results ul{flex:2 1 600px;min-width:0;margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.sf-result{padding:40px 36px 36px;min-height:240px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;gap:32px;color:var(--white);background-color:var(--black);background-image:linear-gradient(var(--white),var(--white));background-repeat:no-repeat;background-position:left bottom;background-size:100% 0%;transition:background-size .45s var(--ease),color .3s ease .05s}
+.sf-big{display:inline-block;font-weight:700;font-size:clamp(44px,4.2vw,64px);line-height:.95;letter-spacing:-.04em;transition:transform .45s var(--ease)}
+.sf-big--stat{font-size:clamp(56px,5.4vw,84px);line-height:.9;letter-spacing:-.045em}
+.sf-sub{font-size:18px;line-height:1.45;color:#A8A8A8;transition:color .3s ease .05s}
+@media (hover:hover){
+  .sf-result:hover{background-size:100% 100%;color:var(--black)}
+  .sf-result:hover .sf-sub{color:#3A3A3A}
+  .sf-result:hover .sf-big{transform:translateY(-6px)}
+}
+.sf-result:focus-within,.sf-result.is-active{background-size:100% 100%;color:var(--black)}
+.sf-result:focus-within .sf-sub,.sf-result.is-active .sf-sub{color:#3A3A3A}
+.sf-result:focus-within .sf-big,.sf-result.is-active .sf-big{transform:translateY(-6px)}
+
+/* Management */
+.sf-mgmt{padding-top:112px;padding-bottom:112px;display:flex;flex-wrap:wrap;gap:56px 80px}
+.sf-mgmt-intro{flex:1 1 380px;min-width:0}
+.sf-mgmt-intro h2{margin-bottom:28px}
+.sf-mgmt-intro p{margin:0 0 20px;font-size:19px;line-height:1.7;color:var(--grey-1)}
+.sf-mgmt-intro p:last-child{margin-bottom:0}
+.sf-pillars{flex:1.4 1 520px;min-width:0;margin:0;display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr);gap:0}
+.sf-pillars dt{padding:26px 24px 26px 0;border-top:1px solid var(--line);font-weight:600;font-size:20px}
+.sf-pillars dd{margin:0;padding:26px 0;border-top:1px solid var(--line);color:var(--grey-2)}
+.sf-pillars dt:last-of-type,.sf-pillars dd:last-of-type{border-bottom:1px solid var(--line)}
+
+/* Consultations */
+.sf-consult{background:var(--panel)}
+.sf-consult .wrap{padding-top:120px;padding-bottom:120px}
+.sf-consult-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:64px}
+.sf-consult-head p{margin:0;max-width:560px;font-size:19px;line-height:1.7;color:var(--grey-1)}
+.sf-offers{display:flex;flex-wrap:wrap;gap:24px}
+.sf-offer{min-width:0;border:1px solid #3A3A3A;padding:44px;display:flex;flex-direction:column;gap:22px}
+.sf-offer--a{flex:5 1 380px}
+.sf-offer--b{flex:7 1 520px;border-color:var(--white)}
+.sf-offer-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.sf-offer h3{margin:0;font-weight:600;font-size:28px;letter-spacing:-.015em}
+.sf-price{font-weight:700;font-size:44px;letter-spacing:-.03em}
+.sf-offer-desc{margin:0;color:var(--grey-1)}
+.sf-offer-label{margin:0 0 10px;font-weight:600}
+.sf-offer--b .sf-offer-label{margin-bottom:12px}
+.sf-offer ul{margin:0;padding-left:20px;color:var(--grey-2);display:flex;flex-direction:column;gap:6px}
+.sf-covers{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px 32px;font-size:16px}
+.sf-covers dt{font-weight:600}
+.sf-covers dd{margin:0;color:var(--grey-3)}
+.sf-offer .btn{margin-top:auto;align-self:flex-start;padding:16px 24px}
+.sf-notes{display:flex;flex-wrap:wrap;gap:40px 64px;margin-top:64px;padding-top:40px;border-top:1px solid var(--line)}
+.sf-note-col{flex:1 1 280px;min-width:0}
+.sf-note-col h3{margin:0 0 8px;font-weight:600;font-size:18px}
+.sf-note-col p{margin:0;color:var(--grey-3);font-size:16px}
+.sf-slots{flex:1.3 1 360px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.sf-slots label{font-weight:600;font-size:18px}
+.sf-hint{color:var(--grey-3);font-size:16px}
+.sf-field{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sf-field input{flex:1 1 200px;min-width:0;background:var(--black);border:1px solid #5A5A5A;border-radius:0;color:var(--white);padding:15px 16px;font-size:16px;font-family:inherit}
+.sf-field button{background:var(--white);color:var(--black);border:0;border-radius:0;padding:15px 22px;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer}
+.sf-sent{margin:0;font-size:16px;color:var(--grey-1)}
+.sf-sent:empty{margin-top:-10px}   /* stays in the page for screen readers, takes no room until it speaks */
+
+/* Inspire. Ignite… Boom! */
+.sf-boom{overflow:hidden}
+.sf-boom p{max-width:1440px;margin:0 auto;padding:120px 32px 112px;font-weight:800;font-size:clamp(64px,12.6vw,196px);line-height:.86;letter-spacing:-.055em}
+
+/* The Producers' List */
+.sf-producers{padding-top:112px;padding-bottom:112px;display:flex;flex-wrap:wrap;gap:48px 80px;align-items:flex-start}
+.sf-producers h2{flex:1 1 420px}
+.sf-producers-body{flex:1.2 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.sf-producers-body p{margin:0;font-size:20px;line-height:1.65;color:#2A2A2A}
+.sf-producers .sf-actions{gap:12px}
+.sf-producers .btn-black{padding:16px 24px}
+.sf-producers .btn-ink-line{padding:15px 23px}
+
+/* Ryan */
+.sf-ryan{padding-top:120px;padding-bottom:120px;display:flex;flex-wrap:wrap;gap:56px 88px;align-items:flex-start}
+.sf-ryan figure{flex:1 1 340px;min-width:0;max-width:460px;margin:0}
+.sf-ryan img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 20%;display:block}
+.sf-ryan-body{flex:1.4 1 480px;min-width:0}
+.sf-ryan-body h2{margin-bottom:6px}
+.sf-role{margin:0 0 36px;font-size:18px;color:var(--grey-3)}
+.sf-bio{margin:0 0 20px;font-size:20px;line-height:1.7;color:#DADADA}
+.sf-bio:last-child{margin-bottom:0}
+
+/* Shop: four across, two on tablets, one on phones */
+.sf-goods{padding-top:112px;padding-bottom:120px}
+.sf-goods-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:48px}
+.sf-goods-head p{margin:0;max-width:460px;color:#3A3A3A}
+.sf-shop{display:grid;grid-template-columns:minmax(0,1fr);gap:32px 16px}
+@media (min-width:620px){.sf-shop{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1170px){.sf-shop{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.sf-item{margin:0}
+.sf-item-frame{background:#F2F2F2;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+.sf-item-frame img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.sf-item > img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block}
+.sf-item figcaption{margin-top:12px;display:flex;justify-content:space-between;gap:12px}
+.sf-item figcaption span:first-child{font-weight:600}
+
+/* Contact and footer */
+.sf-footer{padding-top:112px;padding-bottom:56px}
+.sf-contact{display:flex;flex-wrap:wrap;justify-content:space-between;gap:48px 80px}
+.sf-contact-intro{flex:1 1 420px;min-width:0}
+.sf-contact-intro h2{margin-bottom:20px}
+.sf-contact-intro p{margin:0;max-width:460px;color:var(--grey-3)}
+.sf-details{flex:1 1 420px;min-width:0;margin:0;display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px 24px;font-size:18px}
+.sf-details dt{color:var(--grey-4)}
+.sf-details dd{margin:0;overflow-wrap:anywhere}
+.sf-details a{text-decoration:none}
+.sf-base{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:96px;padding-top:32px;border-top:1px solid var(--line);color:var(--grey-4);font-size:15px}
+.sf-base img{height:120px;width:auto}
+.sf-legal{display:flex;flex-direction:column;gap:4px}
+@media (min-width:701px){.sf-legal{text-align:right}}
+
+/* Phones */
+@media (max-width:600px){
+  .sf-header{padding-top:24px;padding-bottom:24px;gap:20px}
+  .sf-logo img{height:72px}
+  .sf-nav{flex-basis:100%;gap:10px 24px}
+  .sf-nav .btn{margin-top:6px}
+  .sf-results ul{grid-template-columns:minmax(0,1fr)}
+  .sf-offer{padding:32px 28px}
+  .sf-offer-top{flex-wrap:wrap;gap:4px 16px}
+  .sf-pillars{grid-template-columns:minmax(0,1fr)}
+  .sf-pillars dt{padding:24px 0 6px}
+  .sf-pillars dd{padding:0 0 24px;border-top:0}
+  .sf-pillars dt:last-of-type{border-bottom:0}
+  .sf-boom p{padding-left:var(--gutter);padding-right:var(--gutter)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .sf-result,.sf-sub,.sf-big{transition:none}
+  .sf-result:hover .sf-big,.sf-result:focus-within .sf-big,.sf-result.is-active .sf-big{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="sf-skip" href="#main">Skip to content</a>
+
+<header class="wrap sf-header">
+  <a class="sf-logo" href="#top" aria-label="Skyfire Artists, home">
+    <img src="assets/skyfire-lockup-white.png" width="1080" height="1470" alt="Skyfire Artists" fetchpriority="high">
+  </a>
+  <nav aria-label="Main" class="sf-nav">
+    <a href="#management">Management</a>
+    <a href="#consultations">Consultations</a>
+    <a href="#producers-list">The Producers' List</a>
+    <a href="#goods">Goods</a>
+    <a href="#contact">Contact</a>
+    <a class="btn btn-white" href="#consultations">Book a free call</a>
+  </nav>
+</header>
+
+<main id="main" tabindex="-1">
+  <section id="top" class="wrap sf-hero">
+    <h1>Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies.</h1>
+    <div class="sf-hero-foot">
+      <p class="sf-lede sf-serif">We take a holistic, hands-on approach to the actor and their career.</p>
+      <div class="sf-actions">
+        <a class="btn btn-white" href="#consultations">Book a free 15-minute call</a>
+        <a class="btn btn-line" href="#contact">Submit for management</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="results" class="sf-rule">
+    <div class="wrap sf-results">
+      <h2 id="results">After working with Skyfire, clients have seen:</h2>
+      <ul>
+        <li class="sf-result"><span class="sf-big sf-big--stat">60%+</span><span class="sf-sub">More auditions across the board</span></li>
+        <li class="sf-result"><span class="sf-big">Film &amp; TV</span><span class="sf-sub">Steady auditions, season after season</span></li>
+        <li class="sf-result"><span class="sf-big">Signed</span><span class="sf-sub">Commercial and theatrical representation</span></li>
+        <li class="sf-result"><span class="sf-big">Booked</span><span class="sf-sub">First bookings in features, TV and commercials</span></li>
+        <li class="sf-result"><span class="sf-big">Clarity</span><span class="sf-sub">A clear sense of who they are as artists</span></li>
+        <li class="sf-result"><span class="sf-big">On screen</span><span class="sf-sub">Clients Ryan has managed have appeared in 13 (Netflix), The Real Housewives of New York City, Jury Duty and Flamin' Hot</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="management" class="sf-rule">
+    <div class="wrap sf-mgmt">
+      <div class="sf-mgmt-intro">
+        <h2 class="sf-h2-md">A new kind of management company</h2>
+        <p class="sf-serif">Skyfire is committed to guiding, developing and inspiring artists to ignite their talents to their fullest potential, with career consulting, development, branding, social media strategy and new avenues for artists at every level.</p>
+        <p class="sf-serif">At its core is a mission to create opportunities and visibility for underrepresented groups in entertainment.</p>
+      </div>
+      <dl class="sf-pillars">
+        <dt>Vision</dt>
+        <dd>Define a series of goals and create a plan to make them a reality.</dd>
+        <dt>Brand development</dt>
+        <dd>Take ownership of your identity and turn your identity into your brand.</dd>
+        <dt>Craft development</dt>
+        <dd>Cultivate your craft to get the attention you deserve and perform at your highest level.</dd>
+        <dt>Marketing strategies</dt>
+        <dd>Create the artist marketing package that best represents you, and make connections with fellow artists to foster collaboration.</dd>
+        <dt>Connections</dt>
+        <dd>Introductions to casting directors, directors, producers and agents, and help building your team and network.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="consultations" class="sf-consult">
+    <div class="wrap">
+      <div class="sf-consult-head">
+        <h2 class="sf-h2">Consultations</h2>
+        <p class="sf-serif">Ryan is a developmental talent manager focused on emerging actors. For the first time, he is offering consultations to actors who are not Skyfire clients.</p>
+      </div>
+
+      <div class="sf-offers">
+        <article class="sf-offer sf-offer--a">
+          <div class="sf-offer-top">
+            <h3>Consultation A</h3>
+            <span class="sf-price">$100</span>
+          </div>
+          <p class="sf-offer-desc">A 60-minute Zoom with Q&amp;A, actionable career strategy and a live review of your materials.</p>
+          <div>
+            <p class="sf-offer-label">For mid-level actors who:</p>
+            <ul>
+              <li>Have representation but aren't getting auditions</li>
+              <li>Feel limited to certain roles</li>
+              <li>Have questions about working with their reps</li>
+              <li>Are unsure of their brand</li>
+            </ul>
+          </div>
+          <a class="btn btn-white" href="#consultations">Book Consultation A</a>
+        </article>
+
+        <article class="sf-offer sf-offer--b">
+          <div class="sf-offer-top">
+            <h3>Consultation B</h3>
+            <span class="sf-price">$600</span>
+          </div>
+          <p class="sf-offer-desc">A 13-page written assessment covering 54 points, with suggested improvements, followed by a 60-minute Zoom review. Includes 25% off additional Zoom calls for a year.</p>
+          <div>
+            <p class="sf-offer-label">The assessment covers:</p>
+            <dl class="sf-covers">
+              <div><dt>Branding</dt><dd>Your brand, your types, standing out</dd></div>
+              <div><dt>Packaging</dt><dd>Headshots, reels, clips, resume template</dd></div>
+              <div><dt>Actor profiles</dt><dd>Actors Access, Casting Networks, Backstage</dd></div>
+              <div><dt>Training</dt><dd>Your training, plus classes and coaches</dd></div>
+              <div><dt>Self-tapes</dt><dd>Setup, supply list, best practices</dd></div>
+              <div><dt>Vision</dt><dd>Short and long-term goals, step by step</dd></div>
+              <div><dt>Representation</dt><dd>Commercial and theatrical reps, query letter</dd></div>
+              <div><dt>Networking</dt><dd>Finding your community in LA</dd></div>
+            </dl>
+          </div>
+          <a class="btn btn-white" href="#consultations">Book Consultation B</a>
+        </article>
+      </div>
+
+      <div class="sf-notes">
+        <div class="sf-note-col">
+          <h3>Availability</h3>
+          <p>Three to five slots open each month. A consultation does not make you eligible for representation.</p>
+        </div>
+        <div class="sf-note-col">
+          <h3>Payment</h3>
+          <p>A 50% deposit once your booking is confirmed, with the balance due before delivery. Card, Zelle or Venmo.</p>
+        </div>
+        <form class="sf-slots" data-demo novalidate>
+          <label for="slots-email">Hear when slots open</label>
+          <span class="sf-hint" id="slots-hint">Openings go out the first Monday of each month at 10 AM.</span>
+          <div class="sf-field">
+            <input id="slots-email" name="email" type="email" autocomplete="email" placeholder="Email address" aria-describedby="slots-hint">
+            <button type="submit">Join the list</button>
+          </div>
+          <p class="sf-sent" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Inspire. Ignite. Boom." class="sf-boom">
+    <p>Inspire.<br>Ignite…<br>Boom!</p>
+  </section>
+
+  <section id="producers-list" class="sf-light">
+    <div class="wrap sf-producers">
+      <h2 class="sf-h2">The Producers' List</h2>
+      <div class="sf-producers-body">
+        <p class="sf-serif">A members-only directory of producers who are actively developing and casting projects in Los Angeles, curated by Skyfire and updated every month.</p>
+        <div class="sf-actions">
+          <a class="btn btn-black" href="#contact">Request access</a>
+          <a class="btn btn-ink-line" href="#producers-list">Member sign-in</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ryan">
+    <div class="wrap sf-ryan">
+      <figure>
+        <img src="assets/ryan-luevano.webp" width="1080" height="1620" alt="Ryan M. Luévano in a burgundy tuxedo jacket and red-tinted glasses, arms crossed" loading="lazy" decoding="async">
+      </figure>
+      <div class="sf-ryan-body">
+        <h2 class="sf-h2-md">Ryan M. Luévano</h2>
+        <p class="sf-role">Owner and talent manager</p>
+        <p class="sf-bio sf-serif">Ryan is a Latinx, award-winning playwright, director and screenwriter. Before founding Skyfire, he was a manager at Mattie Management under Mattie Webb, working with clients including Frankie McNellis, Leah McSweeney, Ron Song and Fabian Alomar.</p>
+        <p class="sf-bio sf-serif">He has taught music at Woodbury University, Santa Ana College and Rio Hondo College, teaches at A Noise Within Theatre Company, serves on the board of the Foundation for New American Musicals and is a member of the Dramatists Guild.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="goods" class="sf-light">
+    <div class="wrap sf-goods">
+      <div class="sf-goods-head">
+        <h2 class="sf-h2">Shop</h2>
+        <p>Apparel and studio goods for clients, alumni and anyone who wants to carry the bolt.</p>
+      </div>
+      <div class="sf-shop">
+        <figure class="sf-item"><div class="sf-item-frame"><img src="assets/merch/tee-black.webp" width="536" height="557" alt="Black tee with the Skyfire Artists logo on the chest" loading="lazy" decoding="async"></div><figcaption><span>Logo tee, black</span><span>$38</span></figcaption></figure>
+        <figure class="sf-item"><div class="sf-item-frame"><img src="assets/merch/cap-black.webp" width="484" height="493" alt="Black cap with the horizontal Skyfire Artists logo" loading="lazy" decoding="async"></div><figcaption><span>Cap, black</span><span>$34</span></figcaption></figure>
+        <figure class="sf-item"><div class="sf-item-frame"><img src="assets/merch/cap-stone.webp" width="537" height="538" alt="Stone cap with the horizontal Skyfire Artists logo" loading="lazy" decoding="async"></div><figcaption><span>Cap, stone</span><span>$34</span></figcaption></figure>
+        <figure class="sf-item"><div class="sf-item-frame"><img src="assets/merch/cap-navy.webp" width="543" height="531" alt="Navy cap with the Skyfire bolt mark" loading="lazy" decoding="async"></div><figcaption><span>Cap, navy</span><span>$34</span></figcaption></figure>
+        <figure class="sf-item"><div class="sf-item-frame"><img src="assets/merch/tote-black.webp" width="536" height="536" alt="Black tote with the Skyfire Artists logo" loading="lazy" decoding="async"></div><figcaption><span>Tote, black</span><span>$28</span></figcaption></figure>
+        <figure class="sf-item"><img src="assets/merch/crew-jacket.webp" width="880" height="1168" alt="Black satin crew jacket with the Skyfire Artists logo embroidered across the back" loading="lazy" decoding="async"><figcaption><span>Crew jacket, satin</span><span>$165</span></figcaption></figure>
+        <figure class="sf-item"><img src="assets/merch/audition-folder.webp" width="880" height="1168" alt="Black cloth audition folder with the bolt mark blind-debossed on the cover" loading="lazy" decoding="async"><figcaption><span>Audition folder</span><span>$48</span></figcaption></figure>
+        <figure class="sf-item"><img src="assets/merch/vision-notebook-pin.webp" width="880" height="1168" alt="Black Vision notebook with the bolt mark in white foil, beside a matching enamel pin" loading="lazy" decoding="async"><figcaption><span>Vision notebook and pin</span><span>$32</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap sf-footer">
+    <div class="sf-contact">
+      <div class="sf-contact-intro">
+        <h2 class="sf-h2">Contact</h2>
+        <p>Submissions for management and all other inquiries go through the form. Ryan reads every one.</p>
+      </div>
+      <dl class="sf-details">
+        <dt>Email</dt><dd><a href="mailto:ryan@skyfireartists.com">ryan@skyfireartists.com</a></dd>
+        <dt>Phone</dt><dd><a href="tel:+17473338870">(747) 333-8870</a></dd>
+        <dt>Instagram</dt><dd><a href="https://www.instagram.com/skyfireartists/">@skyfireartists</a></dd>
+        <dt>Based in</dt><dd>Los Angeles</dd>
+      </dl>
+    </div>
+    <div class="sf-base">
+      <img src="assets/skyfire-lockup-white.png" width="1080" height="1470" alt="Skyfire Artists" loading="lazy" decoding="async">
+      <div class="sf-legal">
+        <span>© 2026 Skyfire Artists</span>
+        <span>A concept by Dalton Corr. Not the official Skyfire Artists site.</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Results: on touch screens a tap fills the box, as hover does with a mouse
+  var touch = window.matchMedia('(hover: none)');
+  var boxes = document.querySelectorAll('.sf-result');
+  boxes.forEach(function (box) {
+    box.addEventListener('click', function () {
+      if (!touch.matches) return;
+      var on = !box.classList.contains('is-active');
+      boxes.forEach(function (b) { b.classList.remove('is-active'); });
+      if (on) box.classList.add('is-active');
+    });
+  });
+  // Demo forms: nothing is sent
+  document.querySelectorAll('form[data-demo]').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      form.querySelector('.sf-sent').textContent = 'This is a concept. Nothing was sent.';
+    });
+  });
+})();
+</script>
+</body>
+</html>
