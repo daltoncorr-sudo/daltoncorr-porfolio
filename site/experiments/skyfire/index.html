@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://daltoncorr.com/experiments/skyfire/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Skyfire Artists logo above the headline: Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies.">
+<meta property="og:image:alt" content="The headline, Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies, beside the Skyfire bolt mark circled by a ring of client portraits.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -76,6 +76,22 @@ main:focus{outline:none}
 .sf-actions{display:flex;flex-wrap:wrap;gap:14px}
 .sf-hero .btn-white{padding:18px 26px;font-size:17px}
 .sf-hero .btn-line{padding:17px 25px;font-size:17px}
+
+/* The Skyfire mark as a planet, with a ring of clients in orbit (positions set by the script below) */
+.sf-hero-top{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;gap:48px}
+@media (min-width:1180px){
+  .sf-hero-top{grid-template-columns:minmax(0,1fr) minmax(400px,500px);gap:40px}
+  .sf-hero h1{font-size:clamp(40px,4.5vw,68px)}
+}
+.sf-orbit{position:relative;width:100%;max-width:500px;aspect-ratio:25/19;margin:0 auto;pointer-events:none;user-select:none}
+.sf-planet{position:absolute;left:50%;top:50%;z-index:3;width:42%;transform:translate(-50%,-50%)}
+.sf-planet img{position:relative;display:block;width:100%;height:auto}
+.sf-planet::before{content:"";position:absolute;inset:7.2% 1.6% 11.4% 1.2%;background:var(--black)}   /* the square is solid, so clients behind it are hidden */
+.sf-ring{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.sf-ring path{fill:none;stroke:#3A3A3A;stroke-width:1}
+.sf-ring--back{z-index:1}
+.sf-ring--front{z-index:4}
+.sf-moon{position:absolute;left:50%;top:50%;z-index:2;width:12.5%;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px rgba(255,255,255,.28);transform:translate(-50%,-50%);will-change:transform,opacity}
 
 /* Results: white fills each box from the bottom */
 .sf-results{padding-top:112px;padding-bottom:112px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:48px 80px}
@@ -231,7 +247,24 @@ main:focus{outline:none}
 
 <main id="main" tabindex="-1">
   <section id="top" class="wrap sf-hero">
-    <h1>Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies.</h1>
+    <div class="sf-hero-top">
+      <h1>Skyfire Artists is one of Los Angeles's leading independent talent management, production and actor consulting companies.</h1>
+      <div class="sf-orbit" aria-hidden="true">
+        <svg class="sf-ring sf-ring--back"><path/></svg>
+        <div class="sf-planet"><img src="assets/skyfire-mark-white.png" width="440" height="492" alt="" fetchpriority="high"></div>
+        <svg class="sf-ring sf-ring--front"><path/></svg>
+        <img class="sf-moon" src="assets/clients/client-01.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-02.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-03.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-06.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-04.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-09.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-05.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-10.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-08.webp" width="240" height="240" alt="" decoding="async">
+        <img class="sf-moon" src="assets/clients/client-07.webp" width="240" height="240" alt="" decoding="async">
+      </div>
+    </div>
     <div class="sf-hero-foot">
       <p class="sf-lede sf-serif">We take a holistic, hands-on approach to the actor and their career.</p>
       <div class="sf-actions">
@@ -443,6 +476,76 @@ main:focus{outline:none}
       form.querySelector('.sf-sent').textContent = 'This is a concept. Nothing was sent.';
     });
   });
+
+  // Hero: the clients circle the Skyfire mark like a ring round a planet. The ring is tilted towards
+  // the viewer, so a client at the front is lower, larger and brighter, and passes in front of the mark.
+  var orbit = document.querySelector('.sf-orbit');
+  if (!orbit) return;
+  var planet = orbit.querySelector('.sf-planet');
+  var moons = [].slice.call(orbit.querySelectorAll('.sf-moon'));
+  var backArc = orbit.querySelector('.sf-ring--back path'), frontArc = orbit.querySelector('.sf-ring--front path');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LAP = 46000;                                   // ms for one turn of the ring
+  var reach = moons.map(function (m, i) { return i % 2 ? 0.93 : 1; });   // two lanes, so the ring has depth
+  var W, cx, cy, R, spin = 0, last = 0, live = false;
+  var lean = -0.17, leanTo = -0.17, open = 0.26, openTo = 0.26;          // ring angle (rad) and how far it opens
+
+  function measure() { W = orbit.clientWidth; cx = W / 2; cy = orbit.clientHeight / 2; R = W * 0.4; }
+
+  function arc(sweep) {        // half the ring's ellipse, tilted by lean: sweep 1 = far half, 0 = near half
+    var c = Math.cos(lean), s = Math.sin(lean), d = 'M', n = 24;
+    for (var k = 0; k <= n; k++) {
+      var a = Math.PI * k / n * (sweep ? -1 : 1), x = R * Math.cos(a), y = R * open * Math.sin(a);
+      d += (k ? ' L' : '') + (cx + x * c - y * s).toFixed(1) + ' ' + (cy + x * s + y * c).toFixed(1);
+    }
+    return d;
+  }
+
+  function draw(t) {
+    var c = Math.cos(lean), s = Math.sin(lean);
+    backArc.setAttribute('d', arc(1));
+    frontArc.setAttribute('d', arc(0));
+    planet.style.transform = 'translate(-50%,-50%) translateY(' + (still ? 0 : Math.sin(t / 2600) * 5).toFixed(2) + 'px)';
+    moons.forEach(function (m, i) {
+      var a = spin + i * 2 * Math.PI / moons.length;
+      var x = R * reach[i] * Math.cos(a), y = R * reach[i] * open * Math.sin(a);
+      var near = (1 + Math.sin(a)) / 2;                         // 0 at the back of the ring, 1 at the front
+      var bob = still ? 0 : Math.sin(t / 1700 + i * 1.3) * 3;
+      m.style.transform = 'translate(' + (x * c - y * s).toFixed(1) + 'px,' + (x * s + y * c + bob).toFixed(1) + 'px) translate(-50%,-50%) scale(' + (0.68 + 0.42 * near).toFixed(3) + ')';
+      m.style.opacity = (0.4 + 0.6 * near).toFixed(3);
+      m.style.zIndex = Math.sin(a) > 0 ? 5 : 2;
+    });
+  }
+
+  function frame(t) {
+    if (!live) return;
+    var dt = Math.min(t - (last || t), 50); last = t;
+    spin += dt / LAP * 2 * Math.PI;
+    lean += (leanTo - lean) * 0.05; open += (openTo - open) * 0.05;
+    draw(t);
+    requestAnimationFrame(frame);
+  }
+
+  measure(); draw(0);
+  window.addEventListener('resize', function () { measure(); draw(performance.now()); });
+  if (still) return;
+
+  // Only run while the opening is on screen
+  new IntersectionObserver(function (entries) {
+    var on = entries[0].isIntersecting;
+    if (on && !live) { live = true; last = 0; requestAnimationFrame(frame); }
+    live = on;
+  }).observe(orbit);
+
+  // With a mouse, the ring leans and opens a little towards the pointer
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.getElementById('top').addEventListener('pointermove', function (e) {
+      var r = orbit.getBoundingClientRect();
+      var px = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / r.width));
+      var py = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / r.height));
+      leanTo = -0.17 + px * 0.12; openTo = 0.26 + py * 0.1;
+    });
+  }
 })();
 </script>
 </body>
