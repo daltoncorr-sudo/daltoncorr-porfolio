@@ -7,8 +7,12 @@
    announcement film has Play with sound, which turns into Mute. Under
    reduced motion nothing plays until asked (Play).
 
-   Controls (.ctl): with a fine pointer, the word's weight follows the cursor
-   across it, thin to black, over a hidden heaviest copy that holds its width.
+   Controls (.ctl): hover turns the word bold, in CSS (Opmet, Oct. 15; it
+   used to follow the cursor), over a hidden heaviest copy that holds its width.
+
+   The lightbox (main.js) opens a picture from one of the panels on that
+   panel's ground, so the Vellum marks on Ink Navy don't vanish on white
+   (as opmetosserpse.com's does, Oct. 19).
 
    Parts marked data-read turn their notes from grey to ink on the reading
    line.
@@ -100,16 +104,26 @@
   window.addEventListener('resize', soon);
   soon();
 
-  // the controls' weight, under a fine pointer
-  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  var cur = null;
-  function settle(c) { var v = c && c.querySelector('.ctl-v'); if (v) v.style.fontWeight = ''; }
-  document.addEventListener('mousemove', function (e) {
-    var c = e.target.closest ? e.target.closest('.sb-os .ctl') : null;
-    if (c !== cur) { settle(cur); cur = c; }
-    var v = c && c.querySelector('.ctl-v'); if (!v) return;
-    var r = c.getBoundingClientRect(), t = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    v.style.fontWeight = reduce ? 700 : Math.round(200 + t * 700);
-  }, { passive: true });
-  document.addEventListener('mouseout', function (e) { if (cur && !(e.relatedTarget && cur.contains(e.relatedTarget))) { settle(cur); cur = null; } });
+  // the lightbox on a panel's ground: main.js sets its picture; whichever page
+  // picture it shows, a picture in a .pnl brings that panel's colours with it
+  function ground() {
+    var lb = document.querySelector('.lightbox'), pic = lb && lb.querySelector('img');
+    if (!lb || !pic) return;
+    var name = (pic.getAttribute('src') || '').split('/').pop(), from = null;
+    if (name) [].some.call(document.querySelectorAll('.sb-os .pp .m img'), function (img) {
+      var refs = (img.getAttribute('src') || '') + ' ' + (img.getAttribute('srcset') || '');
+      if (refs.indexOf('/' + name) > -1) { from = img; return true; }
+      return false;
+    });
+    var gr = from && from.closest('.pnl'), cs = gr && getComputedStyle(gr);
+    lb.style.background = cs ? cs.backgroundColor : '';
+    lb.style.color = cs ? cs.color : '';
+  }
+  function watchLightbox() {  // main.js makes the lightbox on DOMContentLoaded
+    var lb = document.querySelector('.lightbox'), pic = lb && lb.querySelector('img');
+    if (!pic || !('MutationObserver' in window)) return false;
+    new MutationObserver(ground).observe(pic, { attributes: true, attributeFilter: ['src'] });
+    return true;
+  }
+  if (!watchLightbox()) document.addEventListener('DOMContentLoaded', watchLightbox);
 })();

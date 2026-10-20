@@ -3,7 +3,10 @@
    on the paper; the book, the marks, the type, the colours and the
    stationery as cut-outs, numbered and labelled; a chapter label over each
    part; the films play once and rest (the signature round and round), with
-   Play again and Play with sound. The rules below are opmetosserpse.com's
+   Play again and Play with sound. Since Oct. 19 (opmetosserpse.com's
+   redesign): four chapters in rounded panels (three on #F3F0E9, Journal &
+   Press on Ink Navy in its Vellum marks), every row of marks a level plate,
+   the stationery as a bento, the announcement film beside the book drawing. The rules below are opmetosserpse.com's
    (its .pp project page), held inside .sb-os, which is their container: the
    work column lays out as that site would at the column's width. The words,
    the outcome and the credits stay this site's. Behaviour:
@@ -14,6 +17,11 @@
 @font-face { font-family: "Opmet Serif"; font-style: italic; font-weight: 100 900; font-display: swap; src: url(../fonts/opmet-serif/opmet-serif-italic.woff2) format("woff2"); }
 @font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-400-normal.woff2) format("woff2"); }
 @font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF; }
+
+/* --sbvw: one hundredth of the work column (.sb-os), computed once on .pp, so
+   the cut-outs and panels inside the plates' own size containers (.b-cuts) still
+   size by the column, as Opmet's do by the viewport (its vw) */
+@property --sbvw { syntax: "<length>"; inherits: true; initial-value: 0px; }
 
 /* the paper, while the page is showing (the veil over the work takes it too) */
 :root:has(.sb-os) { --bg: #F7F6F2; }
@@ -41,7 +49,7 @@
    under the veil the work goes behind while the deck turns. */
 .sb-os {
   container: sbpp / inline-size; isolation: isolate; text-align: left;
-  --paper: #F7F6F2; --ink: #161512;
+  --paper: #F7F6F2; --ink: #161512; --tag-gray: #5E5A53;
   --serif: "Opmet Serif", Georgia, "Times New Roman", serif;
   --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   --t: .5s; --ease: ease; --s3: 24px;
@@ -54,11 +62,15 @@
 .sb-os .ctl:hover { color: var(--ink); }
 .sb-os .ctl-w, .sb-os .ctl-v { grid-area: 1/1; white-space: nowrap; }
 .sb-os .ctl-w { visibility: hidden; font-weight: 900; }
-.sb-os .ctl-v { font-weight: 400; transition: font-weight .3s var(--ease); }
+.sb-os .ctl-v { font-weight: 400; transition: font-weight var(--t) var(--ease); }
+/* hover turns the word bold, in the one motion value (Opmet, Oct. 15) */
+@media (hover: hover) and (pointer: fine) { .sb-os .ctl:hover .ctl-v { font-weight: 700; } }
+@media (prefers-reduced-motion: reduce) { .sb-os .ctl-v { transition: none; } }
 
 /* the column has no page margin of its own (--m: 0); the rest as there */
 .sb-os .pp { --m: 0px; --g: clamp(12px, 1.6667cqw, 24px); --u: 56px; --U: 120px; --b: 16px; --s: 13px;
   --gray: #6B665E; --hair: rgba(22, 21, 18, .16); --cap: 85vh; --cap: 85svh;
+  --sbvw: 1cqw;
   width: 100%; font: 400 var(--s)/1.45 var(--sans); color: var(--ink); }
 .sb-os .pp img, .sb-os .pp video { display: block; width: 100%; height: auto; max-width: none; }
 .sb-os .pp a:hover { color: var(--gray); }
@@ -74,22 +86,22 @@
 .sb-os .pp .chap { grid-column: 1/-1; font: 400 var(--s)/1.45 var(--sans); letter-spacing: 0; text-align: left; color: var(--ink); white-space: nowrap; overflow: hidden; }
 .sb-os .pp .chap .n { color: var(--gray); display: inline-block; min-width: 1.8em; }
 .sb-os .pp .b { align-items: start; }
-.sb-os .pp .b .m, .sb-os .pp .b .row { grid-column: 3/11; grid-row: 1; }
+.sb-os .pp .b .m:where(:not(.cut)), .sb-os .pp .b .row { grid-column: 3/11; grid-row: 1; }
 .sb-os .pp .b-tall .m { grid-column: 4/10; }
 .sb-os .pp .b-wide .m, .sb-os .pp .b-wide .row { grid-column: 2/12; }
 .sb-os .pp .b .m.cap { width: 100%; max-width: calc(var(--cap) * var(--ar)); margin-inline: auto; }
 .sb-os .pp .b .row { width: 100%; max-width: calc(var(--cap) * var(--ar) + var(--g) * (var(--n) - 1)); margin-inline: auto; }
-.sb-os .pp .b-cuts .cuts { grid-column: 1/13; grid-row: 1; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--u) clamp(16px, 2.8cqw, 40px); }
+.sb-os .pp .b-cuts .cuts { grid-column: 1/13; grid-row: 1; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--u) clamp(16px, calc(2.8 * var(--sbvw)), 40px); }
 .sb-os .pp .cuts.end { align-items: flex-end; }
 .sb-os .pp .cuts.top { align-items: flex-start; }
 .sb-os .pp .b .cut { flex: 0 1 var(--cw); min-width: 0; }
 .sb-os .pp .cuts .cut img { width: var(--cw); max-width: 100%; }
 .sb-os .pp .cuts.end .cut, .sb-os .pp .cuts.top .cut { flex-basis: max(var(--cw), 150px); }
-.sb-os .pp .cut-small { --cw: clamp(72px, 11cqw, 168px); }
-.sb-os .pp .cut-medium { --cw: clamp(104px, 18cqw, 272px); }
-.sb-os .pp .cut-large { --cw: clamp(150px, 30cqw, 440px); }
-.sb-os .pp .cut-xl { --cw: clamp(220px, 44cqw, 640px); }
-.sb-os .pp .cut-true { --cw: calc(var(--w) * clamp(.7px, .11cqw, 1.6px)); }
+.sb-os .pp .cut-small { --cw: clamp(72px, calc(11 * var(--sbvw)), 168px); }
+.sb-os .pp .cut-medium { --cw: clamp(104px, calc(18 * var(--sbvw)), 272px); }
+.sb-os .pp .cut-large { --cw: clamp(150px, calc(30 * var(--sbvw)), 440px); }
+.sb-os .pp .cut-xl { --cw: clamp(220px, calc(44 * var(--sbvw)), 640px); }
+.sb-os .pp .cut-true { --cw: calc(var(--w) * clamp(.7px, calc(.11 * var(--sbvw)), 1.6px)); }
 .sb-os .pp .lbl { margin: 12px 0 0; font: 400 var(--s)/1.4 var(--sans); color: var(--ink); text-align: left; }
 .sb-os .pp .lbl-n { margin-right: .45em; font: italic 400 1.2em/1 var(--ctl-font); font-variant-numeric: oldstyle-nums; color: #CBA65E; }
 .sb-os .pp .lbl-s { display: block; color: var(--gray); }
@@ -106,7 +118,7 @@
 .sb-os .pp .film-ctl { grid-column: 1/-1; grid-row: 3; margin-top: 10px; text-align: center; }
 .sb-os .pp .m img { cursor: zoom-in; }
 @container sbpp (min-width: 641px) and (max-width: 1099px) {
-  .sb-os .pp .b .m, .sb-os .pp .b .row { grid-column: 2/12; }
+  .sb-os .pp .b .m:where(:not(.cut)), .sb-os .pp .b .row { grid-column: 2/12; }
   .sb-os .pp .b-tall .m { grid-column: 3/11; }
   .sb-os .pp .b-wide .m, .sb-os .pp .b-wide .row { grid-column: 1/13; }
   .sb-os .pp .note:not(:has(.again)) { display: none; }
@@ -116,11 +128,150 @@
 @container sbpp (max-width: 640px) {
   .sb-os .pp { --g: 12px; --u: 24px; --U: 64px; }
   .sb-os .pp .g { grid-template-columns: 1fr 1fr; }
-  .sb-os .pp .g > *, .sb-os .pp .b .m, .sb-os .pp .b .row, .sb-os .pp .note, .sb-os .pp .chap { grid-column: 1/-1 !important; grid-row: auto !important; }
+  .sb-os .pp .g > *, .sb-os .pp .b .m:where(:not(.cut)), .sb-os .pp .b .row, .sb-os .pp .note, .sb-os .pp .chap { grid-column: 1/-1 !important; grid-row: auto !important; }
   .sb-os .pp .note:not(:has(.again)) { display: none; }
   .sb-os .pp .note { margin: 6px 0 0; }
   .sb-os .pp .row-stack { flex-direction: column; gap: var(--u); }
   .sb-os .pp .row-stack .m { flex: none !important; width: 100%; }
   .sb-os .pp .cuts.end .cut, .sb-os .pp .cuts.top .cut { flex-basis: max(var(--cw), 120px); }
   .sb-os .pp .cut-xl { --cw: 100%; }
+}
+
+/* ── Grounds and plates (opmetosserpse.com, Oct. 19, 2026) ──
+   Four chapters sit in rounded panels (The marks, The type and Stationery on
+   a light off-white; Journal & Press on the Bible's Ink Navy); everything
+   filmed, photographed or delivered, and the palette itself, stays on the
+   paper. Every row of cut-outs is a plate: its pictures share one line, their
+   labels the next, so a label can never move a picture. The shared .b .m
+   rules above skip cut-outs (:where, no added specificity). As there, with
+   the viewport's @media as @container sbpp and its vw as --sbvw. */
+
+/* --edge: the photos' edge (one column in from 1100 px of column, the
+   column's edge under it). --pr: a panel's top and bottom padding, and the
+   room between its rows and between a plate's lines. --px: its side padding. */
+.sb-os .pp-plates { --edge: var(--m); --pr: clamp(28px, calc(4.45 * var(--sbvw)), 64px); --px: clamp(20px, calc(3.9 * var(--sbvw)), 56px); }
+@container sbpp (min-width: 1100px) { .sb-os .pp-plates { --edge: calc(var(--m) + (100% - 2 * var(--m) - 11 * var(--g)) / 12 + var(--g)); } }
+@container sbpp (max-width: 640px) { .sb-os .pp.pp-plates { --pr: 32px; } }
+
+/* the room between sections: 240 px from 1100 px, 160 on tablets, 64 on
+   phones; rows on the paper 98, 72, 32; from the opening film to the first
+   chapter shorter, for the same distance by eye */
+.sb-os .pp.pp-air.pp-plates > .ch { margin-top: calc(var(--U) * 2); }
+.sb-os .pp.pp-air.pp-plates > .b + .ch { margin-top: 104px; }
+@container sbpp (min-width: 641px) and (max-width: 1099px) {
+  .sb-os .pp.pp-air.pp-plates > .ch { margin-top: 160px; }
+  .sb-os .pp.pp-air.pp-plates > .b + .ch { margin-top: 72px; }
+  .sb-os .pp.pp-air.pp-plates .ch > .b + .b { margin-top: 72px; }
+}
+@container sbpp (max-width: 640px) {
+  .sb-os .pp.pp-air.pp-plates > .ch, .sb-os .pp.pp-air.pp-plates > .b + .ch { margin-top: 64px; }
+  .sb-os .pp.pp-air.pp-plates .ch > .b + .b { margin-top: 32px; }
+}
+
+/* Panels: a chapter's blocks on one of the Bible's grounds, to the photos'
+   edges; no border, shadow, z-index or overflow */
+.sb-os .pp.pp-plates .pnl { margin-inline: var(--edge); padding: var(--pr) var(--px); border-radius: clamp(16px, calc(1.4 * var(--sbvw)), 20px); background: var(--pbg); }
+.sb-os .pp.pp-plates .pnl > .b + .b { margin-top: var(--pr); }
+.sb-os .pp.pp-plates .pnl-light { --pbg: #F3F0E9; --gray: var(--tag-gray); }
+.sb-os .pp.pp-plates .pnl-navy { --pbg: #1F2B45; --ink: #F2EBDC; --gray: rgb(242 235 220 / .7); color: var(--ink); }
+
+/* Plates, where the browser has size containers; elsewhere a row of cut-outs
+   keeps the flex row above. The row (.b-cuts) is the size container: the
+   photo column on the paper, the panel's inside (960 px at most) in a panel. */
+@supports (container-type: inline-size) {
+.sb-os .pp.pp-plates .b-cuts { display: block; padding-inline: var(--edge); container-type: inline-size; position: relative; z-index: 2; }
+.sb-os .pp.pp-plates .pnl > .b-cuts { padding-inline: 0; max-width: 960px; margin-inline: auto; }
+.sb-os .pp.pp-plates .b-cuts > .cuts { --cg: clamp(16px, 5cqi, 48px); --band: var(--pr); display: grid; grid-auto-flow: column; grid-template-rows: auto auto;
+  grid-auto-columns: max-content; justify-content: center; align-items: stretch; column-gap: var(--cg); row-gap: 0; }
+.sb-os .pp.pp-plates .b-cuts > .cuts:has(> .cut > .lbl) { margin-bottom: calc(-1 * var(--band)); }
+.sb-os .pp.pp-plates .cuts > .cut { --pw: var(--cw); display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 0; width: max(var(--pw), 8em); max-width: 100%; min-width: 0; }
+.sb-os .pp.pp-plates .cuts > .cut > img { width: var(--pw); max-width: 100%; align-self: end; justify-self: start; }
+.sb-os .pp.pp-plates .cuts.top > .cut > img { align-self: start; }
+.sb-os .pp.pp-plates .cuts.mid > .cut > img { align-self: center; }
+.sb-os .pp.pp-plates .cuts > .cut > .lbl { margin: 12px 0 var(--band); align-self: start; text-wrap: pretty; }
+
+/* sizes from the plate: large marks in a panel half the plate each; an xl
+   piece alone on its line two thirds of the plate, 600 to 640 px */
+.sb-os .pp.pp-plates .pnl .cut-large { --pw: calc((100cqi - var(--cg)) / 2); }
+.sb-os .pp.pp-plates .cuts > .cut-xl { --pw: min(100cqi, max(600px, 66.667cqi), 640px); }
+@container (min-width: 560px) {
+  .sb-os .pp.pp-plates .pnl .b-cuts > .cuts.top { column-gap: calc(var(--cg) * 3); }
+  .sb-os .pp.pp-plates .pnl .cuts.top > .cut-large { --pw: calc((100cqi - 3 * var(--cg)) / 2); }
+}
+
+/* fill: the row exactly as wide as the plate, each mark's width in
+   proportion to its --f; the gaps what is left, shared evenly */
+.sb-os .pp.pp-plates .b-cuts > .cuts.fill { column-gap: 0; justify-content: space-between; }
+.sb-os .pp.pp-plates .cuts.fill > .cut { --pw: calc((100cqi - (var(--n) - 1) * var(--cg) * var(--gx, 1)) * var(--f) / var(--sf)); width: max(var(--pw), 7em); }
+
+/* bento (Stationery): each piece in its box, filling it, at the bottom left:
+   the letterhead and event card two rows tall, the bookmark the whole height,
+   the small ones stacked beside them; on a phone two columns */
+.sb-os .pp.pp-plates .b-cuts > .cuts.bento { --r: clamp(96px, 17cqi, 168px); grid-auto-flow: row; justify-content: stretch; row-gap: 32px; margin-bottom: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(4, var(--r));
+  grid-template-areas: "lh bc ev bm" "lh en ev bm" "es es gc bm" "rc rc st bm"; }
+.sb-os .pp.pp-plates .b-cuts > .cuts.bento:has(> .cut > .lbl) { margin-bottom: 0; }
+.sb-os .pp.pp-plates .cuts.bento > .cut { display: flex; flex-direction: column; width: auto; min-height: 0; }
+.sb-os .pp.pp-plates .cuts.bento > .cut > img { flex: 1 1 0; min-height: 0; width: 100%; max-width: 100%; object-fit: contain; object-position: left bottom; }
+.sb-os .pp.pp-plates .cuts.bento > .cut > .lbl { margin: 12px 0 0; min-height: 4.2em; }
+@container (min-width: 560px) and (max-width: 879px) { .sb-os .pp.pp-plates .cuts.bento > .cut > .lbl { min-height: 5.6em; } }
+/* swatches (The colors, on the paper): six columns, three under 1000 px of
+   row, two under 560 */
+.sb-os .pp.pp-plates .b-cuts > .cuts.swatches { grid-auto-flow: row; grid-template-columns: repeat(6, minmax(0, 1fr)); justify-content: stretch; column-gap: 24px; }
+.sb-os .pp.pp-plates .cuts.swatches > .cut { width: auto; --pw: min(100%, 168px); }
+@container (max-width: 999px) { .sb-os .pp.pp-plates .b-cuts > .cuts.swatches { grid-template-columns: repeat(3, minmax(0, 168px)); justify-content: space-between; } }
+
+/* a row with an xl mark beside smaller ones stacks under 700 px of row: the
+   xl mark takes the line, the others keep its scale, two to a line */
+@container (max-width: 699px) {
+  .sb-os .pp.pp-plates .b-cuts > .cuts.fill:has(> .cut-xl) { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-columns: auto; column-gap: var(--cg); justify-content: stretch; }
+  .sb-os .pp.pp-plates .cuts.fill:has(> .cut-xl) > .cut { width: auto; --pw: min(100%, calc(min(100cqi, 640px) * var(--f) / var(--fx))); }
+  .sb-os .pp.pp-plates .cuts.fill:has(> .cut-xl) > .cut-xl, .sb-os .pp.pp-plates .cuts.fill:has(> .cut-xl) > .cut-lone { grid-column: 1/-1; }
+}
+
+/* under 560 px of row: two equal columns, each picture at the left of its
+   column; large marks in a panel, xl marks and a lone last piece the line */
+@container (max-width: 559px) {
+  .sb-os .pp.pp-plates .b-cuts > .cuts, .sb-os .pp.pp-plates .b-cuts > .cuts.fill { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-columns: auto; justify-content: stretch; column-gap: var(--cg); }
+  .sb-os .pp.pp-plates .cuts > .cut, .sb-os .pp.pp-plates .cuts.fill > .cut { width: auto; }
+  .sb-os .pp.pp-plates .cuts > .cut-xl, .sb-os .pp.pp-plates .pnl .cuts > .cut-large, .sb-os .pp.pp-plates .cuts > .cut-lone { grid-column: 1/-1; }
+  .sb-os .pp.pp-plates .pnl .cut-large, .sb-os .pp.pp-plates .cuts > .cut-xl { --pw: 100cqi; }
+  .sb-os .pp.pp-plates .cuts.fill > .cut { --pw: min(100%, calc((100cqi - var(--cg)) / 2 * var(--f) / var(--fmax))); }
+  .sb-os .pp.pp-plates .b-cuts > .cuts.shelf { grid-template-columns: 40fr 32fr 28fr; column-gap: 12px; }
+  .sb-os .pp.pp-plates .cuts.shelf > .cut { --pw: min(100%, var(--cw)); }
+  .sb-os .pp.pp-plates .b-cuts > .cuts.swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; column-gap: 16px; }
+  .sb-os .pp.pp-plates .cuts.swatches > .cut { --pw: 100%; }
+  .sb-os .pp.pp-plates .b-cuts > .cuts.bento { --r: clamp(120px, 46cqi, 200px); row-gap: 24px; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(8, var(--r));
+    grid-template-areas: "lh bc" "lh en" "ev bm" "ev bm" "gc bm" "st bm" "es es" "rc rc"; }
+}
+}
+
+/* Films: Play under its film's bottom-right corner from 1100 px; on a phone
+   centered on the film */
+@container sbpp (min-width: 1100px) { .sb-os .pp.pp-plates .b-tall .note { align-self: end; } }
+@container sbpp (max-width: 640px) { .sb-os .pp.pp-plates .note { text-align: center; } .sb-os .pp.pp-plates .note .again { margin-inline: auto; } }
+/* a row of films (the book drawn by hand and the announcement film): two
+   columns, the vertical film two fifths of the row (never taller than the
+   screen allows), the book drawing centered beside it; each film's controls
+   right under it; on a phone at the row's two outer edges */
+.sb-os .pp.pp-plates .b-row .row:has(> .m > video) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, min(40%, calc(var(--cap) * .5625))); align-items: center; max-width: none; }
+.sb-os .pp.pp-plates .b-row .row:has(> .m > video) > .m { grid-column: auto !important; grid-row: auto !important; width: auto; }
+.sb-os .pp.pp-plates .row .m > .film-ctl { margin: 10px 0 0; text-align: center; }
+.sb-os .pp.pp-plates .row .m > .note { margin: 6px 0 0; text-align: center; }
+.sb-os .pp.pp-plates .row .m > .note .again { margin-inline: auto; }
+@container sbpp (max-width: 640px) {
+  .sb-os .pp.pp-plates .row .m > .film-ctl, .sb-os .pp.pp-plates .row .m > .note { white-space: nowrap; }
+  .sb-os .pp.pp-plates .row .m:first-child > * { text-align: left; }
+  .sb-os .pp.pp-plates .row .m:first-child > .note .again { margin-inline: 0 auto; }
+  .sb-os .pp.pp-plates .row .m:last-child > .film-ctl, .sb-os .pp.pp-plates .row .m:last-child > .note { display: flex; justify-content: flex-end; }
+}
+
+/* phones: the delivery sheets and the studies two to a line, one even grid */
+@container sbpp (max-width: 640px) {
+  .sb-os .pp.pp-plates .ch-pairs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-inline: var(--m); }
+  .sb-os .pp.pp-plates .ch-pairs > .chl { grid-column: 1/-1; padding-inline: 0; margin-bottom: 0; }
+  .sb-os .pp.pp-plates .ch-pairs > .b-single { grid-column: 1/-1; display: block; padding-inline: 0; margin-bottom: 20px; }
+  .sb-os .pp.pp-plates .ch-pairs > .b-row, .sb-os .pp.pp-plates .ch-pairs .row { display: contents; }
+  .sb-os .pp.pp-plates .ch-pairs .row .m { width: auto; flex: none !important; grid-column: auto !important; grid-row: auto !important; }
+  .sb-os .pp.pp-air.pp-plates .ch-pairs > .b + .b { margin-top: 0; }
 }
