@@ -1,0 +1,230 @@
+/* Opmet Serif (work/opmet-serif), laid out as on opmetosserpse.com: the
+   quote and the hand it came from, the wink, the letters drawn as strokes,
+   the specimen boards, a line to try and what's in the font. The rules after
+   the meta block are that site's page.css, unchanged except that they sit
+   inside .os-dc, a container-query box (its @media widths are @container
+   widths and its vw are cqw), so the column lays out as that site would at
+   the column's width. The deck and the words stay this site's. Behaviour:
+   js/opmet-serif.js. */
+
+/* Opmet Serif, roman and italic, and Instrument Sans
+   (SIL Open Font License, fonts/instrument-sans/OFL.txt) */
+@font-face { font-family: "Opmet Serif"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(../fonts/opmet-serif/opmet-serif.woff2) format("woff2"); }
+@font-face { font-family: "Opmet Serif"; font-style: italic; font-weight: 100 900; font-display: swap; src: url(../fonts/opmet-serif/opmet-serif-italic.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Instrument Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(../fonts/instrument-sans/instrument-sans-latin-ext-400-normal.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+A720-A7FF; }
+
+/* the paper, while the page is showing (the veil over the work takes it too) */
+:root:has(.os-dc) { --bg: #F7F6F2; }
+
+/* the deck sentence, then Client / Year / Role, in the meta line's type */
+.wc-info .os-meta { margin: 0 0 1em; font-size: 1.0625rem; line-height: 1.55; letter-spacing: -0.012em; color: #1d1d1f; }
+.os-meta div { display: grid; grid-template-columns: 3.4em 1fr; gap: 0.6em; }
+.os-meta dt { color: #6e6e73; flex: none; }
+.os-meta dd { margin: 0; }
+
+/* the work column is the container the page's widths are read from */
+.os-dc { container-type: inline-size; }
+
+/* A project page of opmetosserpse.com, made for one typeface: a standard header, the alphabet across the page,
+   then the work, centered. Paper and ink only; the type is the only image that moves. */
+.os{
+  --paper:#F7F6F2; --paper-deep:#EEEDE8; --sheet:#FFFFFF; --ink:#161512; --graphite:#635E57; --rule:#D8D5CD; --wash:rgba(22,21,18,.08);
+  --serif:"Opmet Serif",Georgia,"Times New Roman",serif;
+  --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --margin:clamp(20px,3.4cqw,56px); --gutter:clamp(14px,1.7cqw,24px);
+  --t:.5s; --ease:cubic-bezier(.3,.1,.2,1);
+  --mcol:clamp(104px,9cqw,140px); --mgap:clamp(32px,3.2cqw,48px);
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:72px; --s6:clamp(96px,13cqw,184px);
+  color-scheme:light;
+}
+.os,.os *,.os *::before,.os *::after{box-sizing:border-box}
+
+.os{margin:0;background:var(--paper);color:var(--ink);font:400 13px/1.55 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.os{max-width:1440px;margin:0 auto;padding-inline:var(--margin);padding-block:0 var(--s5);overflow-x:clip}
+.os button,.os input{font:inherit;color:inherit}
+.os :focus-visible{outline:1.5px solid var(--ink);outline-offset:4px}
+.os a{color:inherit;text-decoration:none}
+.os .os-grid{display:block}
+.os .os-label{font:400 12px/1.4 var(--sans);letter-spacing:.02em;color:var(--graphite)}
+.os .os-num{font-variant-numeric:tabular-nums}
+
+/* The nameplate: the hand, then Opmet over Osserpse, centered */
+.os .os-mast{display:flex;justify-content:center;padding-top:clamp(28px,5vh,56px)}
+.os .os-mast a{display:flex;align-items:flex-end;gap:.24em;font:900 clamp(22px,2.4cqw,32px)/1.02 var(--serif);font-optical-sizing:auto;letter-spacing:-.005em;transition:color var(--t) var(--ease)}
+.os .os-mast a:hover{color:var(--graphite)}
+.os .os-mast-hand{height:2.05em;width:auto;margin-bottom:.06em}
+.os .os-mast-hand path{fill:currentColor}
+.os .os-mast span{display:block}
+
+/* The header: the name, the whole range of the family under the pointer, then the client, the year and the work */
+.os .os-hero{padding-top:var(--s5);text-align:center}
+.os .os-hero h1{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(44px,12.4cqw,196px);line-height:.92;letter-spacing:-.018em;
+  font-variation-settings:"wght" var(--w,400),"opsz" 72;white-space:nowrap;cursor:ew-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.os .os-facts{margin:var(--s4) 0 0;display:flex;justify-content:center;flex-wrap:wrap;gap:var(--s2) var(--s5)}
+.os .os-facts div{display:grid;gap:2px;text-align:center}
+.os .os-facts dt{font:400 12px/1.4 var(--sans);color:var(--ink);letter-spacing:.02em}
+.os .os-facts dd{margin:0;font:400 14px/1.4 var(--sans)}
+.os .os-lede{max-width:31em;margin:var(--s5) auto 0;text-align:center;font:400 16px/1.6 var(--sans);text-wrap:balance}
+
+/* Each piece: a small label over the work, the work across the page */
+.os .os-piece{margin-top:var(--s6);display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s3)}
+.os .os-work{min-width:0}
+/* 2026-10-14 (D: "I said all headers in margins"): from 1000 px every piece sits between two margins, its header in the
+   left one, held in view while the piece scrolls past; narrower, the header sits above the piece */
+@container (min-width:1000px){
+  .os .os-piece{grid-template-columns:var(--mcol) minmax(0,1fr) var(--mcol);column-gap:var(--mgap)}
+  .os .os-piece > .os-mh{grid-column:1;grid-row:1}
+  .os .os-piece > .os-work{grid-column:2;grid-row:1}
+}
+.os .os-controls{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);margin-top:var(--s3);align-items:center}
+.os .os-seg{display:inline-flex;gap:var(--s2)}
+.os .os-seg button{appearance:none;background:none;border:0;padding:4px 0;cursor:pointer;font:400 13px/1.3 var(--sans);color:var(--graphite);
+  border-bottom:1px solid transparent;transition:color var(--t) var(--ease),border-color var(--t) var(--ease)}
+.os .os-seg button:hover{color:var(--ink)}
+.os .os-seg button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.os .os-seg .os-sep{width:1px;background:var(--rule)}
+.os svg{display:block;overflow:visible}
+
+/* The wink and Drawn as strokes: two pieces side by side, each named in its own margin, its words below it.
+   2026-10-14 (D: "the headers ... go in hte margins. have the wink and the strokes interactive examples side by side
+   with the text below it"). Each panel is a subgrid of four rows (the picture, the controls, the readout, the words),
+   so the two line up row by row. */
+.os .os-pair{margin-top:var(--s5);display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s3)}
+.os .os-pair > section{display:contents}
+.os .os-mh{margin:0;font:400 13px/1.4 var(--sans);letter-spacing:.02em;color:var(--ink)}
+@container (min-width:1000px){ .os .os-mh{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start} }
+.os .os-panel{display:grid;gap:var(--s3);align-content:start;min-width:0}
+.os .os-vis{width:100%;max-width:100%;aspect-ratio:1;background:var(--paper-deep)}
+.os .os-vis svg{width:100%;height:100%}
+.os .os-ctl{display:flex;flex-wrap:wrap;align-items:center;align-content:start;gap:var(--s2) var(--s3)}
+.os .os-ctl .os-letters{flex:1 0 100%}
+.os .os-out{display:grid;gap:2px;align-content:start}
+.os .os-out span{font:400 13px/1.4 var(--sans)}
+.os .os-out b{font:300 clamp(30px,3cqw,44px)/1.1 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.01em}
+.os .os-txt{margin:0;font:400 15px/1.6 var(--sans);max-width:34em}
+.os .os-letters{display:flex;flex-wrap:wrap;gap:4px 0;margin-left:-6px}
+.os .os-letters button{appearance:none;border:0;background:none;cursor:pointer;padding:2px 6px 8px;font:400 clamp(28px,2.6cqw,38px)/1.1 var(--serif);
+  font-variation-settings:"opsz" 40;color:var(--graphite);border-bottom:1.5px solid transparent;transition:color var(--t) var(--ease),border-color var(--t) var(--ease)}
+.os .os-letters button:hover{color:var(--ink)}
+.os .os-letters button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+@container (min-width:1000px){
+  .os .os-pair{grid-template-columns:var(--mcol) minmax(0,1fr) minmax(0,1fr) var(--mcol);grid-template-rows:repeat(4,auto);column-gap:var(--mgap)}
+  .os .os-mh-w{grid-column:1;grid-row:1 / span 4}
+  .os .os-p-w{grid-column:2;grid-row:1 / span 4}
+  .os .os-mh-cx{grid-column:4;grid-row:1 / span 4;text-align:right}
+  .os .os-p-cx{grid-column:3;grid-row:1 / span 4}
+  .os .os-panel{grid-template-rows:subgrid}
+}
+@container (min-width:701px) and (max-width:999px){
+  .os .os-pair{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,auto);column-gap:var(--s4)}
+  .os .os-mh-w{grid-column:1;grid-row:1} .os .os-mh-cx{grid-column:2;grid-row:1}
+  .os .os-p-w{grid-column:1;grid-row:2 / span 4} .os .os-p-cx{grid-column:2;grid-row:2 / span 4}
+  .os .os-panel{grid-template-rows:subgrid}
+}
+@container (max-width:700px){ .os .os-mh-cx{margin-top:var(--s5)} }
+
+/* The wink: a letter with a bowl, the Opmet Osserpse way or the regular way */
+.os .os-wink-g .os-glyph{fill:var(--ink);transition:opacity .3s var(--ease)}
+.os .os-wink-g .os-reg{opacity:0}
+.os .os-wink-g[data-way="reg"] .os-op{opacity:0}
+.os .os-wink-g[data-way="reg"] .os-reg{opacity:1}
+.os .os-wink-g .os-axes{transition:opacity .22s var(--ease)}
+.os .os-wink-g .os-axis{stroke:var(--graphite);stroke-width:3;stroke-dasharray:2 11;stroke-linecap:round;fill:none}
+.os .os-wink-g .os-tick{fill:var(--ink)}
+.os .os-wink-g.os-swap .os-glyph,.os .os-wink-g.os-swap .os-axes{opacity:0}
+
+/* Drawn as strokes: the outline and its points */
+.os .os-cx .os-ink{fill:var(--ink);transition:fill-opacity var(--t) var(--ease)}
+.os .os-cx[data-view="points"] .os-ink{fill-opacity:.07}
+.os .os-cx .os-ol{fill:none;stroke:var(--ink);stroke-width:1.6;opacity:0;transition:opacity var(--t) var(--ease)}
+.os .os-cx .os-pts{opacity:0;transition:opacity var(--t) var(--ease)}
+.os .os-cx[data-view="points"] .os-ol,.os .os-cx[data-view="points"] .os-pts{opacity:1}
+.os .os-cx .os-h{stroke:var(--graphite);stroke-width:1.2}
+.os .os-cx .os-on-c{fill:var(--paper);stroke:var(--ink);stroke-width:2.4}
+.os .os-cx .os-on-s{fill:var(--ink)}
+.os .os-cx .os-off{fill:var(--paper);stroke:var(--graphite);stroke-width:1.6}
+
+/* The whole font: the print tests' content, set large, one board after another. --u is px per point, fitted by script */
+.os .os-boards{display:grid;gap:var(--s5)}
+.os .os-board{margin:0;display:grid;gap:var(--s2)}
+.os .os-bbody{container-type:inline-size;--u:calc(86cqw / 504);padding:clamp(36px,7cqw,112px) 3%;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden}
+.os .os-board.os-soft .os-bbody{background:var(--paper-deep)}
+.os .os-board.os-ink .os-bbody{background:var(--ink);color:var(--paper)}
+
+.os .os-bl{font-family:var(--serif);white-space:nowrap;font-kerning:normal;line-height:1.5;color:inherit}
+.os .os-bl.os-lc{line-height:1.56} .os .os-bl.os-big{line-height:1.1} .os .os-bl.os-flow{line-height:1.17}
+.os .os-bl.os-nm{line-height:1.22} .os .os-bl.os-nm.os-ramp{line-height:1.5}
+.os .os-bgap{height:calc(var(--u) * 40)} .os .os-bgap.os-small{height:calc(var(--u) * 20)}
+@container (max-width:700px){ .os .os-bl.os-split span{display:block} }
+
+/* A line to try: the slider runs the whole range */
+.os .os-tester .os-work{display:grid}
+.os .os-tester-text{font-family:var(--serif);font-size:clamp(34px,5.4cqw,80px);line-height:1.1;outline:none;min-height:1.1em;overflow-wrap:anywhere;text-wrap:balance;
+  font-variation-settings:"wght" var(--tw,400),"opsz" var(--to,72);font-style:var(--ts,normal);caret-color:var(--graphite)}
+.os .os-tester .os-range{display:flex;align-items:center;gap:var(--s2);flex:1 1 240px;min-width:200px}
+.os .os-tester input[type=range]{flex:1;accent-color:var(--ink);min-width:0}
+.os .os-tester-readout{min-width:11em}
+.os .os-tester .os-label{color:var(--ink)}
+
+/* In use */
+.os .os-use img{display:block;width:100%;height:auto;max-height:85vh;object-fit:contain;background:var(--paper-deep)}
+
+/* The numbers */
+.os .os-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4) var(--gutter)}
+.os .os-nums div{display:grid;gap:4px}
+.os .os-nums b{font:300 clamp(40px,5cqw,72px)/1 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.01em}
+.os .os-nums span{color:var(--graphite);max-width:16em}
+
+.os .os-end{margin-top:var(--s6);display:flex;justify-content:center;gap:var(--s4)}
+.os .os-end a{font:400 13px/1.4 var(--sans);color:var(--graphite);border-bottom:1px solid var(--rule);transition:color var(--t) var(--ease),border-color var(--t) var(--ease)}
+.os .os-end a:hover{color:var(--ink);border-color:var(--ink)}
+.os .os-credit{margin-top:var(--s3);text-align:center}
+
+@container (max-width:900px){
+  .os .os-nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){.os *{transition:none!important}}
+/* D, Oct. 15: the pictures speak for themselves. The section headings stay for screen readers (each section is named by
+   its heading) and the demos' readouts stay in the page, out of sight, because the script writes into them. */
+.os h2.os-mh{position:absolute;top:auto;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+.os .os-out,.os .os-tester-readout{display:none}
+
+/* The title is regular, the role under it, small, in the italic (D, Oct. 20) */
+.os .os-role{margin:var(--s2) 0 0;font:italic 400 clamp(17px,1.5cqw,22px)/1.3 var(--serif);font-variation-settings:"opsz" 24}
+
+/* The alphabet: lowercase on the left, capitals on the right, at one size, across the whole page (D, Oct. 20) */
+.os .os-alpha{margin-top:var(--s5);margin-inline:calc(50% - 50cqw);padding:clamp(56px,8cqw,140px) var(--margin);background:var(--paper-deep);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:clamp(24px,4cqw,80px);align-items:center}
+.os .os-alpha .os-half{display:flex;flex-direction:column;align-items:center;min-width:0}
+.os .os-alpha .os-bl{font-size:calc(var(--au,1px) * 60);font-variation-settings:'wght' 400,'opsz' 72;line-height:1.1}
+@container (max-width:700px){ .os .os-alpha{grid-template-columns:minmax(0,1fr);row-gap:var(--s4)} }
+
+/* Weights and italics: the nine weights, each with its italic, in the Display */
+.os .os-wts{display:grid;gap:clamp(6px,1cqw,14px)}
+.os .os-wt{display:grid;grid-template-columns:7.5em minmax(0,1fr) minmax(0,1fr);align-items:baseline;column-gap:var(--s3);border-top:1px solid var(--rule);padding-top:clamp(6px,1cqw,14px)}
+.os .os-wt-n{font:400 12px/1.4 var(--sans);letter-spacing:.02em;color:var(--graphite)}
+.os .os-wt-r,.os .os-wt-i{font-family:var(--serif);font-size:clamp(24px,3.2cqw,50px);line-height:1.15;white-space:nowrap}
+.os .os-wt-i{font-style:italic}
+@container (max-width:700px){ .os .os-wt{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .os .os-wt-n{grid-column:1/-1} .os .os-wt-r,.os .os-wt-i{font-size:clamp(20px,6.4cqw,30px)} }
+
+/* Features in use: each one named, then set in a line */
+.os .os-feats{display:grid;gap:clamp(18px,2.4cqw,32px)}
+.os .os-ft{display:grid;grid-template-columns:12em minmax(0,1fr);align-items:baseline;column-gap:var(--s3);border-top:1px solid var(--rule);padding-top:clamp(10px,1.4cqw,18px)}
+.os .os-ft-l{margin:0}
+.os .os-ft-s{margin:0;font-family:var(--serif);font-size:clamp(20px,2.4cqw,36px);line-height:1.3;font-variation-settings:"opsz" 18;text-wrap:balance}
+.os .os-ft-s .os-x{color:var(--graphite)}
+@container (max-width:700px){ .os .os-ft{grid-template-columns:minmax(0,1fr);row-gap:6px} }
+
+/* In use: staged pieces, real type rendered as it would be shot; two to a row where they pair */
+.os .os-use-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s3)}
+.os .os-use-grid img{display:block;width:100%;height:auto;max-height:none;background:var(--paper-deep)}
+.os .os-use-grid .os-full{grid-column:1/-1}
+@container (max-width:700px){ .os .os-use-grid{grid-template-columns:minmax(0,1fr)} }
+
+/* Proofs and process: the working sheets, each on its own white plate */
+.os .os-proofs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--s3)}
+.os .os-proofs .os-plate{margin:0;background:var(--sheet);padding:clamp(14px,3cqw,48px);display:grid;place-items:center}
+.os .os-proofs .os-full{grid-column:1/-1}
+.os .os-proofs img{display:block;width:100%;height:auto}
+@container (max-width:700px){ .os .os-proofs{grid-template-columns:minmax(0,1fr)} }

@@ -16,8 +16,8 @@
       "Art Direction",
       "Illustration"
     ],
-    "image": "../images/design/sunnys-bookshop/sb-00-thumb-01-1x1-1200.webp",
-    "alt": "The Sunny's Bookshop seal in vellum on Library Green.",
+    "image": "../images/design/sunnys-bookshop/sb-00-thumb-02-1x1-2000.webp",
+    "alt": "The Sunny's Bookshop half moon, the name arched over the book, in vellum on Library Green.",
     "og": "../images/design/sunnys-bookshop/sb-00-og-01-1200x630.jpg"
   },
   {
@@ -39,6 +39,24 @@
     ],
     "image": "../images/design/hollyshorts-22/card.webp",
     "alt": "22nd Annual HollyShorts Film Festival poster"
+  },
+  {
+    "slug": "opmet-serif",
+    "sort": 0,
+    "year": 2026,
+    "filters": [
+      "visual",
+      "branding"
+    ],
+    "title": "Opmet Serif",
+    "role": "Type Design",
+    "tags": [
+      "Type Design",
+      "Branding"
+    ],
+    "image": "../images/design/opmet-serif/card.webp",
+    "alt": "A book's chapter opening set in Opmet Serif: The salt season in Display Italic over justified text in Text Regular.",
+    "og": "../images/design/opmet-serif/og-1200x630.jpg"
   },
   {
     "slug": "hollyshorts-comedy-2026",
